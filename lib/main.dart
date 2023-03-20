@@ -4,11 +4,11 @@ import 'package:task_mangment/screens/main_layer/main_screen.dart';
 import 'package:task_mangment/utils/app_theme/app_theme_light.dart';
 
 void main() {
-  runApp(const TaskMangeMentApp());
+  runApp(const TaskManageMentApp());
 }
 
-class TaskMangeMentApp extends StatelessWidget {
-  const TaskMangeMentApp({Key? key}) : super(key: key);
+class TaskManageMentApp extends StatelessWidget {
+  const TaskManageMentApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
