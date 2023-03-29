@@ -15,8 +15,7 @@ class TaskManageMentApp extends StatelessWidget {
     return MaterialApp(
       theme: getAppTheme(),
       debugShowCheckedModeBanner: false,
-      home: const MainScreen(),
+      home: MainScreen(),
     );
   }
-
 }
