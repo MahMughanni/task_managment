@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:task_mangment/screens/auth_layer/login_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:task_mangment/screens/main_layer/main_screen.dart';
 import 'package:task_mangment/utils/app_theme/app_theme_light.dart';
 
 void main() {
-  runApp(const TaskManageMentApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
+    (value) => runApp(const TaskManageMentApp()),
+  );
 }
 
 class TaskManageMentApp extends StatelessWidget {
@@ -13,7 +16,6 @@ class TaskManageMentApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: getAppTheme(),
       debugShowCheckedModeBanner: false,
       home: MainScreen(),
     );
