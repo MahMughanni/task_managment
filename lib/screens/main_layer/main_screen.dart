@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:task_mangment/screens/main_layer/screens/addtask_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/assigned_screen.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/home_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/notification_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen.dart';
 import 'package:task_mangment/utils/app_constants.dart';
