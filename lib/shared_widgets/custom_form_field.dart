@@ -9,16 +9,19 @@ class CustomTextFormField extends StatelessWidget {
     this.isPassword,
     this.suffixIcon,
     this.initialValue,
+    this.controller,
   }) : super(key: key);
   final String? hintText, initialValue;
   final String? Function(String?)? validator;
   final bool? isPassword;
   final Widget? suffixIcon;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: initialValue ?? '',
+      controller: controller,
+      initialValue: initialValue,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       obscureText: isPassword ?? false,
       validator: validator,

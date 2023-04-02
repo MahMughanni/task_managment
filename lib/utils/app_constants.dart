@@ -8,6 +8,16 @@ class ImageConstManger {
 class ColorConstManger {
   static const Color primaryColor = Color(0xff218BDB);
   static const Color formFieldFiledColor = Color(0xffF2F2F2);
+  static const int backGroundBottomSheet = 0xFF505050;
+  static const int backGroundContainer = 0xffFFF9F0;
+  static const int borderContainer = 0xffF3F3F3;
+  static const int white = 0xffFFFFFF;
+  static const int backGroundSnackBarFalse = 0xFFFCF3E4;
+  static const int borderSnackBarFalse = 0xFFDAA545;
+  static const int backGroundSnackBarTrue = 0xFFE9F7E7;
+  static const int primaryTextColor = 0xFF000000;
+  static const int primaryButtonColor = 0xFF4375FF;
+  static const int borderSnackBarTrue = 0xFF70B668;
 }
 
 
