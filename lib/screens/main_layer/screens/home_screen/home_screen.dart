@@ -24,21 +24,21 @@ class HomeScreen extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: 5,
                   itemBuilder: (BuildContext context, int index) {
-                    return const ListVIewItemBody();
+                    return const ListViewItemBody();
                   },
                 ),
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: 5,
                   itemBuilder: (BuildContext context, int index) {
-                    return const ListVIewItemBody();
+                    return const ListViewItemBody();
                   },
                 ),
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: 5,
                   itemBuilder: (BuildContext context, int index) {
-                    return const ListVIewItemBody();
+                    return const ListViewItemBody();
                   },
                 ),
               ],
