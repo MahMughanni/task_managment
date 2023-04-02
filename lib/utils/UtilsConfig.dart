@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import 'app_constants.dart';
 
@@ -14,12 +15,13 @@ class UtilsConfig {
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 3),
         content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(
               Icons.warning,
               color: Color(ColorConstManger.borderSnackBarFalse),
             ),
+            16.pw,
             Text(
               message,
               style: const TextStyle(

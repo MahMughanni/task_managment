@@ -8,13 +8,15 @@ class ListViewItemBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(6),
       height: 120,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
           BoxShadow(
+            blurRadius: .5,
+            spreadRadius: .5,
             offset: const Offset(-10, 0),
             color: Colors.blueAccent.withOpacity(.4),
           )

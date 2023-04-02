@@ -2,14 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:task_mangment/screens/auth_layer/login_screen.dart';
+import 'package:task_mangment/core/routes/app_router.dart';
+import 'package:task_mangment/core/routes/generate_routes.dart';
+import 'package:task_mangment/core/routes/named_router.dart';
+
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:task_mangment/utils/UtilsConfig.dart';
+
+import 'logic/auth_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // FirebaseAuth.instance.signOut();
+  // AuthFireBase.createUserAccount('mahm@asd.com', '123456mA@', 'mahmoud', '0597289998');
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(const TaskManageMentApp()),
   );
@@ -21,6 +27,9 @@ class TaskManageMentApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: OnGenerateRouter.onGenerateRoute,
+      navigatorKey: AppRouter.navigatorKey,
+      initialRoute: NamedRouter.splashScreen,
       scaffoldMessengerKey: UtilsConfig.scaffoldKey,
       builder: (context, child) => ResponsiveWrapper.builder(
         child,
@@ -34,7 +43,6 @@ class TaskManageMentApp extends StatelessWidget {
         ],
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
     );
   }
 }

@@ -24,7 +24,7 @@ class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: 30,
+                      radius: 25,
                       child: Image.asset(ImageConstManger.logoImage),
                     ),
                     8.pw,

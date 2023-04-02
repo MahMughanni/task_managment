@@ -1,9 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_mangment/core/routes/app_router.dart';
+import 'package:task_mangment/logic/auth_provider.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/custom_rich_text.dart';
+import 'package:task_mangment/utils/UtilsConfig.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 import 'package:task_mangment/utils/extentions/string_validate_extention.dart';
 
+import '../../core/routes/named_router.dart';
 import '../../shared_widgets/custom_button.dart';
 import '../../shared_widgets/custom_form_field.dart';
 import '../../utils/app_constants.dart';
@@ -19,6 +23,29 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isPassword = true;
+
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController userNameController;
+  late TextEditingController phoneController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    phoneController = TextEditingController();
+    userNameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    userNameController.dispose();
+    phoneController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   34.ph,
                   CustomTextFormField(
+                    controller: userNameController,
                     validator: (value) {
                       if (!value!.isValidName) {
                         return 'enter valid name';
@@ -50,6 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   16.ph,
                   CustomTextFormField(
+                    controller: emailController,
                     validator: (value) {
                       if (!value!.isValidEmail) {
                         return 'enter valid email';
@@ -60,6 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   16.ph,
                   CustomTextFormField(
+                    controller: passwordController,
                     suffixIcon: IconButton(
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
@@ -102,10 +132,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   24.ph,
                   CustomTextFormField(
-                    initialValue: '+970',
+                    controller: phoneController,
                     validator: (value) {
                       if (!value!.isValidNumber) {
-                        return 'enter valid phone must start with + ';
+                        return 'enter valid phone must start with +970 ';
                       }
                       return null;
                     },
@@ -118,11 +148,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 52,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Success'),
-                          ),
+                        AuthFireBase.createUserAccount(
+                          emailController.text.trim().toString(),
+                          passwordController.text.trim().toString(),
+                          userNameController.text.trim().toString(),
+                          phoneController.text.trim().toString(),
                         );
+
+                        AppRouter.goToAndRemove(
+                            screenName: NamedRouter.mainScreen);
+
+                        UtilsConfig.showSnackBarMessage(
+                            message: 'Thanks for signing up!.', status: true);
+                      } else {
+                        UtilsConfig.showSnackBarMessage(
+                            message: 'Enter valid Information', status: false);
                       }
                     },
                   ),

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/header_widget.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/login_body_widget.dart';
+import 'package:task_mangment/utils/UtilsConfig.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../logic/auth_provider.dart';
@@ -69,9 +70,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         34.ph,
                         LoginScreenBodyWidget(
                           onPressed: () {
-                            AuthFireBase.logIn(
-                                emailController.text.trim().toString(),
-                                passwordController.text.trim().toString());
+                            if (_formKey.currentState!.validate()) {
+                              AuthFireBase.logIn(
+                                  emailController.text.trim().toString(),
+                                  passwordController.text.trim().toString());
+
+
+                            }
+                            else {
+                              UtilsConfig.showSnackBarMessage(
+                                  message: 'Enter valid Information',
+                                  status: false);
+                            }
                           },
                           emailController: emailController,
                           passwordController: passwordController,

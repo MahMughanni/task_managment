@@ -21,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
 
   List<Widget> _buildScreens() {
     return [
-       HomeScreen(),
+      HomeScreen(),
       const AssignedScreen(),
       const AddTaskScreen(),
       const NotificationScreen(),
@@ -97,19 +97,6 @@ class _MainScreenState extends State<MainScreen> {
         duration: Duration(milliseconds: 500),
       ),
       navBarStyle: NavBarStyle.style15,
-    );
-  }
-}
-
-class SecondScreen extends StatelessWidget {
-  const SecondScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Secondscreen'),
-      ),
     );
   }
 }
