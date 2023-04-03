@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:task_mangment/model/task_model.dart';
 import 'package:task_mangment/utils/UtilsConfig.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +8,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/user_model.dart';
 
 class AuthFireBase {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final user = FirebaseAuth.instance.currentUser!;
+
   static Future logIn(String email, String password) async {
     try {
       await FirebaseAuth.instance
@@ -73,23 +78,51 @@ class AuthFireBase {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('tasks')
         .where('userId', isEqualTo: userId)
-        .orderBy('createdAt', descending: true)
+        .orderBy('createdDate', descending: true)
         .get();
+    // print(querySnapshot.metadata.toString());
 
-    querySnapshot.docs.forEach((doc) {
+    for (var doc in querySnapshot.docs) {
       final data = doc.data();
-      final task = TaskModel(
-        id: doc.id,
-        title: data['title'],
-        description: data['description'],
-        createdDate: data['createdDate'].toDate(),
-        // userId: data['userId'],
-        isCompleted: data['isCompleted'],
-      );
-      tasks.add(task);
-    });
+      // final task = TaskModel(
+      //   id: doc.id,
+      //   title: data['title'],
+      //   description: data['description'],
+      //   createdDate: data['createdDate'].toDate(),
+      //   // userId: data['userId'],
+      //   isCompleted: data['isCompleted'] ?? '',
+      //   createdBy: 'createdBy',
+      // );
+      // tasks.add(task);
+    }
 
-    print(tasks.first.toString());
+    // print(tasks.first.toString());
     return tasks.toList();
+  }
+
+  Future<void> addTask(
+    String title,
+    String description,
+    DateTime startTime,
+    DateTime endTime,
+    DateTime deadline, // new parameter
+  ) async {
+    final userModel = UserModel.fromSnapshot(
+      await _firestore.collection('users').doc(user.uid).get(),
+    );
+
+    final task = TaskModel(
+      title: title,
+      description: description,
+      startTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(startTime),
+      endTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(endTime),
+      state: 'assigned',
+    );
+
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('tasks')
+        .add(task.toMap());
   }
 }

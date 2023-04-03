@@ -15,6 +15,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userFuture = AuthFireBase.getUserInfo();
+    final userTasks = AuthFireBase.getUserTasks(userId: user.uid);
     return DefaultTabController(
       length: 3,
       child: SafeArea(
@@ -45,46 +46,47 @@ class HomeScreen extends StatelessWidget {
                     },
                     body: TabBarView(
                       children: [
-                        // FutureBuilder<List<TaskModel>>(
-                        //   future: AuthFireBase.getUserTasks(userId: user.uid),
-                        //   builder: (context, snapshot) {
-                        //     print(snapshot.data) ;
-                        //     if (snapshot.connectionState ==
-                        //         ConnectionState.waiting) {
-                        //       return Center(child: CircularProgressIndicator());
-                        //     }
-                        //     if (snapshot.hasError) {
-                        //       return Center(
-                        //           child: Text('Error: ${snapshot.error}'));
-                        //     }
-                        //     final tasks = snapshot.data!;
-                        //     return ListView.builder(
-                        //       itemCount: tasks.length,
-                        //       shrinkWrap: true,
-                        //       itemBuilder: (BuildContext context, int index) {
-                        //         return ListViewItemBody(
-                        //           title: tasks[index].title,
-                        //           startTime:"",
-                        //           userName: 'name',
-                        //           taskCategory: '',
-                        //           // endTime: tasks[index].endTime,
-                        //         );
-                        //       },
-                        //     );
-                        //   },
-                        // ),
-                        ListView.builder(
-                          itemCount: 10,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return const ListViewItemBody(
-                              userName: '',
-                              taskCategory: '',
-                              startTime: '',
-                              title: '',
+                        FutureBuilder<dynamic>(
+                          future: userTasks,
+                          builder: (mContext, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (snapshot.hasError) {
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            }
+                            final tasks = snapshot.data!;
+                            return ListView.builder(
+                              itemCount: tasks.length,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                // print(tasks[index].title);
+                                return ListViewItemBody(
+                                  title: tasks[index].title,
+                                  startTime: tasks[index].createdDate.toString(),
+                                  userName: 'name',
+                                  taskCategory: 'Task Category',
+                                  // endTime: tasks[index].endTime,
+                                );
+                              },
                             );
                           },
                         ),
+                        // ListView.builder(
+                        //   itemCount: 10,
+                        //   shrinkWrap: true,
+                        //   itemBuilder: (BuildContext context, int index) {
+                        //     return const ListViewItemBody(
+                        //       userName: '',
+                        //       taskCategory: '',
+                        //       startTime: '',
+                        //       title: '',
+                        //     );
+                        //   },
+                        // ),
                         ListView.builder(
                           itemCount: 2,
                           shrinkWrap: true,
