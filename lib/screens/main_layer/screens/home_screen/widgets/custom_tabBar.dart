@@ -5,7 +5,9 @@ import 'package:task_mangment/utils/extentions/padding_extention.dart';
 import '../../../../../shared_widgets/cutom_container.dart';
 
 class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
-  const TabBarViewTabs({Key? key}) : super(key: key);
+  const TabBarViewTabs({Key? key, required this.userName}) : super(key: key);
+
+  final String userName;
 
   @override
   Widget build(BuildContext context) {
@@ -28,28 +30,32 @@ class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
                       child: Image.asset(ImageConstManger.logoImage),
                     ),
                     8.pw,
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        RichText(
-                          text: const TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              text: 'Hi ,',
-                              children: [
-                                TextSpan(text: 'User Name'),
-                              ]),
-                        ),
-                        RichText(
-                          text: const TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              text: ' You Have',
-                              children: [
-                                TextSpan(
-                                    text: '8 Task',
-                                    style: TextStyle(color: Colors.blueAccent)),
-                              ]),
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                                style: const TextStyle(color: Colors.black , fontSize: 16),
+                                text: 'Hi ,',
+                                children: [
+                                  TextSpan(text: userName ,style: Theme.of(context).textTheme.titleLarge),
+                                ]),
+                          ),
+                          6.ph,
+                          RichText(
+                            text: const TextSpan(
+                                style: TextStyle(color: Colors.black),
+                                text: ' You Have',
+                                children: [
+                                  TextSpan(
+                                      text: '8 Task',
+                                      style: TextStyle(color: Colors.blueAccent)),
+                                ]),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

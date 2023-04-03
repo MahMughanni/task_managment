@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 
 class ListViewItemBody extends StatelessWidget {
-  const ListViewItemBody({Key? key}) : super(key: key);
+  const ListViewItemBody(
+      {Key? key,
+      required this.userName,
+      required this.taskCategory,
+      required this.startTime,
+      required this.title})
+      : super(key: key);
+
+  final String userName, taskCategory, startTime, title;
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +39,10 @@ class ListViewItemBody extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Task category'),
+              Text(taskCategory),
               RichText(
                   text: TextSpan(
-                      text: 'UserName  ',
+                      text: userName,
                       style: const TextStyle(color: Colors.black),
                       children: [
                     WidgetSpan(
@@ -45,8 +53,8 @@ class ListViewItemBody extends StatelessWidget {
                     ))
                   ])),
               RichText(
-                  text: const TextSpan(
-                      text: '6.Feb.2023 ',
+                  text: TextSpan(
+                      text: startTime,
                       style: TextStyle(color: Colors.red),
                       children: [
                     WidgetSpan(
@@ -55,7 +63,7 @@ class ListViewItemBody extends StatelessWidget {
                       size: 20,
                     ))
                   ])),
-              const Text('Assigned employee'),
+              Text(title),
             ],
           ),
           CircleAvatar(

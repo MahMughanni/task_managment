@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:task_mangment/model/task_model.dart';
 import 'package:task_mangment/utils/UtilsConfig.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../model/user_model.dart';
 
 class AuthFireBase {
   static Future logIn(String email, String password) async {
@@ -26,22 +29,16 @@ class AuthFireBase {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    print('frist step') ;
     try {
-      print('create account') ;
-      // Create user account with email and password
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      print('create account2') ;
 
-      // Add user information to FireStore
       String userId = userCredential.user!.uid;
-      print('create account1 ') ;
 
       await firestore
           .collection('users')
           .doc(userId)
-          .set({'username': username, 'phone': phone});
+          .set({'username': username, 'phone': phone, 'role': 'user'});
 
       print('User created successfully!');
     } on FirebaseAuthException catch (e) {
@@ -54,5 +51,45 @@ class AuthFireBase {
             message: 'Wrong password provided for that user.', status: false);
       }
     }
+  }
+
+  static Future<UserModel> getUserInfo() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    final userData = await firestore.collection('users').doc(userId).get();
+    final userName = userData.get('username');
+    final role = userData.get('role');
+    final phone = userData.get('phone');
+
+    final userModel =
+        UserModel(userName: userName, uId: userId, phone: phone, role: role);
+
+    return userModel;
+  }
+
+  static Future<List<TaskModel>> getUserTasks({required String userId}) async {
+    final tasks = <TaskModel>[];
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('tasks')
+        .where('userId', isEqualTo: userId)
+        .orderBy('createdAt', descending: true)
+        .get();
+
+    querySnapshot.docs.forEach((doc) {
+      final data = doc.data();
+      final task = TaskModel(
+        id: doc.id,
+        title: data['title'],
+        description: data['description'],
+        createdDate: data['createdDate'].toDate(),
+        // userId: data['userId'],
+        isCompleted: data['isCompleted'],
+      );
+      tasks.add(task);
+    });
+
+    print(tasks.first.toString());
+    return tasks.toList();
   }
 }

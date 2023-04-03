@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:task_mangment/core/routes/generate_routes.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
 
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:task_mangment/model/user_model.dart';
 import 'package:task_mangment/utils/UtilsConfig.dart';
 
 import 'logic/auth_provider.dart';
@@ -14,6 +16,10 @@ import 'logic/auth_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // final data =  AuthFireBase.getUserTasks(userId: 'i8I9c76QJxOUU6hjIiJ0ND23kIi2');
+  // print("data :${data}");
+  // addTask('Buy mahmoud', 'Milk, eggs, bread, and cheese');
+
   // FirebaseAuth.instance.signOut();
   // AuthFireBase.createUserAccount('mahm@asd.com', '123456mA@', 'mahmoud', '0597289998');
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
@@ -46,3 +52,24 @@ class TaskManageMentApp extends StatelessWidget {
     );
   }
 }
+
+// Future<void> addTask(String title, String description) async {
+//   final userId = FirebaseAuth.instance.currentUser!.uid;
+//   final tasksRef = FirebaseFirestore.instance.collection('tasks');
+//   final newTaskRef =
+//       tasksRef.doc(); // creates a new DocumentReference with a unique ID
+//
+//   try {
+//     await newTaskRef.set({
+//       'userId': userId,
+//       'title': title,
+//       'description': description,
+//       'createdDate': DateTime.now(),
+//       'completed': false,
+//     });
+//
+//     print('Task added successfully!');
+//   } catch (e) {
+//     print('Error adding task: $e');
+//   }
+// }

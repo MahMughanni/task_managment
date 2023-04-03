@@ -13,9 +13,8 @@ class OnGenerateRouter {
 
     Widget result;
     switch (settings.name) {
-
       case NamedRouter.mainScreen:
-        result = const MainScreen();
+        result = MainScreen();
         break;
 
       case NamedRouter.loginScreen:
