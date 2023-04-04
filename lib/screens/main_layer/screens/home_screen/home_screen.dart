@@ -1,17 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
-import 'package:task_mangment/utils/UtilsConfig.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_task_list.dart';
+import 'package:task_mangment/shared_widgets/cutom_container.dart';
 
 import '../../../../logic/firebase_controller.dart';
 import '../../../../model/task_model.dart';
 import '../../../../model/user_model.dart';
-import '../../../../shared_widgets/list_item_body.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
   final user = FirebaseAuth.instance.currentUser!;
+  List taskTitles = [
+    'Tasks',
+    'Assigned',
+    'Completed',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -44,145 +49,105 @@ class HomeScreen extends StatelessWidget {
                           builder: (context2, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return SliverPersistentHeader(
-                                delegate: MySliverAppBar(
-                                  expandedHeight: 300,
+                              return _buildSliverAppBar(
                                   userName: userData.userName.toString(),
                                   taskNumber: 'Loading...',
-                                ),
-                              );
+                                  itemCount: 3,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Container();
+                                  });
                             } else if (snapshot.hasError) {
-                              return SliverPersistentHeader(
-                                delegate: MySliverAppBar(
-                                  expandedHeight: 300,
-                                  userName: userData.userName.toString(),
-                                  taskNumber: 'Error: ${snapshot.error}',
-                                ),
+                              return _buildSliverAppBar(
+                                userName: userData.userName.toString(),
+                                taskNumber: 'Error: ${snapshot.error}',
+                                itemCount: 3,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container();
+                                },
                               );
                             } else {
                               List<TaskModel> userTasks = snapshot.data!;
-                              return SliverPersistentHeader(
-                                delegate: MySliverAppBar(
-                                  expandedHeight: 300,
-                                  userName: userData.userName.toString(),
-                                  taskNumber: userTasks.length.toString(),
-                                ),
+                              return _buildSliverAppBar(
+                                userName: userData.userName.toString(),
+                                taskNumber: userTasks.length.toString(),
+                                itemCount: 3,
+                                itemBuilder: (BuildContext context, int index) {
+                                  int todayTasksCount = userTasks
+                                      .where((task) => task.state == 'today')
+                                      .length;
+                                  int upcomingTasksCount = userTasks
+                                      .where((task) => task.state == 'upcoming')
+                                      .length;
+                                  int completedTasksCount = userTasks
+                                      .where(
+                                          (task) => task.state == 'completed')
+                                      .length;
+
+                                  switch (index) {
+                                    case 0:
+                                      return CustomContainer(
+                                        color: const Color(0xffF9B5D0),
+                                        titel: 'Today',
+                                        taskNumber: todayTasksCount.toString(),
+                                      );
+                                    case 1:
+                                      return CustomContainer(
+                                        color: const Color(0xffC9F4AA),
+                                        titel: 'Upcoming',
+                                        taskNumber:
+                                            upcomingTasksCount.toString(),
+                                      );
+                                    case 2:
+                                      return CustomContainer(
+                                        color: const Color(0xffF3CCFF),
+                                        titel: 'Completed',
+                                        taskNumber:
+                                            completedTasksCount.toString(),
+                                      );
+                                    default:
+                                      return const CustomContainer(
+                                          titel: '', taskNumber: '');
+                                  }
+                                },
                               );
                             }
                           },
                         ),
                       ];
                     },
-                    body: TabBarView(
-                      children: [
-                        FutureBuilder<dynamic>(
-                          future: userTasks,
-                          builder: (mContext, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-                            if (snapshot.hasError) {
-                              return Center(
-                                  child: Text('Error: ${snapshot.error}'));
-                            }
-                            final tasks = snapshot.data!;
-                            return ListView.builder(
-                                itemCount: tasks.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  // print(tasks[index].state);
-                                  if (tasks[index].state == 'today') {
-                                    return ListViewItemBody(
-                                      title: tasks[index].description,
-                                      startTime: UtilsConfig.formatTime(
-                                              tasks[index].startTime)
-                                          .toString(),
-                                      userName: tasks[index].title,
-                                      taskCategory: tasks[index].state,
-                                      // endTime: tasks[index].endTime,
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
-                                });
-                          },
-                        ),
-                        FutureBuilder<dynamic>(
-                          future: userTasks,
-                          builder: (mContext, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-                            if (snapshot.hasError) {
-                              return Center(
-                                  child: Text('Error: ${snapshot.error}'));
-                            }
-                            final tasks = snapshot.data!;
-                            return ListView.builder(
-                                itemCount: tasks.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  // print(tasks[index].state);
-                                  if (tasks[index].state == 'upcoming') {
-                                    return ListViewItemBody(
-                                      title: tasks[index].description,
-                                      startTime: UtilsConfig.formatTime(
-                                              tasks[index].startTime)
-                                          .toString(),
-                                      userName: tasks[index].title,
-                                      taskCategory: tasks[index].state,
-                                      // endTime: tasks[index].endTime,
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
-                                });
-                          },
-                        ),
-                        FutureBuilder<dynamic>(
-                          future: userTasks,
-                          builder: (mContext, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-                            if (snapshot.hasError) {
-                              return Center(
-                                  child: Text('Error: ${snapshot.error}'));
-                            }
-                            final tasks = snapshot.data!;
-                            return ListView.builder(
-                                itemCount: tasks.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  // print(tasks[index].state);
-                                  if (tasks[index].state == 'completed') {
-                                    return ListViewItemBody(
-                                      title: tasks[index].description,
-                                      startTime: UtilsConfig.formatTime(
-                                              tasks[index].startTime)
-                                          .toString(),
-                                      userName: tasks[index].title,
-                                      taskCategory: tasks[index].state,
-                                      // endTime: tasks[index].endTime,
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
-                                });
-                          },
-                        ),
-                      ],
-                    ));
+                    body: TabBarView(children: [
+                      CustomTaskList(
+                          state: 'today', label: 'today', userTask: userTasks),
+                      CustomTaskList(
+                          state: 'upcoming',
+                          label: 'Upcoming',
+                          userTask: userTasks),
+                      CustomTaskList(
+                          state: 'completed',
+                          label: 'Completed',
+                          userTask: userTasks),
+                    ]));
               }
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSliverAppBar(
+      {required String userName,
+      required String taskNumber,
+      required int itemCount,
+      required IndexedWidgetBuilder itemBuilder}) {
+    return SliverPersistentHeader(
+      delegate: MySliverAppBar(
+        expandedHeight: 300,
+        userName: userName,
+        taskNumber: taskNumber,
+        itemBuilder: itemBuilder,
+        itemCount: itemCount,
       ),
     );
   }

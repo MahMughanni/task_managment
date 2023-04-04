@@ -6,12 +6,16 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
 
   MySliverAppBar({
+    required this.itemBuilder,
+    required this.itemCount,
     required this.expandedHeight,
     required this.userName,
     required this.taskNumber,
   });
 
   final String userName, taskNumber;
+  final Widget? Function(BuildContext, int) itemBuilder;
+  final int itemCount;
 
   @override
   Widget build(
@@ -19,6 +23,8 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
     return TabBarViewTabs(
       userName: userName,
       taskNumber: taskNumber,
+      itemBuilder: itemBuilder,
+      itemCount: itemCount,
     );
   }
 

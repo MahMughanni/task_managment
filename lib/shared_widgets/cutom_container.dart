@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 class CustomContainer extends StatelessWidget {
   const CustomContainer({
     Key? key,
-    this.child,
     this.color = Colors.grey,
+    required this.titel,
+    required this.taskNumber,
   }) : super(key: key);
-  final Widget? child;
   final Color? color;
+  final String titel, taskNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,14 @@ class CustomContainer extends StatelessWidget {
           BoxDecoration(color: color, borderRadius: BorderRadius.circular(15)),
       height: height * .1,
       width: width * .29,
-      child: Text('222'),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(titel , style: Theme.of(context).textTheme.titleMedium,),
+          Text(taskNumber),
+        ],
+      ),
     );
   }
 }

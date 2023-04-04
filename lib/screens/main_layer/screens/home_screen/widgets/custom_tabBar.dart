@@ -6,10 +6,16 @@ import '../../../../../shared_widgets/cutom_container.dart';
 
 class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
   const TabBarViewTabs(
-      {Key? key, required this.userName, required this.taskNumber})
+      {Key? key,
+      required this.userName,
+      required this.taskNumber,
+      required this.itemBuilder,
+      required this.itemCount})
       : super(key: key);
 
   final String userName, taskNumber;
+  final Widget? Function(BuildContext, int) itemBuilder;
+  final int itemCount;
 
   @override
   Widget build(BuildContext context) {
@@ -70,23 +76,37 @@ class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
                 const Icon(Icons.calendar_month)
               ],
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  CustomContainer(
-                    color: Color(0xffF9B5D0),
-                  ),
-                  CustomContainer(
-                    color: Color(0xffC9F4AA),
-                  ),
-                  CustomContainer(
-                    color: Color(0xffF3CCFF),
-                  ),
-                ],
-              ),
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: itemCount,
+                  itemBuilder: itemBuilder),
             ),
+            // SingleChildScrollView(
+            //   scrollDirection: Axis.horizontal,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       CustomContainer(
+            //         color: const Color(0xffF9B5D0),
+            //         titel: 'Tasks',
+            //         taskNumber: taskNumber,
+            //       ),
+            //       CustomContainer(
+            //         color: const Color(0xffC9F4AA),
+            //         titel: 'Assigned',
+            //         taskNumber: taskNumber,
+            //       ),
+            //       CustomContainer(
+            //         color: const Color(0xffF3CCFF),
+            //         titel: 'Completed',
+            //         taskNumber: taskNumber,
+            //       ),
+            //     ],
+            //   ),
+            // ),
             16.ph,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
