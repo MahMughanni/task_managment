@@ -25,7 +25,7 @@ class ListViewItemBody extends StatelessWidget {
           BoxShadow(
             blurRadius: .5,
             spreadRadius: .5,
-            offset: const Offset(-10, 0),
+            offset: const Offset(-5, 0),
             color: Colors.blueAccent.withOpacity(.4),
           )
         ],
@@ -55,15 +55,18 @@ class ListViewItemBody extends StatelessWidget {
               RichText(
                   text: TextSpan(
                       text: startTime,
-                      style: TextStyle(color: Colors.red),
-                      children: [
+                      style: const TextStyle(color: Colors.red),
+                      children: const [
                     WidgetSpan(
                         child: Icon(
                       Icons.calendar_month,
                       size: 20,
                     ))
                   ])),
-              Text(title),
+              Text(
+                title,
+                style: const TextStyle(fontSize: 16, color: Colors.blueAccent),
+              ),
             ],
           ),
           CircleAvatar(

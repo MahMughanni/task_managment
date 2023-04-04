@@ -6,7 +6,16 @@ class AddTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        centerTitle: false,
+        backgroundColor: Colors.white54,
+        elevation: 0,
+        automaticallyImplyLeading: true,
+        title: Text(
+          'Create Task',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      ),
     );
   }
 }

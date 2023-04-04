@@ -5,7 +5,7 @@ import 'package:task_mangment/screens/auth_layer/widgets/login_body_widget.dart'
 import 'package:task_mangment/utils/UtilsConfig.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
-import '../../logic/auth_provider.dart';
+import '../../logic/firebase_controller.dart';
 import '../main_layer/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         LoginScreenBodyWidget(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              AuthFireBase.logIn(
+                              FireBaseController.logIn(
                                   emailController.text.trim().toString(),
                                   passwordController.text.trim().toString());
 

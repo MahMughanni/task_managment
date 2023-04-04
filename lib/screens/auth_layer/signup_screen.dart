@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/logic/auth_provider.dart';
+import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/custom_rich_text.dart';
 import 'package:task_mangment/utils/UtilsConfig.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
@@ -148,15 +148,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 52,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        AuthFireBase.createUserAccount(
+                        FireBaseController.createUserAccount(
                           emailController.text.trim().toString(),
                           passwordController.text.trim().toString(),
                           userNameController.text.trim().toString(),
                           phoneController.text.trim().toString(),
                         );
-
                         AppRouter.goToAndRemove(
-                            screenName: NamedRouter.mainScreen);
+                            screenName: NamedRouter.loginScreen);
 
                         UtilsConfig.showSnackBarMessage(
                             message: 'Thanks for signing up!.', status: true);

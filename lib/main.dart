@@ -12,7 +12,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:task_mangment/model/user_model.dart';
 import 'package:task_mangment/utils/UtilsConfig.dart';
 
-import 'logic/auth_provider.dart';
+import 'logic/firebase_controller.dart';
 import 'model/task_model.dart';
 
 void main() async {
@@ -26,12 +26,12 @@ void main() async {
   // FirebaseAuth.instance.signOut();
   // AuthFireBase.createUserAccount('mahm@asd.com', '123456mA@', 'mahmoud', '0597289998');
 
-  addTask(
-      title: 'task1',
-      description: 'test',
-      startTime: DateTime.now(),
-      endTime: DateTime.now(),
-      state: 'today');
+  // addTask(
+  //     title: 'Ui1223333',
+  //     description: 'te222133',
+  //     startTime: DateTime.now(),
+  //     endTime: DateTime.now(),
+  //     state: 'upcoming');
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(const TaskManageMentApp()),

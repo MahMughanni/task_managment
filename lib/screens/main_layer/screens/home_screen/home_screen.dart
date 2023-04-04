@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:task_mangment/model/task_model.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
+import 'package:task_mangment/utils/UtilsConfig.dart';
 
-import '../../../../logic/auth_provider.dart';
+import '../../../../logic/firebase_controller.dart';
+import '../../../../model/task_model.dart';
 import '../../../../model/user_model.dart';
 import '../../../../shared_widgets/list_item_body.dart';
 
@@ -14,8 +15,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userFuture = AuthFireBase.getUserInfo();
-    final userTasks = AuthFireBase.getUserTasks(userId: user.uid);
+    final userFuture = FireBaseController.getUserInfo();
+    final userTasks = FireBaseController.getUserTasks(userId: user.uid);
     return DefaultTabController(
       length: 3,
       child: SafeArea(
@@ -37,11 +38,39 @@ class HomeScreen extends StatelessWidget {
                     headerSliverBuilder:
                         (BuildContext context, bool innerBoxIsScrolled) {
                       return [
-                        SliverPersistentHeader(
-                            delegate: MySliverAppBar(
-                          expandedHeight: 300,
-                          userName: userData.userName.toString(),
-                        ))
+                        FutureBuilder<List<TaskModel>>(
+                          future:
+                              FireBaseController.getUserTasks(userId: user.uid),
+                          builder: (context2, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return SliverPersistentHeader(
+                                delegate: MySliverAppBar(
+                                  expandedHeight: 300,
+                                  userName: userData.userName.toString(),
+                                  taskNumber: 'Loading...',
+                                ),
+                              );
+                            } else if (snapshot.hasError) {
+                              return SliverPersistentHeader(
+                                delegate: MySliverAppBar(
+                                  expandedHeight: 300,
+                                  userName: userData.userName.toString(),
+                                  taskNumber: 'Error: ${snapshot.error}',
+                                ),
+                              );
+                            } else {
+                              List<TaskModel> userTasks = snapshot.data!;
+                              return SliverPersistentHeader(
+                                delegate: MySliverAppBar(
+                                  expandedHeight: 300,
+                                  userName: userData.userName.toString(),
+                                  taskNumber: userTasks.length.toString(),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       ];
                     },
                     body: TabBarView(
@@ -60,55 +89,92 @@ class HomeScreen extends StatelessWidget {
                             }
                             final tasks = snapshot.data!;
                             return ListView.builder(
-                              itemCount: tasks.length,
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                // print(tasks[index].title);
-                                return ListViewItemBody(
-                                  title: tasks[index].title,
-                                  startTime: tasks[index].createdDate.toString(),
-                                  userName: 'name',
-                                  taskCategory: 'Task Category',
-                                  // endTime: tasks[index].endTime,
-                                );
-                              },
-                            );
+                                itemCount: tasks.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  // print(tasks[index].state);
+                                  if (tasks[index].state == 'today') {
+                                    return ListViewItemBody(
+                                      title: tasks[index].description,
+                                      startTime: UtilsConfig.formatTime(
+                                              tasks[index].startTime)
+                                          .toString(),
+                                      userName: tasks[index].title,
+                                      taskCategory: tasks[index].state,
+                                      // endTime: tasks[index].endTime,
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                });
                           },
                         ),
-                        // ListView.builder(
-                        //   itemCount: 10,
-                        //   shrinkWrap: true,
-                        //   itemBuilder: (BuildContext context, int index) {
-                        //     return const ListViewItemBody(
-                        //       userName: '',
-                        //       taskCategory: '',
-                        //       startTime: '',
-                        //       title: '',
-                        //     );
-                        //   },
-                        // ),
-                        ListView.builder(
-                          itemCount: 2,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return const ListViewItemBody(
-                              userName: '',
-                              taskCategory: '',
-                              startTime: '',
-                              title: '',
-                            );
+                        FutureBuilder<dynamic>(
+                          future: userTasks,
+                          builder: (mContext, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (snapshot.hasError) {
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            }
+                            final tasks = snapshot.data!;
+                            return ListView.builder(
+                                itemCount: tasks.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  // print(tasks[index].state);
+                                  if (tasks[index].state == 'upcoming') {
+                                    return ListViewItemBody(
+                                      title: tasks[index].description,
+                                      startTime: UtilsConfig.formatTime(
+                                              tasks[index].startTime)
+                                          .toString(),
+                                      userName: tasks[index].title,
+                                      taskCategory: tasks[index].state,
+                                      // endTime: tasks[index].endTime,
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                });
                           },
                         ),
-                        ListView.builder(
-                          itemCount: 3,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return const ListViewItemBody(
-                              userName: '',
-                              taskCategory: '',
-                              startTime: '',
-                              title: '',
-                            );
+                        FutureBuilder<dynamic>(
+                          future: userTasks,
+                          builder: (mContext, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (snapshot.hasError) {
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            }
+                            final tasks = snapshot.data!;
+                            return ListView.builder(
+                                itemCount: tasks.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  // print(tasks[index].state);
+                                  if (tasks[index].state == 'completed') {
+                                    return ListViewItemBody(
+                                      title: tasks[index].description,
+                                      startTime: UtilsConfig.formatTime(
+                                              tasks[index].startTime)
+                                          .toString(),
+                                      userName: tasks[index].title,
+                                      taskCategory: tasks[index].state,
+                                      // endTime: tasks[index].endTime,
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                });
                           },
                         ),
                       ],

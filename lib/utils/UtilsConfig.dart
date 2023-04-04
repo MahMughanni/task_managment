@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import 'app_constants.dart';
@@ -46,6 +47,11 @@ class UtilsConfig {
     );
   }
 
+  static String formatTime(data) {
+    DateTime createdDate = DateTime.parse(data);
+    String formattedDate = DateFormat.yMMMEd().format(createdDate);
+    return formattedDate;
+  }
 // static showAlertDialog(BuildContext context, String title) {
 //   AlertDialog alert = AlertDialog(
 //     elevation: 5,

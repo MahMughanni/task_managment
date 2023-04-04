@@ -14,12 +14,13 @@ class CustomContainer extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Container(
+      alignment: Alignment.center,
       margin: const EdgeInsets.all(6),
       decoration:
           BoxDecoration(color: color, borderRadius: BorderRadius.circular(15)),
       height: height * .1,
       width: width * .29,
-      child: child,
+      child: Text('222'),
     );
   }
 }

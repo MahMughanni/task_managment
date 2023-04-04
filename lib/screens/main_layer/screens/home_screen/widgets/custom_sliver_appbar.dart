@@ -5,15 +5,20 @@ import 'custom_tabBar.dart';
 class MySliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
 
-  MySliverAppBar({required this.expandedHeight, required this.userName});
+  MySliverAppBar({
+    required this.expandedHeight,
+    required this.userName,
+    required this.taskNumber,
+  });
 
-  final String userName;
+  final String userName, taskNumber;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return TabBarViewTabs(
       userName: userName,
+      taskNumber: taskNumber,
     );
   }
 

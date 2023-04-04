@@ -5,9 +5,11 @@ import 'package:task_mangment/utils/extentions/padding_extention.dart';
 import '../../../../../shared_widgets/cutom_container.dart';
 
 class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
-  const TabBarViewTabs({Key? key, required this.userName}) : super(key: key);
+  const TabBarViewTabs(
+      {Key? key, required this.userName, required this.taskNumber})
+      : super(key: key);
 
-  final String userName;
+  final String userName, taskNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +39,27 @@ class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
                         children: [
                           RichText(
                             text: TextSpan(
-                                style: const TextStyle(color: Colors.black , fontSize: 16),
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 16),
                                 text: 'Hi ,',
                                 children: [
-                                  TextSpan(text: userName ,style: Theme.of(context).textTheme.titleLarge),
+                                  TextSpan(
+                                      text: userName,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge),
                                 ]),
                           ),
                           6.ph,
                           RichText(
-                            text: const TextSpan(
-                                style: TextStyle(color: Colors.black),
+                            text: TextSpan(
+                                style: const TextStyle(color: Colors.black),
                                 text: ' You Have',
                                 children: [
                                   TextSpan(
-                                      text: '8 Task',
-                                      style: TextStyle(color: Colors.blueAccent)),
+                                      text: '$taskNumber Task',
+                                      style: const TextStyle(
+                                          color: Colors.blueAccent)),
                                 ]),
                           ),
                         ],
@@ -67,9 +75,15 @@ class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
-                  CustomContainer(),
-                  CustomContainer(),
-                  CustomContainer(),
+                  CustomContainer(
+                    color: Color(0xffF9B5D0),
+                  ),
+                  CustomContainer(
+                    color: Color(0xffC9F4AA),
+                  ),
+                  CustomContainer(
+                    color: Color(0xffF3CCFF),
+                  ),
                 ],
               ),
             ),
