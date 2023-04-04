@@ -23,11 +23,19 @@ class ListViewItemBody extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            blurRadius: .5,
-            spreadRadius: .5,
-            offset: const Offset(-5, 0),
-            color: Colors.blueAccent.withOpacity(.4),
-          )
+            blurRadius: 1,
+            spreadRadius: .3,
+            blurStyle: BlurStyle.inner,
+            offset: const Offset(-8.5, -.1),
+            color: Colors.blueAccent.withOpacity(.3),
+          ),
+          BoxShadow(
+            blurRadius: 3,
+            spreadRadius: .3,
+            blurStyle: BlurStyle.normal,
+            offset: const Offset(1, 2),
+            color: Colors.grey.withOpacity(.3),
+          ),
         ],
         borderRadius: BorderRadius.circular(10),
       ),

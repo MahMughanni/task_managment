@@ -4,11 +4,11 @@ class CustomContainer extends StatelessWidget {
   const CustomContainer({
     Key? key,
     this.color = Colors.grey,
-    required this.titel,
+    required this.title,
     required this.taskNumber,
   }) : super(key: key);
   final Color? color;
-  final String titel, taskNumber;
+  final String title, taskNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +19,13 @@ class CustomContainer extends StatelessWidget {
       margin: const EdgeInsets.all(6),
       decoration:
           BoxDecoration(color: color, borderRadius: BorderRadius.circular(15)),
-      height: height * .1,
+      height: height * .20,
       width: width * .29,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(titel , style: Theme.of(context).textTheme.titleMedium,),
+          Text(title , style: Theme.of(context).textTheme.titleMedium,),
           Text(taskNumber),
         ],
       ),

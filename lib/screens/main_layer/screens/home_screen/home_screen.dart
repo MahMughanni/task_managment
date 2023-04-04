@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
   final user = FirebaseAuth.instance.currentUser!;
-  List taskTitles = [
+  final List taskTitles = [
     'Tasks',
     'Assigned',
     'Completed',
@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                           builder: (context2, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return _buildSliverAppBar(
+                              return BuildSliverAppBar(
                                   userName: userData.userName.toString(),
                                   taskNumber: 'Loading...',
                                   itemCount: 3,
@@ -58,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                                     return Container();
                                   });
                             } else if (snapshot.hasError) {
-                              return _buildSliverAppBar(
+                              return BuildSliverAppBar(
                                 userName: userData.userName.toString(),
                                 taskNumber: 'Error: ${snapshot.error}',
                                 itemCount: 3,
@@ -68,14 +68,12 @@ class HomeScreen extends StatelessWidget {
                               );
                             } else {
                               List<TaskModel> userTasks = snapshot.data!;
-                              return _buildSliverAppBar(
+                              return BuildSliverAppBar(
                                 userName: userData.userName.toString(),
                                 taskNumber: userTasks.length.toString(),
                                 itemCount: 3,
                                 itemBuilder: (BuildContext context, int index) {
-                                  int todayTasksCount = userTasks
-                                      .where((task) => task.state == 'today')
-                                      .length;
+                                  int todayTasksCount = userTasks.length;
                                   int upcomingTasksCount = userTasks
                                       .where((task) => task.state == 'upcoming')
                                       .length;
@@ -88,26 +86,26 @@ class HomeScreen extends StatelessWidget {
                                     case 0:
                                       return CustomContainer(
                                         color: const Color(0xffF9B5D0),
-                                        titel: 'Today',
+                                        title: 'Tasks',
                                         taskNumber: todayTasksCount.toString(),
                                       );
                                     case 1:
                                       return CustomContainer(
                                         color: const Color(0xffC9F4AA),
-                                        titel: 'Upcoming',
+                                        title: 'Assigned',
                                         taskNumber:
                                             upcomingTasksCount.toString(),
                                       );
                                     case 2:
                                       return CustomContainer(
                                         color: const Color(0xffF3CCFF),
-                                        titel: 'Completed',
+                                        title: 'Completed',
                                         taskNumber:
                                             completedTasksCount.toString(),
                                       );
                                     default:
                                       return const CustomContainer(
-                                          titel: '', taskNumber: '');
+                                          title: '', taskNumber: '');
                                   }
                                 },
                               );
@@ -135,12 +133,24 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildSliverAppBar(
-      {required String userName,
-      required String taskNumber,
-      required int itemCount,
-      required IndexedWidgetBuilder itemBuilder}) {
+class BuildSliverAppBar extends StatelessWidget {
+  const BuildSliverAppBar({
+    Key? key,
+    required this.userName,
+    required this.taskNumber,
+    required this.itemCount,
+    required this.itemBuilder,
+  }) : super(key: key);
+
+  final String userName;
+  final String taskNumber;
+  final int itemCount;
+  final IndexedWidgetBuilder itemBuilder;
+
+  @override
+  Widget build(BuildContext context) {
     return SliverPersistentHeader(
       delegate: MySliverAppBar(
         expandedHeight: 300,

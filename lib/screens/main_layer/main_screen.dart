@@ -90,13 +90,13 @@ class _MainScreenState extends State<MainScreen> {
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
       itemAnimationProperties: const ItemAnimationProperties(
-        duration: Duration(milliseconds: 400),
-        curve: Curves.ease,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOutSine,
       ),
       screenTransitionAnimation: const ScreenTransitionAnimation(
         animateTabTransition: true,
-        curve: Curves.easeInSine,
-        duration: Duration(milliseconds: 500),
+        curve: Curves.easeOutSine,
+        duration: Duration(milliseconds: 300),
       ),
       navBarStyle: NavBarStyle.style15,
     );

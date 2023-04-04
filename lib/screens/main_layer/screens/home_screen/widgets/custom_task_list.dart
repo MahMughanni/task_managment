@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../model/task_model.dart';
 import '../../../../../shared_widgets/list_item_body.dart';
 import '../../../../../utils/UtilsConfig.dart';
