@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_mangment/shared_widgets/list_item_body.dart';
 
-import '../../../shared_widgets/custom_appbar.dart';
+import '../../../../shared_widgets/custom_appbar.dart';
 
 class AssignedScreen extends StatelessWidget {
   const AssignedScreen({Key? key}) : super(key: key);

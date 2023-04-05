@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_task_list.dart';
 import 'package:task_mangment/shared_widgets/cutom_container.dart';
@@ -55,7 +57,15 @@ class HomeScreen extends StatelessWidget {
                                   itemCount: 3,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return Container();
+                                    return Shimmer.fromColors(
+                                      baseColor: Colors.grey[350]!,
+                                      highlightColor: Colors.grey[700]!,
+                                      child: const CustomContainer(
+                                        color: Color(0x86e5e5e5),
+                                        title: '',
+                                        taskNumber: '',
+                                      ),
+                                    );
                                   });
                             } else if (snapshot.hasError) {
                               return BuildSliverAppBar(

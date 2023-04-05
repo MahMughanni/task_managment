@@ -32,7 +32,13 @@ class CustomTaskList extends StatelessWidget {
         return stateTasks.isNotEmpty
             ? Column(
                 children: [
-                  Text(label),
+                  Text(
+                    label,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(color: Colors.blueAccent),
+                  ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: stateTasks.length,
