@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:task_mangment/model/task_model.dart';
 import 'package:task_mangment/utils/UtilsConfig.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/user_model.dart';
+
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as path;
 
 class FireBaseController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -66,10 +68,14 @@ class FireBaseController {
     final userName = userData.get('username');
     final role = userData.get('role');
     final phone = userData.get('phone');
+    final profileImageUrl = userData.get('profileImageUrl');
 
-    final userModel =
-        UserModel(userName: userName, uId: userId, phone: phone, role: role);
-
+    final userModel = UserModel(
+        userName: userName,
+        uId: userId,
+        phone: phone,
+        role: role,
+        profileImageUrl: profileImageUrl);
     return userModel;
   }
 
@@ -88,66 +94,45 @@ class FireBaseController {
     return tasks;
   }
 
-  // Future<void> addTask({
-  //   required String title,
-  //   required String description,
-  //   required DateTime startTime,
-  //   required DateTime endTime,
-  //   required String state,
-  //   required List<String> imageUrls, // new parameter
-  // }) async {
-  //   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  //   final user = FirebaseAuth.instance.currentUser!;
-  //
-  //   final userModel = UserModel.fromSnapshot(
-  //     await _firestore.collection('users').doc(user.uid).get(),
-  //   );
-  //
-  //   final task = TaskModel(
-  //     title: title,
-  //     description: description,
-  //     startTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(startTime),
-  //     endTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(endTime),
-  //     state: state,
-  //     imageUrls: imageUrls, // assign the new parameter value to the task model
-  //   );
-  //
-  //   await _firestore
-  //       .collection('users')
-  //       .doc(user.uid)
-  //       .collection('tasks')
-  //       .add(task.toMap());
-  //   print('add success');
-  // }
-
-  Future<void> addTask({
+  static Future<void> addTask({
     required String title,
     required String description,
     required DateTime startTime,
     required DateTime endTime,
     required String state,
+    required File imageFile,
   }) async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser!;
 
-    // final userModel = UserModel.fromSnapshot(
-    //   await _firestore.collection('users').doc(user.uid).get(),
-    // );
+    String? imageUrl;
+    final Reference storageRef =
+        FirebaseStorage.instance.ref().child('images/${user.uid}/$title');
+    final UploadTask uploadTask = storageRef.putFile(imageFile);
+    await uploadTask.whenComplete(() async {
+      imageUrl = await storageRef.getDownloadURL();
+    });
 
     final task = TaskModel(
       title: title,
       description: description,
-      startTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(startTime),
-      endTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(endTime),
+      startTime: UtilsConfig.formatTime(startTime),
+      endTime: UtilsConfig.formatTime(endTime),
       state: state,
+      imageUrl: imageUrl, // Set the imageUrl field to the download URL
     );
 
+    // Save the task to the user's tasks collection
     await _firestore
         .collection('users')
         .doc(user.uid)
         .collection('tasks')
         .add(task.toMap());
 
-    print('add seccess');
+    await _firestore.collection('users').doc(user.uid).update({
+      'profileImageUrl': imageUrl,
+    });
+
+    print('add success');
   }
 }

@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  final String? userName, uId, role, phone;
+  final String? userName, uId, role, phone, profileImageUrl;
 
   UserModel({
     this.userName = '',
     this.uId = '',
     this.role = '',
     this.phone = '',
+    this.profileImageUrl = '',
   });
 
   factory UserModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -17,11 +18,12 @@ class UserModel {
       userName: data['username'],
       role: data['role'],
       phone: data['phone'],
+      profileImageUrl: data['this.profileImageUrl,'],
     );
   }
 
   @override
   String toString() {
-    return 'UserModel{userName: $userName, uId: $uId, role: $role, phone: $phone}';
+    return 'UserModel{userName: $userName, uId: $uId, role: $role, phone: $phone, profileImageUrl: $profileImageUrl}';
   }
 }

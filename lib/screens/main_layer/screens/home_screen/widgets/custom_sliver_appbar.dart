@@ -6,6 +6,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
 
   MySliverAppBar({
+    required this.imageUrl,
     required this.itemBuilder,
     required this.itemCount,
     required this.expandedHeight,
@@ -13,7 +14,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
     required this.taskNumber,
   });
 
-  final String userName, taskNumber;
+  final String userName, taskNumber, imageUrl;
   final Widget? Function(BuildContext, int) itemBuilder;
   final int itemCount;
 
@@ -25,6 +26,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
       taskNumber: taskNumber,
       itemBuilder: itemBuilder,
       itemCount: itemCount,
+      imageUrl: imageUrl,
     );
   }
 

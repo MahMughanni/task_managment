@@ -3,6 +3,7 @@ import 'package:task_mangment/utils/app_constants.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../../../../shared_widgets/cutom_container.dart';
+import '../../../../../shared_widgets/show_image.dart';
 
 class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
   const TabBarViewTabs(
@@ -10,12 +11,14 @@ class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
       required this.userName,
       required this.taskNumber,
       required this.itemBuilder,
-      required this.itemCount})
+      required this.itemCount,
+      required this.imageUrl})
       : super(key: key);
 
   final String userName, taskNumber;
   final Widget? Function(BuildContext, int) itemBuilder;
   final int itemCount;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +37,8 @@ class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: 25,
-                      child: Image.asset(ImageConstManger.logoImage),
+                      radius: 30,
+                      child: CircleImage(url: imageUrl),
                     ),
                     8.pw,
                     Padding(

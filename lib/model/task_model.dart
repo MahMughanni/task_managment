@@ -6,10 +6,12 @@ class TaskModel {
   final String startTime;
   final String endTime;
   final String state;
+  final String? imageUrl;
   final String? id;
 
   TaskModel({
-     this.id,
+    this.imageUrl,
+    this.id,
     required this.title,
     required this.description,
     required this.startTime,
@@ -28,18 +30,6 @@ class TaskModel {
       state: data['state'],
     );
   }
-
-  // factory TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
-  //   final data = snapshot.data()!;
-  //   return TaskModel(
-  //     id: snapshot.id,
-  //     title: data['title'],
-  //     description: data['description'],
-  //     startTime: data['startTime'],
-  //     endTime: data['endTime'],
-  //     state: data['state'],
-  //   );
-  // }
 
   Map<String, dynamic> toMap() {
     return {

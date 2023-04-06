@@ -24,6 +24,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final userFuture = FireBaseController.getUserInfo();
     final userTasks = FireBaseController.getUserTasks(userId: user.uid);
+
+
     return DefaultTabController(
       length: 3,
       child: SafeArea(
@@ -52,21 +54,22 @@ class HomeScreen extends StatelessWidget {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return BuildSliverAppBar(
-                                  userName: userData.userName.toString(),
-                                  taskNumber: 'Loading...',
-                                  itemCount: 3,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Shimmer.fromColors(
-                                      baseColor: Colors.grey[350]!,
-                                      highlightColor: Colors.grey[700]!,
-                                      child: const CustomContainer(
-                                        color: Color(0x86e5e5e5),
-                                        title: '',
-                                        taskNumber: '',
-                                      ),
-                                    );
-                                  });
+                                userName: userData.userName.toString(),
+                                taskNumber: 'Loading...',
+                                itemCount: 3,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Shimmer.fromColors(
+                                    baseColor: Colors.grey[350]!,
+                                    highlightColor: Colors.grey[700]!,
+                                    child: const CustomContainer(
+                                      color: Color(0x86e5e5e5),
+                                      title: '',
+                                      taskNumber: '',
+                                    ),
+                                  );
+                                },
+                                imageUrl: userData.profileImageUrl.toString(),
+                              );
                             } else if (snapshot.hasError) {
                               return BuildSliverAppBar(
                                 userName: userData.userName.toString(),
@@ -75,6 +78,7 @@ class HomeScreen extends StatelessWidget {
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container();
                                 },
+                                imageUrl: '',
                               );
                             } else {
                               List<TaskModel> userTasks = snapshot.data!;
@@ -103,8 +107,7 @@ class HomeScreen extends StatelessWidget {
                                       return CustomContainer(
                                         color: const Color(0xffC9F4AA),
                                         title: 'Assigned',
-                                        taskNumber:
-                                            upcomingTasksCount.toString(),
+                                        taskNumber: upcomingTasksCount.toString(),
                                       );
                                     case 2:
                                       return CustomContainer(
@@ -118,6 +121,7 @@ class HomeScreen extends StatelessWidget {
                                           title: '', taskNumber: '');
                                   }
                                 },
+                                imageUrl: userData.profileImageUrl ?? '',
                               );
                             }
                           },
@@ -125,7 +129,8 @@ class HomeScreen extends StatelessWidget {
                       ];
                     },
                     body: TabBarView(children: [
-                      CustomTaskList(state: 'today', label: 'today', userTask: userTasks),
+                      CustomTaskList(
+                          state: 'today', label: 'today', userTask: userTasks),
                       CustomTaskList(
                           state: 'upcoming',
                           label: 'Upcoming',
@@ -151,10 +156,11 @@ class BuildSliverAppBar extends StatelessWidget {
     required this.taskNumber,
     required this.itemCount,
     required this.itemBuilder,
+    required this.imageUrl,
   }) : super(key: key);
 
   final String userName;
-  final String taskNumber;
+  final String taskNumber, imageUrl;
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;
 
@@ -167,6 +173,7 @@ class BuildSliverAppBar extends StatelessWidget {
         taskNumber: taskNumber,
         itemBuilder: itemBuilder,
         itemCount: itemCount,
+        imageUrl: imageUrl,
       ),
     );
   }
