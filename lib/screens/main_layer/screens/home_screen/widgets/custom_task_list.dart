@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../../model/task_model.dart';
 import '../../../../../shared_widgets/list_item_body.dart';
 import '../../../../../utils/UtilsConfig.dart';
@@ -22,7 +23,16 @@ class CustomTaskList extends StatelessWidget {
       future: userTask,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Shimmer.fromColors(
+              baseColor: Colors.grey[350]!,
+              highlightColor: Colors.grey[200]!,
+              child: const ListViewItemBody(
+                title: '',
+                startTime: '',
+                userName: '',
+                taskCategory: '',
+                // endTime: stateTasks[index].endTime,
+              ));
         }
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));

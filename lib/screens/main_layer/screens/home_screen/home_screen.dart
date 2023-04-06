@@ -125,8 +125,7 @@ class HomeScreen extends StatelessWidget {
                       ];
                     },
                     body: TabBarView(children: [
-                      CustomTaskList(
-                          state: 'today', label: 'today', userTask: userTasks),
+                      CustomTaskList(state: 'today', label: 'today', userTask: userTasks),
                       CustomTaskList(
                           state: 'upcoming',
                           label: 'Upcoming',
