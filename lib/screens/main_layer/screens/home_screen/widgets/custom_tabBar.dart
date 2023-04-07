@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_mangment/core/routes/app_router.dart';
+import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../../../../shared_widgets/custom_circle_image.dart';
@@ -97,7 +99,9 @@ class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
                       fontSize: 18),
                 ),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      AppRouter.goTo(screenName: NamedRouter.companyTasks);
+                    },
                     child: const Text(
                       'See More',
                       style: TextStyle(color: Colors.black),

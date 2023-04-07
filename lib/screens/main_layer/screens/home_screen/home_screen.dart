@@ -23,7 +23,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userFuture = FireBaseController.getUserInfo();
-    final userTasks = FireBaseController.getUserTasksStream(userId: user.uid);
 
     return DefaultTabController(
       length: 3,
@@ -124,85 +123,6 @@ class HomeScreen extends StatelessWidget {
                           }
                         },
                       ),
-
-                      // FutureBuilder<List<TaskModel>>(
-                      //   future:
-                      //       FireBaseController.getUserTasks(userId: user.uid),
-                      //   builder: (context2, snapshot) {
-                      //     if (snapshot.connectionState ==
-                      //         ConnectionState.waiting) {
-                      //       return BuildSliverAppBar(
-                      //         userName: userData.userName.toString(),
-                      //         taskNumber: 'Loading...',
-                      //         itemCount: 3,
-                      //         itemBuilder: (BuildContext context, int index) {
-                      //           return Shimmer.fromColors(
-                      //             baseColor: Colors.grey[350]!,
-                      //             highlightColor: Colors.grey[700]!,
-                      //             child: const CustomContainer(
-                      //               color: Color(0x86e5e5e5),
-                      //               title: '',
-                      //               taskNumber: '',
-                      //             ),
-                      //           );
-                      //         },
-                      //         imageUrl: userData.profileImageUrl.toString(),
-                      //       );
-                      //     } else if (snapshot.hasError) {
-                      //       return BuildSliverAppBar(
-                      //         userName: userData.userName.toString(),
-                      //         taskNumber: 'Error: ${snapshot.error}',
-                      //         itemCount: 3,
-                      //         itemBuilder: (BuildContext context, int index) {
-                      //           return Container();
-                      //         },
-                      //         imageUrl: '',
-                      //       );
-                      //     } else {
-                      //       List<TaskModel> userTasks = snapshot.data!;
-                      //       return BuildSliverAppBar(
-                      //         userName: userData.userName.toString(),
-                      //         taskNumber: userTasks.length.toString(),
-                      //         itemCount: 3,
-                      //         itemBuilder: (BuildContext context, int index) {
-                      //           int todayTasksCount = userTasks.length;
-                      //           int upcomingTasksCount = userTasks
-                      //               .where((task) => task.state == 'upcoming')
-                      //               .length;
-                      //           int completedTasksCount = userTasks
-                      //               .where((task) => task.state == 'completed')
-                      //               .length;
-                      //
-                      //           switch (index) {
-                      //             case 0:
-                      //               return CustomContainer(
-                      //                 color: const Color(0xffF9B5D0),
-                      //                 title: 'Tasks',
-                      //                 taskNumber: todayTasksCount.toString(),
-                      //               );
-                      //             case 1:
-                      //               return CustomContainer(
-                      //                 color: const Color(0xffC9F4AA),
-                      //                 title: 'Assigned',
-                      //                 taskNumber: upcomingTasksCount.toString(),
-                      //               );
-                      //             case 2:
-                      //               return CustomContainer(
-                      //                 color: const Color(0xffF3CCFF),
-                      //                 title: 'Completed',
-                      //                 taskNumber:
-                      //                     completedTasksCount.toString(),
-                      //               );
-                      //             default:
-                      //               return const CustomContainer(
-                      //                   title: '', taskNumber: '');
-                      //           }
-                      //         },
-                      //         imageUrl: userData.profileImageUrl ?? '',
-                      //       );
-                      //     }
-                      //   },
-                      // ),
                     ];
                   },
                   body: TabBarView(
@@ -212,21 +132,18 @@ class HomeScreen extends StatelessWidget {
                         label: 'today',
                         userTask: FireBaseController.getUserTasksStream(
                             userId: user.uid),
-                        url: '',
                       ),
                       CustomTaskList(
                         state: 'upcoming',
                         label: 'Upcoming',
                         userTask: FireBaseController.getUserTasksStream(
                             userId: user.uid),
-                        url: '',
                       ),
                       CustomTaskList(
                         state: 'completed',
                         label: 'Completed',
                         userTask: FireBaseController.getUserTasksStream(
                             userId: user.uid),
-                        url: '',
                       ),
                     ],
                   ),

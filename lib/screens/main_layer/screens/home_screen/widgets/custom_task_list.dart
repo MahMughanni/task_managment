@@ -5,16 +5,15 @@ import '../../../../../shared_widgets/list_item_body.dart';
 import '../../../../../utils/UtilsConfig.dart';
 
 class CustomTaskList extends StatelessWidget {
-  const CustomTaskList(
-      {Key? key,
-      required this.state,
-      required this.label,
-      required this.userTask,
-      required this.url})
-      : super(key: key);
+  const CustomTaskList({
+    Key? key,
+    required this.state,
+    required this.label,
+    required this.userTask,
+  }) : super(key: key);
   final String state;
 
-  final String label, url;
+  final String label;
 
   final dynamic userTask;
 

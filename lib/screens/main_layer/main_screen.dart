@@ -24,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> _buildScreens() {
     return [
       HomeScreen(),
-      const AssignedScreen(),
+       AssignedScreen(),
       const AddTaskScreen(),
       const NotificationScreen(),
       const SettingScreen(),

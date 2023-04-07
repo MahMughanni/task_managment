@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_mangment/screens/auth_layer/login_screen.dart';
 import 'package:task_mangment/screens/auth_layer/signup_screen.dart';
 import 'package:task_mangment/screens/main_layer/main_screen.dart';
+import 'package:task_mangment/screens/main_layer/screens/company_tasks_screen/company_tasks.dart';
 
 import '../../screens/auth_layer/splash_screen.dart';
 import 'named_router.dart';
@@ -18,6 +19,9 @@ class OnGenerateRouter {
 
       case NamedRouter.loginScreen:
         result = const LoginScreen();
+        break;
+      case NamedRouter.companyTasks:
+        result = CompanyTasksScreen();
         break;
 
       case NamedRouter.splashScreen:
