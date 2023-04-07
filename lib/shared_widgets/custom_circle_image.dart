@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class CircleImage extends StatelessWidget {
+class CustomCircleImage extends StatelessWidget {
   final String url;
 
-  const CircleImage({Key? key, required this.url}) : super(key: key);
+  const CustomCircleImage({Key? key, required this.url}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100,
+      width: 50,
+      height: 50,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.grey[300],
@@ -31,7 +32,12 @@ class CircleImage extends StatelessWidget {
           },
           errorBuilder:
               (BuildContext context, Object error, StackTrace? stackTrace) {
-            return const Icon(Icons.error);
+            return const Icon(
+
+              Icons.error,
+              color: Colors.red,
+              size: 25,
+            );
           },
         ),
       ),

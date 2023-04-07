@@ -10,6 +10,7 @@ import 'package:task_mangment/core/routes/generate_routes.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
 
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/utils/UtilsConfig.dart';
 import 'dart:io';
 import 'model/task_model.dart';
@@ -18,6 +19,8 @@ import 'package:path/path.dart' as path;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // FireBaseController.getUserInfo();
+  // print(await FireBaseController.getUserTasks(userId: 'i8I9c76QJxOUU6hjIiJ0ND23kIi2'));
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(const TaskManageMentApp()),
@@ -49,4 +52,3 @@ class TaskManageMentApp extends StatelessWidget {
     );
   }
 }
-

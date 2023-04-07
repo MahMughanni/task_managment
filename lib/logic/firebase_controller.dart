@@ -83,7 +83,6 @@ class FireBaseController {
     final tasks = <TaskModel>[];
     final userDoc =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
-
     final tasksCollection = userDoc.reference.collection('tasks');
     final querySnapshot = await tasksCollection.get();
 
@@ -91,47 +90,47 @@ class FireBaseController {
       final task = TaskModel.fromSnapshot(doc);
       tasks.add(task);
     }
+
     return tasks;
   }
 
   static Future<void> addTask({
     required String title,
     required String description,
-    required DateTime startTime,
-    required DateTime endTime,
+    required String startTime,
+    required String endTime,
     required String state,
-    required File imageFile,
+    List<File>? imageFiles,
   }) async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser!;
 
-    String? imageUrl;
-    final Reference storageRef =
-        FirebaseStorage.instance.ref().child('images/${user.uid}/$title');
-    final UploadTask uploadTask = storageRef.putFile(imageFile);
-    await uploadTask.whenComplete(() async {
-      imageUrl = await storageRef.getDownloadURL();
-    });
+    List<String> imageUrls = [];
+    for (File imageFile in imageFiles ?? []) {
+      final Reference storageRef =
+          FirebaseStorage.instance.ref().child('images/${user.uid}/$title');
+      final UploadTask uploadTask = storageRef.putFile(imageFile);
+      await uploadTask.whenComplete(() async {
+        String imageUrl = await storageRef.getDownloadURL();
+        imageUrls
+            .add(imageUrl); // Add the download URL to the list of image URLs
+      });
+    }
 
     final task = TaskModel(
       title: title,
       description: description,
-      startTime: UtilsConfig.formatTime(startTime),
-      endTime: UtilsConfig.formatTime(endTime),
+      startTime: startTime,
+      endTime: endTime,
       state: state,
-      imageUrl: imageUrl, // Set the imageUrl field to the download URL
+      imageUrls: imageUrls,
     );
 
-    // Save the task to the user's tasks collection
     await _firestore
         .collection('users')
         .doc(user.uid)
         .collection('tasks')
         .add(task.toMap());
-
-    await _firestore.collection('users').doc(user.uid).update({
-      'profileImageUrl': imageUrl,
-    });
 
     print('add success');
   }

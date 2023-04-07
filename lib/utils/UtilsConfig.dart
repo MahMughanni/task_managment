@@ -49,7 +49,7 @@ class UtilsConfig {
 
   static String formatTime(data) {
     DateTime createdDate = DateTime.parse(data);
-    String formattedDate = DateFormat.yMMMEd().format(createdDate);
+    String formattedDate = DateFormat.MMMMEEEEd().format(createdDate);
     return formattedDate;
   }
 // static showAlertDialog(BuildContext context, String title) {

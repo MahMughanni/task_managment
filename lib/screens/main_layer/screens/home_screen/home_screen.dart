@@ -25,7 +25,6 @@ class HomeScreen extends StatelessWidget {
     final userFuture = FireBaseController.getUserInfo();
     final userTasks = FireBaseController.getUserTasks(userId: user.uid);
 
-
     return DefaultTabController(
       length: 3,
       child: SafeArea(
@@ -107,14 +106,14 @@ class HomeScreen extends StatelessWidget {
                                       return CustomContainer(
                                         color: const Color(0xffC9F4AA),
                                         title: 'Assigned',
-                                        taskNumber: upcomingTasksCount.toString(),
+                                        taskNumber:
+                                        upcomingTasksCount.toString(),
                                       );
                                     case 2:
                                       return CustomContainer(
                                         color: const Color(0xffF3CCFF),
                                         title: 'Completed',
-                                        taskNumber:
-                                            completedTasksCount.toString(),
+                                        taskNumber: completedTasksCount.toString(),
                                       );
                                     default:
                                       return const CustomContainer(
@@ -130,15 +129,23 @@ class HomeScreen extends StatelessWidget {
                     },
                     body: TabBarView(children: [
                       CustomTaskList(
-                          state: 'today', label: 'today', userTask: userTasks),
+                        state: 'today',
+                        label: 'today',
+                        userTask: userTasks,
+                        url: '',
+                      ),
                       CustomTaskList(
-                          state: 'upcoming',
-                          label: 'Upcoming',
-                          userTask: userTasks),
+                        state: 'upcoming',
+                        label: 'Upcoming',
+                        userTask: userTasks,
+                        url: '',
+                      ),
                       CustomTaskList(
-                          state: 'completed',
-                          label: 'Completed',
-                          userTask: userTasks),
+                        state: 'completed',
+                        label: 'Completed',
+                        userTask: userTasks,
+                        url: '',
+                      ),
                     ]));
               }
             },

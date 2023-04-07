@@ -3,7 +3,7 @@ import 'package:task_mangment/utils/app_constants.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../../../../shared_widgets/cutom_container.dart';
-import '../../../../../shared_widgets/show_image.dart';
+import '../../../../../shared_widgets/custom_circle_image.dart';
 
 class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
   const TabBarViewTabs(
@@ -38,7 +38,7 @@ class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      child: CircleImage(url: imageUrl),
+                      child: CustomCircleImage(url: imageUrl),
                     ),
                     8.pw,
                     Padding(
@@ -87,29 +87,6 @@ class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
                   itemCount: itemCount,
                   itemBuilder: itemBuilder),
             ),
-            // SingleChildScrollView(
-            //   scrollDirection: Axis.horizontal,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       CustomContainer(
-            //         color: const Color(0xffF9B5D0),
-            //         titel: 'Tasks',
-            //         taskNumber: taskNumber,
-            //       ),
-            //       CustomContainer(
-            //         color: const Color(0xffC9F4AA),
-            //         titel: 'Assigned',
-            //         taskNumber: taskNumber,
-            //       ),
-            //       CustomContainer(
-            //         color: const Color(0xffF3CCFF),
-            //         titel: 'Completed',
-            //         taskNumber: taskNumber,
-            //       ),
-            //     ],
-            //   ),
-            // ),
             16.ph,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 
-class ListViewItemBody extends StatelessWidget {
-  const ListViewItemBody(
-      {Key? key,
-      required this.userName,
-      required this.taskCategory,
-      required this.startTime,
-      required this.title})
-      : super(key: key);
+import 'custom_circle_image.dart';
 
-  final String userName, taskCategory, startTime, title;
+class ListViewItemBody extends StatelessWidget {
+  const ListViewItemBody({
+    Key? key,
+    required this.userName,
+    required this.taskCategory,
+    required this.startTime,
+    required this.title,
+     required this.url ,
+  }) : super(key: key);
+
+  final String userName, taskCategory, startTime, title, url;
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +80,9 @@ class ListViewItemBody extends StatelessWidget {
               ),
             ],
           ),
-          CircleAvatar(
-            radius: 25,
-            child: Image.asset(ImageConstManger.logoImage),
-          )
+          CustomCircleImage(
+            url: url,
+          ),
         ],
       ),
     );

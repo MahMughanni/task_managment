@@ -27,6 +27,7 @@ class AssignedScreen extends StatelessWidget {
             taskCategory: '',
             startTime: '',
             title: '',
+            url: '',
           );
         },
       ),

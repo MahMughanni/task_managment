@@ -11,8 +11,8 @@ class CustomDropDown extends StatelessWidget {
   });
 
   final String dropDownValue;
-  final List<String> items;
-  final Function(String?)? onChanged;
+  final List<DropdownMenuItem> items;
+  final Function(dynamic)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +43,7 @@ class CustomDropDown extends StatelessWidget {
       style: const TextStyle(color: Colors.black, fontSize: 16),
       value: dropDownValue,
       icon: const Icon(Icons.keyboard_arrow_down),
-      items: items.map((String items) {
-        return DropdownMenuItem(
-          value: items,
-          child: Text(items),
-        );
-      }).toList(),
+      items: items,
 
       // logic here
       onChanged: onChanged,

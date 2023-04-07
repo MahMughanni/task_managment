@@ -9,11 +9,12 @@ class CustomTaskList extends StatelessWidget {
       {Key? key,
       required this.state,
       required this.label,
-      required this.userTask})
+      required this.userTask,
+      required this.url})
       : super(key: key);
   final String state;
 
-  final String label;
+  final String label, url;
 
   final dynamic userTask;
 
@@ -31,6 +32,7 @@ class CustomTaskList extends StatelessWidget {
                 startTime: '',
                 userName: '',
                 taskCategory: '',
+                url: '',
                 // endTime: stateTasks[index].endTime,
               ));
         }
@@ -53,14 +55,15 @@ class CustomTaskList extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: stateTasks.length,
                       itemBuilder: (context, index) => ListViewItemBody(
-                        title: stateTasks[index].description,
-                        startTime:
-                            UtilsConfig.formatTime(stateTasks[index].startTime)
-                                .toString(),
-                        userName: stateTasks[index].title,
-                        taskCategory: stateTasks[index].state,
-                        // endTime: stateTasks[index].endTime,
-                      ),
+                          title: stateTasks[index].description,
+                          startTime: UtilsConfig.formatTime(
+                                  stateTasks[index].startTime)
+                              .toString(),
+                          userName: stateTasks[index].title,
+                          taskCategory: stateTasks[index].state,
+                          url: stateTasks[index].imageUrls.isNotEmpty
+                              ? stateTasks[index].imageUrls.first
+                              : ''),
                     ),
                   ),
                 ],
