@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskModel {
@@ -8,6 +7,7 @@ class TaskModel {
   final String endTime;
   final String state;
   final List<String> imageUrls;
+  final Timestamp createdAt;
 
   TaskModel({
     required this.title,
@@ -16,6 +16,7 @@ class TaskModel {
     required this.endTime,
     required this.state,
     required this.imageUrls,
+    required this.createdAt,
   });
 
   factory TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -29,6 +30,7 @@ class TaskModel {
       endTime: data['endTime'] ?? '',
       state: data['state'] ?? '',
       imageUrls: imageUrls,
+      createdAt: data['createdAt'] ?? Timestamp.now(),
     );
   }
 
@@ -40,6 +42,7 @@ class TaskModel {
       'endTime': endTime,
       'state': state,
       'imageUrls': imageUrls,
+      'createdAt': createdAt,
     };
   }
 

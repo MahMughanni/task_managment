@@ -10,7 +10,7 @@ class CustomButton extends StatelessWidget {
       required this.height})
       : super(key: key);
   final Function()? onPressed;
-  final String title;
+  final Object title;
   final double width, height;
 
   @override
@@ -24,7 +24,7 @@ class CustomButton extends StatelessWidget {
           backgroundColor: ColorConstManger.primaryColor),
       onPressed: onPressed,
       child: Text(
-        title,
+        title.toString(),
         style: Theme.of(context).textTheme.titleLarge!.copyWith(
               color: Colors.white,
             ),

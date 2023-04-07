@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_mangment/utils/app_constants.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
-import '../../../../../shared_widgets/cutom_container.dart';
 import '../../../../../shared_widgets/custom_circle_image.dart';
 
 class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {

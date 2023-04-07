@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../../../../shared_widgets/custom_form_field.dart';
@@ -6,10 +7,19 @@ import '../../../../../utils/app_constants.dart';
 
 class CreateTaskBody extends StatelessWidget {
   const CreateTaskBody(
-      {Key? key, required this.onTap, required this.descriptionController})
+      {Key? key,
+      required this.onTap,
+      required this.descriptionController,
+      this.validator,
+      required this.startTimeController,
+      required this.endTimeController})
       : super(key: key);
   final Function()? onTap;
   final TextEditingController descriptionController;
+  final String? Function(String?)? validator;
+  final TextEditingController startTimeController;
+
+  final TextEditingController endTimeController;
 
   @override
   Widget build(BuildContext context) {
@@ -21,42 +31,82 @@ class CreateTaskBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Start',
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          color: ColorConstManger.primaryColor,
-                        ),
-                  ),
-                  const CustomTextFormField(
-                    suffixIcon: Icon(Icons.calendar_month),
-                    labelText: '',
+              child: GestureDetector(
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(DateTime.now().year + 10),
+                  );
+                  if (picked != null) {
+                    final time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if (time != null) {
+                      startTimeController.text =
+                          DateFormat.yMMMEd().add_jm().format(
+                                DateTime(picked.year, picked.month, picked.day,
+                                    time.hour, time.minute),
+                              );
+                    }
+                  }
+                },
+                child: AbsorbPointer(
+                  child: CustomTextFormField(
+                    suffixIcon: const Icon(Icons.calendar_today),
+                    labelText: 'Start',
                     hintText: '5.apr 10:00pm',
+                    controller: startTimeController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter a start time';
+                      }
+                      return null;
+                    },
                   ),
-                ],
+                ),
               ),
             ),
             16.pw,
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'End',
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          color: ColorConstManger.primaryColor,
-                        ),
-                  ),
-                  const CustomTextFormField(
-                    suffixIcon: Icon(Icons.calendar_month),
-                    labelText: '',
+              child: GestureDetector(
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(DateTime.now().year + 10),
+                  );
+                  if (picked != null) {
+                    final time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if (time != null) {
+                      endTimeController.text =
+                          DateFormat.yMMMEd().add_jm().format(
+                                DateTime(picked.year, picked.month, picked.day,
+                                    time.hour, time.minute),
+                              );
+                    }
+                  }
+                },
+                child: AbsorbPointer(
+                  child: CustomTextFormField(
+                    suffixIcon: const Icon(Icons.calendar_today),
+                    labelText: 'End',
                     hintText: '5.apr 10:00pm',
+                    controller: endTimeController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter an end time';
+                      }
+                      return null;
+                    },
                   ),
-                ],
+                ),
               ),
             ),
           ],
@@ -65,6 +115,7 @@ class CreateTaskBody extends StatelessWidget {
         const Text('Task Description'),
         8.ph,
         CustomTextFormField(
+          validator: validator,
           controller: descriptionController,
           maxLine: 10,
           keyboardType: TextInputType.multiline,

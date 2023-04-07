@@ -105,7 +105,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
           subTitle: ' SIGN UP',
           subTextStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
               fontWeight: AppConstFontWeight.bold,
-              color: ColorConstManger.primaryColor!),
+              color: ColorConstManger.primaryColor),
           tapGestureRecognizer: TapGestureRecognizer()
             ..onTap = () {
               Navigator.push(

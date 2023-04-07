@@ -20,8 +20,8 @@ class CustomTaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<TaskModel>>(
-      future: userTask,
+    return StreamBuilder<List<TaskModel>>(
+      stream: userTask,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Shimmer.fromColors(
@@ -56,9 +56,7 @@ class CustomTaskList extends StatelessWidget {
                       itemCount: stateTasks.length,
                       itemBuilder: (context, index) => ListViewItemBody(
                           title: stateTasks[index].description,
-                          startTime: UtilsConfig.formatTime(
-                                  stateTasks[index].startTime)
-                              .toString(),
+                          startTime: stateTasks[index].startTime,
                           userName: stateTasks[index].title,
                           taskCategory: stateTasks[index].state,
                           url: stateTasks[index].imageUrls.isNotEmpty

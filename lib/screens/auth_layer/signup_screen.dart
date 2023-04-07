@@ -173,7 +173,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         .bodyLarge!
                         .copyWith(
                             fontWeight: AppConstFontWeight.bold,
-                            color: ColorConstManger.primaryColor!),
+                            color: ColorConstManger.primaryColor),
                     tapGestureRecognizer: TapGestureRecognizer()
                       ..onTap = () {
                         Navigator.pop(context);

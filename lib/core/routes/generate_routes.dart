@@ -4,12 +4,11 @@ import 'package:task_mangment/screens/auth_layer/signup_screen.dart';
 import 'package:task_mangment/screens/main_layer/main_screen.dart';
 
 import '../../screens/auth_layer/splash_screen.dart';
-import '../../screens/main_layer/screens/home_screen/home_screen.dart';
 import 'named_router.dart';
 
 class OnGenerateRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    dynamic data = settings.arguments;
+    // dynamic data = settings.arguments;
 
     Widget result;
     switch (settings.name) {

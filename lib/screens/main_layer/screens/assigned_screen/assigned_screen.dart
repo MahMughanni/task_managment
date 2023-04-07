@@ -22,7 +22,7 @@ class AssignedScreen extends StatelessWidget {
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (BuildContext context, int index) {
-          return ListViewItemBody(
+          return const ListViewItemBody(
             userName: '',
             taskCategory: '',
             startTime: '',

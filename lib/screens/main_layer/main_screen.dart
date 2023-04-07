@@ -5,7 +5,7 @@ import 'package:task_mangment/screens/main_layer/screens/add_task_screen/addtask
 import 'package:task_mangment/screens/main_layer/screens/assigned_screen/assigned_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/home_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/notification_screen/notification_screen.dart';
-import 'package:task_mangment/screens/main_layer/screens/setting_screen.dart';
+import 'package:task_mangment/screens/main_layer/screens/setting_screen/setting_screen.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 
 class MainScreen extends StatefulWidget {

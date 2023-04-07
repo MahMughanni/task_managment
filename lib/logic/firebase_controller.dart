@@ -7,10 +7,9 @@ import '../model/user_model.dart';
 
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as path;
 
 class FireBaseController {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final user = FirebaseAuth.instance.currentUser!;
 
   static Future logIn(String email, String password) async {
@@ -49,7 +48,6 @@ class FireBaseController {
 
       print('User created successfully!');
     } on FirebaseAuthException catch (e) {
-      // print('error MSG : $e');
       if (e.code == 'user-not-found') {
         UtilsConfig.showSnackBarMessage(
             message: 'No user found for that email.', status: false);
@@ -79,20 +77,20 @@ class FireBaseController {
     return userModel;
   }
 
-  static Future<List<TaskModel>> getUserTasks({required String userId}) async {
-    final tasks = <TaskModel>[];
-    final userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    final tasksCollection = userDoc.reference.collection('tasks');
-    final querySnapshot = await tasksCollection.get();
-
-    for (var doc in querySnapshot.docs) {
-      final task = TaskModel.fromSnapshot(doc);
-      tasks.add(task);
-    }
-
-    return tasks;
+  static Stream<List<TaskModel>> getUserTasksStream({required String userId}) {
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+    final tasksCollection = userDoc.collection('tasks');
+    final snapshots = tasksCollection.orderBy('createdAt', descending: true).snapshots();
+    return snapshots.map((querySnapshot) {
+      final tasks = <TaskModel>[];
+      for (var doc in querySnapshot.docs) {
+        final task = TaskModel.fromSnapshot(doc);
+        tasks.add(task);
+      }
+      return tasks;
+    });
   }
+
 
   static Future<void> addTask({
     required String title,
@@ -124,6 +122,7 @@ class FireBaseController {
       endTime: endTime,
       state: state,
       imageUrls: imageUrls,
+      createdAt: Timestamp.now(),
     );
 
     await _firestore
