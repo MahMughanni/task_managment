@@ -68,13 +68,16 @@ class FireBaseController {
     final role = userData.get('role');
     final phone = userData.get('phone');
     final profileImageUrl = userData.get('profileImageUrl');
+    final position = userData.get('position');
 
     final userModel = UserModel(
-        userName: userName,
-        uId: userId,
-        phone: phone,
-        role: role,
-        profileImageUrl: profileImageUrl);
+      userName: userName,
+      uId: userId,
+      phone: phone,
+      role: role,
+      profileImageUrl: profileImageUrl,
+      position: position,
+    );
     return userModel;
   }
 

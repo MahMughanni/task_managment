@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/widgets/custom_drop_down.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
@@ -48,20 +49,57 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   String _selectedDropdownValue = 'Today';
 
+  // Future<void> _pickImages() async {
+  //   final result = await FilePicker.platform.pickFiles(
+  //     type: FileType.image,
+  //     allowMultiple: true,
+  //   );
+  //
+  //   if (result != null) {
+  //     setState(() {
+  //       _imageFiles = result.paths.map((path) => File(path!)).toList();
+  //     });
+  //   }
+  // }
   Future<void> _pickImages() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: true,
-    );
+    await requestPermissions(); // Call the permission request function
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: true,
+      );
 
-    if (result != null) {
-      setState(() {
-        _imageFiles = result.paths.map((path) => File(path!)).toList();
-      });
+      if (result != null) {
+        setState(() {
+          _imageFiles = result.paths.map((path) => File(path!)).toList();
+        });
+      }
+    } else {
+      // Handle denied or restricted status
+    }
+  }
+
+  Future<void> requestPermissions() async {
+    final statusStorage = await Permission.storage.request();
+    final statusCamera = await Permission.camera.request();
+    final statusMicrophone = await Permission.microphone.request();
+    if (statusStorage.isDenied ||
+        statusCamera.isDenied ||
+        statusMicrophone.isDenied) {
+      // Permission has been denied
+      return;
+    }
+    if (statusStorage.isPermanentlyDenied ||
+        statusCamera.isPermanentlyDenied ||
+        statusMicrophone.isPermanentlyDenied) {
+      // Permission has been permanently denied on iOS, navigate to app settings.
+      openAppSettings();
     }
   }
 
   final _formKey = GlobalKey<FormState>();
+  bool _isUploading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -136,40 +174,64 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               .toList(),
                         ),
                       32.ph,
-                      CustomButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            try {
-                              await FireBaseController.addTask(
-                                title: titleController.text.toString().trim(),
-                                description: descriptionController.text
-                                    .toString()
-                                    .trim(),
-                                startTime:
-                                    _startTimeController.text.toString().trim(),
-                                endTime:
-                                    _endTimeController.text.toString().trim(),
-                                state: _selectedDropdownValue.toLowerCase(),
-                                imageFiles: _imageFiles,
-                              );
-                              UtilsConfig.showSnackBarMessage(
-                                  message: 'Add Success', status: true);
-                              titleController.clear();
-                              descriptionController.clear();
-                              _startTimeController.clear();
-                              _endTimeController.clear();
-                              setState(() {
-                                _imageFiles.clear();
-                              });
-                            } catch (e) {
-                              UtilsConfig.showSnackBarMessage(
-                                  message: e.toString(), status: false);
-                            }
-                          }
-                        },
-                        title: 'Upload',
-                        width: double.infinity,
-                        height: 60,
+                      Stack(
+                        children: [
+                          CustomButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  _isUploading = true;
+                                });
+                                try {
+                                  await FireBaseController.addTask(
+                                    title:
+                                        titleController.text.toString().trim(),
+                                    description: descriptionController.text
+                                        .toString()
+                                        .trim(),
+                                    startTime: _startTimeController.text
+                                        .toString()
+                                        .trim(),
+                                    endTime: _endTimeController.text
+                                        .toString()
+                                        .trim(),
+                                    state: _selectedDropdownValue.toLowerCase(),
+                                    imageFiles: _imageFiles,
+                                  );
+                                  UtilsConfig.showSnackBarMessage(
+                                      message: 'Add Success', status: true);
+                                  titleController.clear();
+                                  descriptionController.clear();
+                                  _startTimeController.clear();
+                                  _endTimeController.clear();
+                                  setState(() {
+                                    _imageFiles.clear();
+                                    _isUploading = false;
+                                  });
+                                } catch (e) {
+                                  print(e.toString());
+                                  UtilsConfig.showSnackBarMessage(
+                                      message: e.toString(), status: false);
+                                  setState(() {
+                                    _isUploading = false;
+                                  });
+                                }
+                              }
+                            },
+                            title: 'Upload',
+                            width: double.infinity,
+                            height: 60,
+                          ),
+                          if (_isUploading)
+                            Positioned.fill(
+                              child: Container(
+                                color: Colors.black.withOpacity(0.5),
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ],
                   ),
@@ -181,14 +243,4 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       ),
     );
   }
-// Future<void> _pickImage() async {
-//   final picker = ImagePicker();
-//   final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-//
-//   if (pickedImage != null) {
-//     setState(() {
-//       _imageFile = File(pickedImage.path);
-//     });
-//   }
-// }
 }

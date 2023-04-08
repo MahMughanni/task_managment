@@ -34,6 +34,7 @@ class HomeScreen extends StatelessWidget {
             future: userFuture,
             builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
+                // print(snapshot.data!.position);
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
