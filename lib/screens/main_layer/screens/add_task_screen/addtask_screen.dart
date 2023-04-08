@@ -209,7 +209,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                     _isUploading = false;
                                   });
                                 } catch (e) {
-                                  print(e.toString());
+                                  // print(e.toString());
                                   UtilsConfig.showSnackBarMessage(
                                       message: e.toString(), status: false);
                                   setState(() {
