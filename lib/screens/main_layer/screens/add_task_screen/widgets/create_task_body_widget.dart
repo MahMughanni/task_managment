@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../../../../shared_widgets/custom_form_field.dart';
-import '../../../../../utils/app_constants.dart';
 
 class CreateTaskBody extends StatelessWidget {
   const CreateTaskBody(
@@ -73,25 +72,7 @@ class CreateTaskBody extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () async {
-                  final picked = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(DateTime.now().year + 10),
-                  );
-                  if (picked != null) {
-                    final time = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                    if (time != null) {
-                      endTimeController.text =
-                          DateFormat.yMMMEd().add_jm().format(
-                                DateTime(picked.year, picked.month, picked.day,
-                                    time.hour, time.minute),
-                              );
-                    }
-                  }
+                  _showTimePicker(context);
                 },
                 child: AbsorbPointer(
                   child: CustomTextFormField(
@@ -133,5 +114,32 @@ class CreateTaskBody extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _showTimePicker(BuildContext context) async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null) {
+      final time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+      if (time != null) {
+        startTimeController.text = DateFormat.yMMMEd().add_jm().format(
+              DateTime(
+                picked.year,
+                picked.month,
+                picked.day,
+                time.hour,
+                time.minute,
+              ),
+            );
+      }
+    }
   }
 }

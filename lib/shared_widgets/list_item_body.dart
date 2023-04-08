@@ -9,13 +9,18 @@ class ListViewItemBody extends StatelessWidget {
     required this.taskCategory,
     required this.startTime,
     required this.title,
-     required this.url ,
+    required this.url,
   }) : super(key: key);
 
   final String userName, taskCategory, startTime, title, url;
 
   @override
   Widget build(BuildContext context) {
+    int maxLength = 20;
+
+    String shortString = title.length > maxLength
+        ? "${title.substring(0, maxLength)}..."
+        : title;
     return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -51,30 +56,40 @@ class ListViewItemBody extends StatelessWidget {
             children: [
               Text(taskCategory),
               RichText(
-                  text: TextSpan(
-                      text: userName,
-                      style: const TextStyle(color: Colors.black),
-                      children: [
+                text: TextSpan(
+                  text: userName,
+                  style: const TextStyle(
+                      color: Colors.black, overflow: TextOverflow.ellipsis),
+                  children: [
                     WidgetSpan(
                         child: Icon(
                       Icons.messenger,
                       color: Colors.green.shade100,
                       size: 19,
                     ))
-                  ])),
+                  ],
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.clip,
+              ),
               RichText(
-                  text: TextSpan(
-                      text: startTime,
-                      style: const TextStyle(color: Colors.red),
-                      children: const [
-                    WidgetSpan(
-                        child: Icon(
-                      Icons.calendar_month,
-                      size: 20,
-                    ))
-                  ])),
+                text: TextSpan(
+                    text: startTime,
+                    style: const TextStyle(color: Colors.red),
+                    children: const [
+                      WidgetSpan(
+                          child: Icon(
+                        Icons.calendar_month,
+                        size: 20,
+                      ))
+                    ]),
+                maxLines: 2,
+                overflow: TextOverflow.clip,
+              ),
               Text(
-                title,
+                shortString,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 16, color: Colors.blueAccent),
               ),
             ],

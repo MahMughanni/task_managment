@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:task_mangment/screens/auth_layer/login_screen.dart';
 import 'package:task_mangment/screens/auth_layer/signup_screen.dart';
 import 'package:task_mangment/screens/main_layer/main_screen.dart';
@@ -23,6 +24,14 @@ class OnGenerateRouter {
       case NamedRouter.companyTasks:
         result = CompanyTasksScreen();
         break;
+      // case NamedRouter.taskDetailsScreen:
+      //   if (data is TaskModel) {
+      //     final selectedTask = data as TaskModel;
+      //     result = TaskDetailsScreen(taskStream: Stream.value([selectedTask]));
+      //   } else {
+      //     result = const Center(child: Text('Invalid task data'));
+      //   }
+      //   break;
 
       case NamedRouter.splashScreen:
         result = const SplashScreen();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'custom_tabBar.dart';
+import 'custom_tab_bar.dart';
 
 class MySliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
@@ -21,7 +21,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return TabBarViewTabs(
+    return CustomTabBarViewTabs(
       userName: userName,
       taskNumber: taskNumber,
       itemBuilder: itemBuilder,

@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:task_mangment/utils/extentions/padding_extention.dart';
-
 import '../../../../logic/firebase_controller.dart';
 import '../../../../shared_widgets/custom_appbar.dart';
 import '../home_screen/widgets/custom_task_list.dart';
@@ -20,7 +18,7 @@ class CompanyTasksScreen extends StatelessWidget {
           appBar: CustomAppbar(
             height: 150,
             title: 'Company Tasks',
-            action: [],
+            action: const [],
             bottom: TabBar(
                 unselectedLabelColor: Colors.black,
                 splashBorderRadius: const BorderRadius.all(
@@ -48,19 +46,19 @@ class CompanyTasksScreen extends StatelessWidget {
             children: [
               CustomTaskList(
                 state: 'today',
-                label: 'today',
+                label: '',
                 userTask:
                     FireBaseController.getUserTasksStream(userId: user.uid),
               ),
               CustomTaskList(
                 state: 'upcoming',
-                label: 'Upcoming',
+                label: '',
                 userTask:
                     FireBaseController.getUserTasksStream(userId: user.uid),
               ),
               CustomTaskList(
                 state: 'completed',
-                label: 'Completed',
+                label: '',
                 userTask:
                     FireBaseController.getUserTasksStream(userId: user.uid),
               ),

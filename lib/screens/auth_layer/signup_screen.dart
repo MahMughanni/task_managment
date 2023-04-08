@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/custom_rich_text.dart';
-import 'package:task_mangment/utils/UtilsConfig.dart';
+import 'package:task_mangment/utils/utils_config.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 import 'package:task_mangment/utils/extentions/string_validate_extention.dart';
 

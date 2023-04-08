@@ -2,16 +2,14 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:task_mangment/logic/firebase_controller.dart';
-import 'package:task_mangment/screens/main_layer/screens/add_task_screen/widgets/CustomDropDown.dart';
+import 'package:task_mangment/screens/main_layer/screens/add_task_screen/widgets/custom_drop_down.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
-import 'package:task_mangment/utils/UtilsConfig.dart';
+import 'package:task_mangment/utils/utils_config.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../../../shared_widgets/custom_button.dart';
 import '../../../../shared_widgets/custom_form_field.dart';
-import '../../../../utils/app_constants.dart';
 
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({Key? key}) : super(key: key);
@@ -95,6 +93,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           if (value!.isEmpty) {
                             return 'enter valid title';
                           }
+                          return null;
                         },
                         labelText: 'Task Title',
                         hintText: '',
@@ -121,6 +120,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           if (value!.isEmpty) {
                             return 'enter valid text';
                           }
+                          return null;
                         },
                         descriptionController: descriptionController,
                         onTap: _pickImages,
@@ -162,7 +162,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                 _imageFiles.clear();
                               });
                             } catch (e) {
-                              print(e.toString());
+                              UtilsConfig.showSnackBarMessage(
+                                  message: e.toString(), status: false);
                             }
                           }
                         },

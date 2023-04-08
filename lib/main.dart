@@ -6,7 +6,7 @@ import 'package:task_mangment/core/routes/generate_routes.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
 
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:task_mangment/utils/UtilsConfig.dart';
+import 'package:task_mangment/utils/utils_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userFuture = FireBaseController.getUserInfo();
-
+    // final taskData = FireBaseController.getUserTasksStream(userId: user.uid);
     return DefaultTabController(
       length: 3,
       child: SafeArea(
@@ -128,18 +128,21 @@ class HomeScreen extends StatelessWidget {
                   body: TabBarView(
                     children: [
                       CustomTaskList(
+                        userName: userData.userName,
                         state: 'today',
                         label: 'today',
                         userTask: FireBaseController.getUserTasksStream(
                             userId: user.uid),
                       ),
                       CustomTaskList(
+                        userName: userData.userName,
                         state: 'upcoming',
                         label: 'Upcoming',
                         userTask: FireBaseController.getUserTasksStream(
                             userId: user.uid),
                       ),
                       CustomTaskList(
+                        userName: userData.userName,
                         state: 'completed',
                         label: 'Completed',
                         userTask: FireBaseController.getUserTasksStream(

@@ -8,7 +8,7 @@ class AppRouter {
     navigatorKey.currentState!.pushReplacementNamed(screenName);
   }
 
-  static goTo({required String screenName}) {
+  static goTo({required String screenName, Object? arguments}) {
     navigatorKey.currentState!.pushNamed(screenName);
   }
 

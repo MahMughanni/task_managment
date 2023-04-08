@@ -23,6 +23,7 @@ dependencies:
   path: ^1.8.2
   firebase_storage: ^11.1.0
   file_picker: ^5.2.7
+  uuid: ^3.0.7
 
 
 

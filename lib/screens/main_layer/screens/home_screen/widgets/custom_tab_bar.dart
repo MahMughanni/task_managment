@@ -5,8 +5,8 @@ import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../../../../shared_widgets/custom_circle_image.dart';
 
-class TabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
-  const TabBarViewTabs(
+class CustomTabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
+  const CustomTabBarViewTabs(
       {Key? key,
       required this.userName,
       required this.taskNumber,

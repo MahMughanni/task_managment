@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/header_widget.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/login_body_widget.dart';
-import 'package:task_mangment/utils/UtilsConfig.dart';
+import 'package:task_mangment/utils/utils_config.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../logic/firebase_controller.dart';

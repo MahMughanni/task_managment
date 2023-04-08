@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:task_mangment/model/task_model.dart';
-import 'package:task_mangment/utils/UtilsConfig.dart';
+import 'package:task_mangment/utils/utils_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 import '../model/user_model.dart';
 
@@ -46,7 +47,7 @@ class FireBaseController {
           .doc(userId)
           .set({'username': username, 'phone': phone, 'role': 'user'});
 
-      print('User created successfully!');
+      // print('User created successfully!');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         UtilsConfig.showSnackBarMessage(
@@ -80,7 +81,8 @@ class FireBaseController {
   static Stream<List<TaskModel>> getUserTasksStream({required String userId}) {
     final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
     final tasksCollection = userDoc.collection('tasks');
-    final snapshots = tasksCollection.orderBy('createdAt', descending: true).snapshots();
+    final snapshots =
+        tasksCollection.orderBy('createdAt', descending: true).snapshots();
     return snapshots.map((querySnapshot) {
       final tasks = <TaskModel>[];
       for (var doc in querySnapshot.docs) {
@@ -91,6 +93,22 @@ class FireBaseController {
     });
   }
 
+  static Stream<List<TaskModel>> getTasksDetailsStream(
+      {required String userId}) {
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+    final tasksCollection = userDoc.collection('tasks');
+    final snapshots =
+        tasksCollection.orderBy('createdAt', descending: true).snapshots();
+
+    return snapshots.map((querySnapshot) {
+      final tasks = <TaskModel>[];
+      for (var doc in querySnapshot.docs) {
+        final task = TaskModel.fromSnapshot(doc);
+        tasks.add(task);
+      }
+      return tasks;
+    });
+  }
 
   static Future<void> addTask({
     required String title,
@@ -100,18 +118,20 @@ class FireBaseController {
     required String state,
     List<File>? imageFiles,
   }) async {
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final FirebaseFirestore fireStore = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser!;
 
     List<String> imageUrls = [];
-    for (File imageFile in imageFiles ?? []) {
+    for (int i = 0; i < (imageFiles?.length ?? 0); i++) {
+      final File imageFile = imageFiles![i];
+      final String fileName =
+          '$title-${const Uuid().v4()}.${imageFile.path.split('.').last}';
       final Reference storageRef =
-          FirebaseStorage.instance.ref().child('images/${user.uid}/$title');
+          FirebaseStorage.instance.ref().child('images/${user.uid}/$fileName');
       final UploadTask uploadTask = storageRef.putFile(imageFile);
       await uploadTask.whenComplete(() async {
         String imageUrl = await storageRef.getDownloadURL();
-        imageUrls
-            .add(imageUrl); // Add the download URL to the list of image URLs
+        imageUrls.add(imageUrl);
       });
     }
 
@@ -125,12 +145,12 @@ class FireBaseController {
       createdAt: Timestamp.now(),
     );
 
-    await _firestore
+    await fireStore
         .collection('users')
         .doc(user.uid)
         .collection('tasks')
         .add(task.toMap());
 
-    print('add success');
+    // print('add success');
   }
 }

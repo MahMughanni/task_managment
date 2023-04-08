@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../model/task_model.dart';
 import '../../../../../shared_widgets/list_item_body.dart';
-import '../../../../../utils/UtilsConfig.dart';
+import '../../task_details_screen/task_details_screen.dart';
 
 class CustomTaskList extends StatelessWidget {
   const CustomTaskList({
@@ -10,10 +10,12 @@ class CustomTaskList extends StatelessWidget {
     required this.state,
     required this.label,
     required this.userTask,
+    this.userName,
   }) : super(key: key);
   final String state;
 
   final String label;
+  final String? userName;
 
   final dynamic userTask;
 
@@ -53,14 +55,27 @@ class CustomTaskList extends StatelessWidget {
                   Expanded(
                     child: ListView.builder(
                       itemCount: stateTasks.length,
-                      itemBuilder: (context, index) => ListViewItemBody(
-                          title: stateTasks[index].description,
-                          startTime: stateTasks[index].startTime,
-                          userName: stateTasks[index].title,
-                          taskCategory: stateTasks[index].state,
-                          url: stateTasks[index].imageUrls.isNotEmpty
-                              ? stateTasks[index].imageUrls.first
-                              : ''),
+                      itemBuilder: (context, index) => GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TaskDetailsScreen(
+                                task: stateTasks[index],
+                                userName: userName ?? '',
+                              ),
+                            ),
+                          );
+                        },
+                        child: ListViewItemBody(
+                            title: stateTasks[index].description,
+                            startTime: stateTasks[index].startTime,
+                            userName: stateTasks[index].title,
+                            taskCategory: stateTasks[index].state,
+                            url: stateTasks[index].imageUrls.isNotEmpty
+                                ? stateTasks[index].imageUrls.first
+                                : ''),
+                      ),
                     ),
                   ),
                 ],
