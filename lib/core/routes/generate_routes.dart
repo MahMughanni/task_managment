@@ -4,6 +4,8 @@ import 'package:task_mangment/screens/auth_layer/login_screen.dart';
 import 'package:task_mangment/screens/auth_layer/signup_screen.dart';
 import 'package:task_mangment/screens/main_layer/main_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/company_tasks_screen/company_tasks.dart';
+import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/employee_screen.dart';
+import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/profile_screen.dart';
 
 import '../../screens/auth_layer/splash_screen.dart';
 import 'named_router.dart';
@@ -35,6 +37,12 @@ class OnGenerateRouter {
 
       case NamedRouter.splashScreen:
         result = const SplashScreen();
+        break;
+      case NamedRouter.profileScreen:
+        result = const ProfileScreen();
+        break;
+      case NamedRouter.employee:
+        result = const EmployeeScreen();
         break;
       case NamedRouter.signUpScreen:
         result = const SignUpScreen();

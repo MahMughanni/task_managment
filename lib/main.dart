@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +14,6 @@ void main() async {
   await Firebase.initializeApp();
   // FireBaseController.getUserInfo();
   // print(await FireBaseController.getUserTasks(userId: 'i8I9c76QJxOUU6hjIiJ0ND23kIi2'));
-
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(const TaskManageMentApp()),
   );

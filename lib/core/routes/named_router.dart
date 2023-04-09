@@ -6,4 +6,6 @@ class NamedRouter {
   static const String mainScreen = '/main_screen';
   static const String companyTasks = '/company_tasks';
   static const String taskDetailsScreen = '/task_details';
+  static const String profileScreen = '/profile';
+  static const String employee = '/employee';
 }

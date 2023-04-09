@@ -74,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                       return null;
                     },
-                    hintText: 'Name',
+                    labelText: 'Name',
                   ),
                   16.ph,
                   CustomTextFormField(
@@ -85,7 +85,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                       return null;
                     },
-                    hintText: 'Email',
+                    labelText: 'Email',
                   ),
                   16.ph,
                   CustomTextFormField(
@@ -128,7 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return null;
                     },
                     isPassword: _isPassword,
-                    hintText: 'Password',
+                    labelText: 'Password',
                   ),
                   24.ph,
                   CustomTextFormField(
@@ -139,7 +139,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                       return null;
                     },
+                    keyboardType: TextInputType.phone,
                     hintText: '+970',
+                    labelText: 'phone',
                   ),
                   16.ph,
                   CustomButton(

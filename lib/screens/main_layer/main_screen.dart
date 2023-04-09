@@ -27,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
        AssignedScreen(),
       const AddTaskScreen(),
       const NotificationScreen(),
-      const SettingScreen(),
+       SettingScreen(),
     ];
   }
 

@@ -3,6 +3,8 @@ import 'package:file_picker/file_picker.dart';
 
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:task_mangment/core/routes/app_router.dart';
+import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/widgets/custom_drop_down.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
@@ -165,12 +167,28 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         startTimeController: _startTimeController,
                         endTimeController: _endTimeController,
                       ),
+                      8.ph,
                       if (_imageFiles.isNotEmpty)
                         Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
+                          direction: Axis.horizontal,
+                          spacing: 4,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          runSpacing: 4,
+                          clipBehavior: Clip.antiAlias,
                           children: _imageFiles
-                              .map((imageFile) => Image.file(imageFile))
+                              .map(
+                                (imageFile) => Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Image.file(
+                                    imageFile,
+                                    fit: BoxFit.contain,
+                                    width: 250,
+                                    height: 250,
+                                  ),
+                                ),
+                              )
                               .toList(),
                         ),
                       32.ph,
@@ -204,10 +222,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                   descriptionController.clear();
                                   _startTimeController.clear();
                                   _endTimeController.clear();
-                                  setState(() {
-                                    _imageFiles.clear();
-                                    _isUploading = false;
-                                  });
+                                  setState(
+                                    () {
+                                      _imageFiles.clear();
+                                      _isUploading = false;
+                                    },
+                                  );
+
+                                  AppRouter.goToAndRemove(
+                                      screenName: NamedRouter.mainScreen);
                                 } catch (e) {
                                   // print(e.toString());
                                   UtilsConfig.showSnackBarMessage(

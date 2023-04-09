@@ -42,12 +42,13 @@ class FireBaseController {
 
       String userId = userCredential.user!.uid;
 
-      await firestore
-          .collection('users')
-          .doc(userId)
-          .set({'username': username, 'phone': phone, 'role': 'user'});
-
-      // print('User created successfully!');
+      await firestore.collection('users').doc(userId).set({
+        'username': username,
+        'phone': phone,
+        'role': 'user',
+        'profileImageUrl': '',
+        'position': '',
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         UtilsConfig.showSnackBarMessage(

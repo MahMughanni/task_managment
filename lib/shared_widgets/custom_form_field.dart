@@ -4,7 +4,7 @@ import 'package:task_mangment/utils/app_constants.dart';
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     Key? key,
-    required this.hintText,
+    this.hintText,
     this.validator,
     this.isPassword,
     this.suffixIcon,

@@ -40,7 +40,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
             }
             return null;
           },
-          hintText: 'Email',
+          labelText: 'Email',
         ),
         16.ph,
         CustomTextFormField(
@@ -83,7 +83,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
             return null;
           },
           isPassword: _isPassword,
-          hintText: 'Password',
+          labelText: 'Password',
         ),
         8.ph,
         Align(

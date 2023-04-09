@@ -3,6 +3,9 @@ import 'dart:ui';
 class ImageConstManger {
   static const String imagePath = 'assets/images';
   static const String logoImage = '$imagePath/logo.png';
+  static const String profileImage = '$imagePath/profile.png';
+  static const String logoutImage = '$imagePath/logout.png';
+  static const String emailImage = '$imagePath/email.png';
 }
 
 class ColorConstManger {

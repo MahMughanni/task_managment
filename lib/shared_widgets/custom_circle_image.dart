@@ -33,10 +33,9 @@ class CustomCircleImage extends StatelessWidget {
           errorBuilder:
               (BuildContext context, Object error, StackTrace? stackTrace) {
             return const Icon(
-
-              Icons.error,
+              Icons.no_accounts,
               color: Colors.red,
-              size: 25,
+              size: 30,
             );
           },
         ),
