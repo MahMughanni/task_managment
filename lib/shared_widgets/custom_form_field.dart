@@ -14,6 +14,8 @@ class CustomTextFormField extends StatelessWidget {
     this.maxLine,
     this.keyboardType,
     this.enabled,
+    this.padding,
+    this.contentPadding,
   }) : super(key: key);
   final String? hintText, initialValue, labelText;
   final String? Function(String?)? validator;
@@ -23,28 +25,34 @@ class CustomTextFormField extends StatelessWidget {
   final int? maxLine;
   final TextInputType? keyboardType;
   final bool? enabled;
+  final EdgeInsetsDirectional? padding;
+  final EdgeInsetsDirectional? contentPadding;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      enabled: enabled,
-      maxLines: maxLine ?? 1,
-      keyboardType: keyboardType,
-      controller: controller,
-      initialValue: initialValue,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      obscureText: isPassword ?? false,
-      validator: validator,
-      decoration: InputDecoration(
-        label: Text(labelText ?? ''),
-        suffixIcon: suffixIcon,
-        fillColor: ColorConstManger.formFieldFiledColor,
-        filled: true,
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(9),
+    return Padding(
+      padding: padding ?? const EdgeInsetsDirectional.all(8),
+      child: TextFormField(
+        enabled: enabled,
+        maxLines: maxLine ?? 1,
+        keyboardType: keyboardType,
+        controller: controller,
+        initialValue: initialValue,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        obscureText: isPassword ?? false,
+        validator: validator,
+        decoration: InputDecoration(
+          contentPadding: contentPadding ?? const EdgeInsetsDirectional.all(25),
+          label: Text(labelText ?? ''),
+          suffixIcon: suffixIcon,
+          fillColor: ColorConstManger.formFieldFiledColor,
+          filled: true,
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(9),
+          ),
+          hintText: hintText,
         ),
-        hintText: hintText,
       ),
     );
   }

@@ -38,7 +38,11 @@ class CustomTabBarViewTabs extends StatelessWidget with PreferredSizeWidget {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      child: CustomCircleImage(url: imageUrl),
+                      child: CustomCircleImage(
+                        url: imageUrl,
+                        width: 50,
+                        height: 50,
+                      ),
                     ),
                     8.pw,
                     Padding(

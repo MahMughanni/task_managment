@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 
 class CustomCircleImage extends StatelessWidget {
   final String url;
+  final double width;
 
-  const CustomCircleImage({Key? key, required this.url}) : super(key: key);
+  final double height;
+
+  const CustomCircleImage(
+      {Key? key, required this.url, required this.width, required this.height})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 50,
-      height: 50,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.grey[300],

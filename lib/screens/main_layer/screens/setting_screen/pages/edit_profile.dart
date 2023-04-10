@@ -4,39 +4,19 @@ import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/edit_profile.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/widgets/profile_body.dart';
 import 'package:task_mangment/shared_widgets/custom_appbar.dart';
-import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
-import '../../../../../shared_widgets/custom_circle_image.dart';
-import '../../../../../shared_widgets/custom_form_field.dart';
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class EditProfileScreen extends StatelessWidget {
+  const EditProfileScreen({Key? key}) : super(key: key);
 
   final bool isEnabled = false;
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppbar(
-        title: 'My Profile',
-        action: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                return const EditProfileScreen();
-              }));
-            },
-            icon: const Icon(
-              Icons.edit,
-              size: 25,
-              color: Colors.blueAccent,
-            ),
-          ),
-        ],
+      appBar: const CustomAppbar(
+        title: 'Edit Profile',
+        action: [],
       ),
       body: SingleChildScrollView(
         child: FutureBuilder(
@@ -50,14 +30,12 @@ class ProfileScreen extends StatelessWidget {
                   return Text("An error occurred: ${snapshot.error}");
                 }
                 var userData = snapshot.data;
-                return ProfileBodyScreen(
-                  initialData: [
-                    userData.email,
-                    userData.password,
-                    userData.phone,
-                    userData.position,
-                  ],
-                );
+                return ProfileBodyScreen(initialData: [
+                  userData.email.toString(),
+                  userData.password.toString(),
+                  userData.phone.toString(),
+                  userData.position.toString(),
+                ]);
               default:
                 return const SizedBox.shrink();
             }

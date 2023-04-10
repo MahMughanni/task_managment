@@ -22,8 +22,8 @@ class SettingScreen extends StatelessWidget {
   final imageList = [
     ImageConstManger.profileImage,
     ImageConstManger.emailImage,
-    ImageConstManger.emailImage,
-    ImageConstManger.emailImage,
+    ImageConstManger.aboutUsImage,
+    ImageConstManger.langImage,
     ImageConstManger.logoutImage,
   ];
 
@@ -70,31 +70,38 @@ class SettingScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14)),
                   child: ListTile(
                     onTap: () {
-                      if (index == 0) {
-                        AppRouter.goTo(screenName: NamedRouter.profileScreen);
-                      } else if (index == 1) {
-                        AppRouter.goTo(screenName: NamedRouter.employee);
-                      } else if (index == 2) {
-                        UtilsConfig.showSnackBarMessage(
-                            message: index.toString(), status: true);
-                      } else if (index == 3) {
-                        UtilsConfig.showSnackBarMessage(
-                            message: index.toString(), status: true);
-                      } else if (index == 4) {
-                        FirebaseAuth.instance.signOut();
-                        AppRouter.goToAndRemove(
-                            screenName: NamedRouter.loginScreen);
-                      } else {
-                        UtilsConfig.showSnackBarMessage(
-                            message: 'No Index', status: false);
+                      switch (index) {
+                        case 0:
+                          AppRouter.goTo(screenName: NamedRouter.profileScreen);
+                          break;
+                        case 1:
+                          AppRouter.goTo(screenName: NamedRouter.employee);
+
+                          break;
+                        case 2:
+                          UtilsConfig.showSnackBarMessage(
+                              message: index.toString(), status: true);
+                          break;
+                        case 3:
+                          UtilsConfig.showSnackBarMessage(
+                              message: index.toString(), status: true);
+                          break;
+                        case 4:
+                          FirebaseAuth.instance.signOut();
+                          AppRouter.goToAndRemove(
+                              screenName: NamedRouter.loginScreen);
+                          break;
+
+                        default:
+                          UtilsConfig.showSnackBarMessage(
+                              message: 'Something WWrong', status: true);
                       }
                     },
                     contentPadding: const EdgeInsets.all(20),
                     leading: CircleAvatar(
                       backgroundColor: Colors.white,
-                      radius: 50,
                       child: Image.asset(
-                        fit: BoxFit.contain,
+                        fit: BoxFit.cover,
                         imageList[index],
                       ),
                     ), //C
@@ -103,7 +110,7 @@ class SettingScreen extends StatelessWidget {
                 ),
               ), //ListTile
               childCount: 5,
-            ), //SliverChildBuildDelegate
+            ),
           ),
         ],
       ),

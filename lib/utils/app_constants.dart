@@ -6,6 +6,8 @@ class ImageConstManger {
   static const String profileImage = '$imagePath/profile.png';
   static const String logoutImage = '$imagePath/logout.png';
   static const String emailImage = '$imagePath/email.png';
+  static const String aboutUsImage = '$imagePath/about.png';
+  static const String langImage = '$imagePath/lang.png';
 }
 
 class ColorConstManger {

@@ -10,7 +10,6 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FireBaseController {
-  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final user = FirebaseAuth.instance.currentUser!;
 
   static Future logIn(String email, String password) async {
@@ -34,7 +33,7 @@ class FireBaseController {
   static Future<void> createUserAccount(
       String email, String password, String username, String phone) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
@@ -42,7 +41,7 @@ class FireBaseController {
 
       String userId = userCredential.user!.uid;
 
-      await firestore.collection('users').doc(userId).set({
+      await fireStore.collection('users').doc(userId).set({
         'username': username,
         'phone': phone,
         'role': 'user',
@@ -60,16 +59,42 @@ class FireBaseController {
     }
   }
 
+  static Future<void> editUserInfo({
+    required String userName,
+    required String phone,
+    required String position,
+    required String newEmail,
+    required String newPassword,
+  }) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+
+    await FirebaseAuth.instance.currentUser!.updateEmail(newEmail);
+    await FirebaseAuth.instance.currentUser!.updatePassword(newPassword);
+
+    await fireStore.collection('users').doc(userId).update({
+      'username': userName,
+      'phone': phone,
+      'position': position,
+    });
+  }
+
   static Future<UserModel> getUserInfo() async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
-    final userData = await firestore.collection('users').doc(userId).get();
+    final userData = await fireStore.collection('users').doc(userId).get();
     final userName = userData.get('username');
     final role = userData.get('role');
     final phone = userData.get('phone');
     final profileImageUrl = userData.get('profileImageUrl');
     final position = userData.get('position');
+    final email = FirebaseAuth.instance.currentUser!.email;
+    final password =
+        FirebaseAuth.instance.currentUser!.providerData[0].providerId ==
+                'password'
+            ? '********'
+            : '';
 
     final userModel = UserModel(
       userName: userName,
@@ -78,6 +103,8 @@ class FireBaseController {
       role: role,
       profileImageUrl: profileImageUrl,
       position: position,
+      email: email!,
+      password: password,
     );
     return userModel;
   }

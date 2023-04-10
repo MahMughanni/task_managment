@@ -120,7 +120,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         key: _formKey,
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,18 +140,21 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         controller: titleController,
                       ),
                       16.ph,
-                      CustomDropDown(
-                        onChanged: (value) =>
-                            setState(() => _selectedDropdownValue = value!),
-                        dropDownValue: _selectedDropdownValue,
-                        items: const [
-                          DropdownMenuItem(
-                              value: 'Upcoming', child: Text('Upcoming')),
-                          DropdownMenuItem(
-                              value: 'Today', child: Text('Today')),
-                          DropdownMenuItem(
-                              value: 'Completed', child: Text('Completed')),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomDropDown(
+                          onChanged: (value) =>
+                              setState(() => _selectedDropdownValue = value!),
+                          dropDownValue: _selectedDropdownValue,
+                          items: const [
+                            DropdownMenuItem(
+                                value: 'Upcoming', child: Text('Upcoming')),
+                            DropdownMenuItem(
+                                value: 'Today', child: Text('Today')),
+                            DropdownMenuItem(
+                                value: 'Completed', child: Text('Completed')),
+                          ],
+                        ),
                       ),
                       16.ph,
                       16.ph,

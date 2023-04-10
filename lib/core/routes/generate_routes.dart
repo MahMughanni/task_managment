@@ -13,7 +13,6 @@ import 'named_router.dart';
 class OnGenerateRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     // dynamic data = settings.arguments;
-
     Widget result;
     switch (settings.name) {
       case NamedRouter.mainScreen:
@@ -26,20 +25,11 @@ class OnGenerateRouter {
       case NamedRouter.companyTasks:
         result = CompanyTasksScreen();
         break;
-      // case NamedRouter.taskDetailsScreen:
-      //   if (data is TaskModel) {
-      //     final selectedTask = data as TaskModel;
-      //     result = TaskDetailsScreen(taskStream: Stream.value([selectedTask]));
-      //   } else {
-      //     result = const Center(child: Text('Invalid task data'));
-      //   }
-      //   break;
-
       case NamedRouter.splashScreen:
         result = const SplashScreen();
         break;
       case NamedRouter.profileScreen:
-        result = const ProfileScreen();
+        result = ProfileScreen();
         break;
       case NamedRouter.employee:
         result = const EmployeeScreen();
