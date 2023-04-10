@@ -120,6 +120,19 @@ class FireBaseController {
     }
   }
 
+  static Future<void> editProfileImage(
+    File? newImage,
+  ) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+    if (newImage != null) {
+      final imageUrl = await uploadProfileImage(userId, newImage);
+      await fireStore.collection('users').doc(userId).update({
+        'profileImageUrl': imageUrl,
+      });
+    }
+  }
+
   static Future<String> uploadProfileImage(
       String userId, File imageFile) async {
     final FirebaseStorage storage = FirebaseStorage.instance;

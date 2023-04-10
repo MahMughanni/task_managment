@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
@@ -93,19 +94,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               24.ph,
               CustomButton(
                   onPressed: () async {
-                    debugPrint(userNameController.text.toString());
-                    debugPrint(phoneController.text.toString());
-                    debugPrint(positionController.text.toString());
-
-                    if (formKey.currentState!.validate()) {
+                    if (userNameController.text.isEmpty &&
+                        phoneController.text.isEmpty &&
+                        positionController.text.isEmpty) {
+                      try {
+                        await FireBaseController.editProfileImage(_newImage);
+                        AppRouter.goToAndRemove(
+                            screenName: NamedRouter.mainScreen);
+                        debugPrint(_newImage?.path.toString() ?? '');
+                      } catch (error) {
+                        debugPrint(error.toString());
+                      }
+                    } else if (formKey.currentState!.validate()) {
                       try {
                         await FireBaseController.editUserInfo(
-                          userName: userNameController.text.trim(),
-                          phone: phoneController.text.trim(),
-                          position: positionController.text.trim(),
-                          newImage: _newImage
-                          // ^ Use the new image if it's not null, otherwise use the old image
-                        );
+                            userName: userNameController.text.trim(),
+                            phone: phoneController.text.trim(),
+                            position: positionController.text.trim(),
+                            newImage: _newImage
+                            // ^ Use the new image if it's not null, otherwise use the old image
+                            );
 
                         debugPrint('Edit Success');
                         AppRouter.goToAndRemove(
@@ -113,7 +121,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       } catch (error) {
                         debugPrint("Edit error $error");
                         // handle error
-                      } finally {}
+                      }
                     }
                   },
                   title: 'Save',
