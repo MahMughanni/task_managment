@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
 import '../model/user_model.dart';
+import 'package:path/path.dart' as path;
 
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -59,24 +60,76 @@ class FireBaseController {
     }
   }
 
+  // static Future<void> editUserInfo({
+  //   required String userName,
+  //   required String phone,
+  //   required String position,
+  //   File? newImage,
+  // }) async {
+  //   final userId = FirebaseAuth.instance.currentUser!.uid;
+  //   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  //
+  //   if (newImage != null) {
+  //     // Upload the new image to Firebase Storage
+  //     final Reference storageRef = FirebaseStorage.instance
+  //         .ref()
+  //         .child('profileImageUrl')
+  //         .child('$userId.jpg');
+  //     await storageRef.putFile(newImage);
+  //
+  //     // Get the download URL of the new image
+  //     final String imageUrl = await storageRef.getDownloadURL();
+  //
+  //     await fireStore.collection('users').doc(userId).update({
+  //       'username': userName,
+  //       'phone': phone,
+  //       'position': position,
+  //       'profileImageUrl': imageUrl,
+  //     });
+  //   } else {
+  //     // Update the user's document in the Firestore collection without changing the image URL
+  //     await fireStore.collection('users').doc(userId).update({
+  //       'username': userName,
+  //       'phone': phone,
+  //       'position': position,
+  //     });
+  //   }
+  // }
   static Future<void> editUserInfo({
     required String userName,
     required String phone,
     required String position,
-    required String newEmail,
-    required String newPassword,
+    File? newImage,
   }) async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
-    await FirebaseAuth.instance.currentUser!.updateEmail(newEmail);
-    await FirebaseAuth.instance.currentUser!.updatePassword(newPassword);
-
+    // Update the user's profile data
     await fireStore.collection('users').doc(userId).update({
       'username': userName,
       'phone': phone,
       'position': position,
     });
+
+    // If a new image was provided, upload it to Firebase Storage and update the user's profile picture URL
+    if (newImage != null) {
+      final imageUrl = await uploadProfileImage(userId, newImage);
+      await fireStore.collection('users').doc(userId).update({
+        'profileImageUrl': imageUrl,
+      });
+    }
+  }
+
+  static Future<String> uploadProfileImage(
+      String userId, File imageFile) async {
+    final FirebaseStorage storage = FirebaseStorage.instance;
+    final ref = storage.ref('users/$userId/${path.basename(imageFile.path)}');
+    final metadata = SettableMetadata(
+      contentType: 'image/${path.extension(imageFile.path).substring(1)}',
+    );
+    final uploadTask = ref.putFile(imageFile, metadata);
+    final downloadUrl = await (await uploadTask).ref.getDownloadURL();
+    return downloadUrl.toString();
   }
 
   static Future<UserModel> getUserInfo() async {

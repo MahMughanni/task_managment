@@ -95,7 +95,7 @@ class ListViewItemBody extends StatelessWidget {
             ],
           ),
           CustomCircleImage(
-            url: url,
+            image: url,
             width: 50,
             height: 50,
           ),

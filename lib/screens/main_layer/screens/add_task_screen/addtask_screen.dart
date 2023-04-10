@@ -51,18 +51,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   String _selectedDropdownValue = 'Today';
 
-  // Future<void> _pickImages() async {
-  //   final result = await FilePicker.platform.pickFiles(
-  //     type: FileType.image,
-  //     allowMultiple: true,
-  //   );
-  //
-  //   if (result != null) {
-  //     setState(() {
-  //       _imageFiles = result.paths.map((path) => File(path!)).toList();
-  //     });
-  //   }
-  // }
+
   Future<void> _pickImages() async {
     await requestPermissions(); // Call the permission request function
     var status = await Permission.storage.request();
@@ -78,7 +67,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         });
       }
     } else {
-      // Handle denied or restricted status
     }
   }
 

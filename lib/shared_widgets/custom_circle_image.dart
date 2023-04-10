@@ -1,14 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class CustomCircleImage extends StatelessWidget {
-  final String url;
+  final dynamic image;
   final double width;
-
   final double height;
 
-  const CustomCircleImage(
-      {Key? key, required this.url, required this.width, required this.height})
-      : super(key: key);
+  const CustomCircleImage({
+    Key? key,
+    required this.image,
+    required this.width,
+    required this.height,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +24,9 @@ class CustomCircleImage extends StatelessWidget {
         color: Colors.grey[300],
       ),
       child: ClipOval(
-        child: Image.network(
-          url,
+        child: image is String
+            ? Image.network(
+          image,
           fit: BoxFit.cover,
           loadingBuilder: (BuildContext context, Widget child,
               ImageChunkEvent? loadingProgress) {
@@ -30,19 +35,23 @@ class CustomCircleImage extends StatelessWidget {
               child: CircularProgressIndicator(
                 value: loadingProgress.expectedTotalBytes != null
                     ? loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes!
+                    loadingProgress.expectedTotalBytes!
                     : null,
               ),
             );
           },
-          errorBuilder:
-              (BuildContext context, Object error, StackTrace? stackTrace) {
+          errorBuilder: (BuildContext context, Object error,
+              StackTrace? stackTrace) {
             return const Icon(
               Icons.no_accounts,
               color: Colors.red,
               size: 30,
             );
           },
+        )
+            : Image.file(
+          image as File, // Cast image to a File
+          fit: BoxFit.cover,
         ),
       ),
     );
