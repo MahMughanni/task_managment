@@ -32,7 +32,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     userNameController = TextEditingController();
     phoneController = TextEditingController();
     positionController = TextEditingController();
-    _newImage = File('');
+    _newImage = null;
     urlImage = widget.path;
 
     super.initState();
@@ -59,7 +59,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(widget.path);
     var screenSize = MediaQuery.of(context).size;
     return Form(
       key: formKey,
@@ -82,13 +81,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     });
                   }
                 },
-                initialData: [],
+                initialData: const ['', ''],
                 isEnabled: true,
                 screen: 'edit',
                 userNameController: userNameController,
                 phoneController: phoneController,
                 positionController: positionController,
-                newImage: _newImage,
+                newImage: _newImage ?? File(widget.path),
                 imageUrl: urlImage,
               ),
               24.ph,
@@ -104,7 +103,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           userName: userNameController.text.trim(),
                           phone: phoneController.text.trim(),
                           position: positionController.text.trim(),
-                          newImage: _newImage,
+                          newImage: _newImage
+                          // ^ Use the new image if it's not null, otherwise use the old image
                         );
 
                         debugPrint('Edit Success');
@@ -113,7 +113,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       } catch (error) {
                         debugPrint("Edit error $error");
                         // handle error
-                      }
+                      } finally {}
                     }
                   },
                   title: 'Save',
