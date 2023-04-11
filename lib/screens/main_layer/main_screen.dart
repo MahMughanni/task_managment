@@ -16,18 +16,16 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
-
   final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
 
   List<Widget> _buildScreens() {
     return [
       HomeScreen(),
-       AssignedScreen(),
+      AssignedScreen(),
       const AddTaskScreen(),
       const NotificationScreen(),
-       SettingScreen(),
+      SettingScreen(),
     ];
   }
 
@@ -84,9 +82,15 @@ class _MainScreenState extends State<MainScreen> {
       stateManagement: true,
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(2.0),
-        colorBehindNavBar: Colors.white,
-      ),
+          borderRadius: BorderRadius.circular(2.0),
+          colorBehindNavBar: Colors.white,
+          boxShadow: [
+            const BoxShadow(
+              spreadRadius: 1,
+              blurRadius: 16,
+              color: Colors.black12,
+            )
+          ]),
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
       itemAnimationProperties: const ItemAnimationProperties(

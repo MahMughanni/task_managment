@@ -25,7 +25,10 @@ class CustomContainer extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(title , style: Theme.of(context).textTheme.titleMedium,),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           Text(taskNumber),
         ],
       ),

@@ -47,8 +47,6 @@ flutter:
   fonts:
     - family: Cairo
       fonts:
-        - style: normal
-
         - asset: assets/fonts/Cairo-Regular.ttf
           weight: 500
         - asset: assets/fonts/Cairo-Medium.ttf

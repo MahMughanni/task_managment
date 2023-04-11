@@ -23,7 +23,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userFuture = FireBaseController.getUserInfo();
-    // final taskData = FireBaseController.getUserTasksStream(userId: user.uid);
     return DefaultTabController(
       length: 3,
       child: SafeArea(
@@ -34,7 +33,6 @@ class HomeScreen extends StatelessWidget {
             future: userFuture,
             builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                // print(snapshot.data!.position);
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
@@ -112,7 +110,7 @@ class HomeScreen extends StatelessWidget {
                                       color: const Color(0xffF3CCFF),
                                       title: 'Completed',
                                       taskNumber:
-                                          completedTasksCount.toString(),
+                                      completedTasksCount.toString(),
                                     );
                                   default:
                                     return const CustomContainer(
@@ -178,9 +176,12 @@ class BuildSliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery
+        .of(context)
+        .size;
     return SliverPersistentHeader(
       delegate: MySliverAppBar(
-        expandedHeight: 300,
+        expandedHeight:screenSize.height *.36,
         userName: userName,
         taskNumber: taskNumber,
         itemBuilder: itemBuilder,
