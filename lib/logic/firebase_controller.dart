@@ -20,7 +20,6 @@ class FireBaseController {
       UtilsConfig.showSnackBarMessage(
           message: ' Login Success !', status: true);
     } on FirebaseAuthException catch (e) {
-      // print('error MSG : $e');
       if (e.code == 'user-not-found') {
         UtilsConfig.showSnackBarMessage(
             message: 'No user found for that email.', status: false);
@@ -60,41 +59,13 @@ class FireBaseController {
     }
   }
 
-  // static Future<void> editUserInfo({
-  //   required String userName,
-  //   required String phone,
-  //   required String position,
-  //   File? newImage,
-  // }) async {
-  //   final userId = FirebaseAuth.instance.currentUser!.uid;
-  //   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
-  //
-  //   if (newImage != null) {
-  //     // Upload the new image to Firebase Storage
-  //     final Reference storageRef = FirebaseStorage.instance
-  //         .ref()
-  //         .child('profileImageUrl')
-  //         .child('$userId.jpg');
-  //     await storageRef.putFile(newImage);
-  //
-  //     // Get the download URL of the new image
-  //     final String imageUrl = await storageRef.getDownloadURL();
-  //
-  //     await fireStore.collection('users').doc(userId).update({
-  //       'username': userName,
-  //       'phone': phone,
-  //       'position': position,
-  //       'profileImageUrl': imageUrl,
-  //     });
-  //   } else {
-  //     // Update the user's document in the Firestore collection without changing the image URL
-  //     await fireStore.collection('users').doc(userId).update({
-  //       'username': userName,
-  //       'phone': phone,
-  //       'position': position,
-  //     });
-  //   }
-  // }
+  static Future<List<DocumentSnapshot>> getAllUsers() async {
+    final QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('users').get();
+
+    return querySnapshot.docs;
+  }
+
   static Future<void> editUserInfo({
     required String userName,
     required String phone,
@@ -111,7 +82,6 @@ class FireBaseController {
       'position': position,
     });
 
-    // If a new image was provided, upload it to Firebase Storage and update the user's profile picture URL
     if (newImage != null) {
       final imageUrl = await uploadProfileImage(userId, newImage);
       await fireStore.collection('users').doc(userId).update({

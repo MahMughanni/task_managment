@@ -17,6 +17,7 @@ class ListViewItemBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int maxLength = 20;
+    var screenSize = MediaQuery.of(context).size ;
 
     String shortString = title.length > maxLength
         ? "${title.substring(0, maxLength)}..."
@@ -25,7 +26,7 @@ class ListViewItemBody extends StatelessWidget {
       alignment: Alignment.center,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(6),
-      height: 120,
+      height: screenSize.height * .16,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [

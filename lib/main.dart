@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ void main() async {
   await Firebase.initializeApp();
   // FireBaseController.getUserInfo();
   // print(await FireBaseController.getUserTasks(userId: 'i8I9c76QJxOUU6hjIiJ0ND23kIi2'));
+  // print(getAllUsers());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(const TaskManageMentApp()),
   );
@@ -28,6 +30,7 @@ class TaskManageMentApp extends StatelessWidget {
       onGenerateRoute: OnGenerateRouter.onGenerateRoute,
       navigatorKey: AppRouter.navigatorKey,
       initialRoute: NamedRouter.splashScreen,
+      theme: ThemeData(fontFamily: 'Cairo'),
       scaffoldMessengerKey: UtilsConfig.scaffoldKey,
       builder: (context, child) => ResponsiveWrapper.builder(
         child,
@@ -44,3 +47,11 @@ class TaskManageMentApp extends StatelessWidget {
     );
   }
 }
+
+// Future<List<DocumentSnapshot>> getAllUsers() async {
+//   final QuerySnapshot querySnapshot =
+//       await FirebaseFirestore.instance.collection('users').get();
+//
+//   print(querySnapshot.docs.length);
+//   return querySnapshot.docs;
+// }
