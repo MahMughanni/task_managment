@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'custom_tab_bar.dart';
 
-class MySliverAppBar extends SliverPersistentHeaderDelegate {
+class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
 
-  MySliverAppBar({
+  CustomSliverAppBar({
     required this.imageUrl,
     required this.itemBuilder,
     required this.itemCount,
+    required this.userId,
     required this.expandedHeight,
     required this.userName,
     required this.taskNumber,
   });
 
-  final String userName, taskNumber, imageUrl;
+  final String userName, taskNumber, imageUrl, userId;
   final Widget? Function(BuildContext, int) itemBuilder;
   final int itemCount;
 
@@ -27,6 +28,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
       itemBuilder: itemBuilder,
       itemCount: itemCount,
       imageUrl: imageUrl,
+      userId: userId,
     );
   }
 

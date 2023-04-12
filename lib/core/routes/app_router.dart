@@ -5,11 +5,16 @@ class AppRouter {
       GlobalKey<NavigatorState>();
 
   static goToAndRemove({required String screenName, Object? arguments}) {
-    navigatorKey.currentState!.pushReplacementNamed(screenName);
+    if (navigatorKey.currentState != null) {
+      navigatorKey.currentState!
+          .pushReplacementNamed(screenName, arguments: arguments);
+    }
   }
 
   static goTo({required String screenName, Object? arguments}) {
-    navigatorKey.currentState!.pushNamed(screenName);
+    if (navigatorKey.currentState != null) {
+      navigatorKey.currentState!.pushNamed(screenName, arguments: arguments);
+    }
   }
 
   static back() {

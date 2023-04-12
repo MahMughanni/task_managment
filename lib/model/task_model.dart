@@ -19,6 +19,21 @@ class TaskModel {
     required this.createdAt,
   });
 
+  factory TaskModel.fromJson(Map<String, dynamic> json) {
+    final imageUrls = List<String>.from(json['imageUrls'] ?? []);
+    return TaskModel(
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      startTime: json['startTime'] ?? '',
+      endTime: json['endTime'] ?? '',
+      state: json['state'] ?? '',
+      imageUrls: imageUrls,
+      createdAt: json['createdAt'] == null
+          ? Timestamp.now()
+          : Timestamp.fromDate(DateTime.parse(json['createdAt'])),
+    );
+  }
+
   factory TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
     final imageUrls = List<String>.from(data['imageUrls'] ?? []);

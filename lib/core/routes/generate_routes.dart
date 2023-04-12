@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:task_mangment/screens/auth_layer/login_screen.dart';
 import 'package:task_mangment/screens/auth_layer/signup_screen.dart';
 import 'package:task_mangment/screens/main_layer/main_screen.dart';
+import 'package:task_mangment/screens/main_layer/screens/calender_screen/calender_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/company_tasks_screen/company_tasks.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/employee_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/profile_screen.dart';
@@ -29,9 +30,13 @@ class OnGenerateRouter {
         result = const SplashScreen();
         break;
       case NamedRouter.profileScreen:
-        result = ProfileScreen();
+        result = const ProfileScreen();
         break;
-      case NamedRouter.employee:
+      case NamedRouter.calenderScreen:
+        return MaterialPageRoute(builder: (BuildContext context) {
+          return CalendarScreen(userId: settings.arguments?.toString() ?? '');
+        });
+      case NamedRouter.employeeScreen:
         result = const EmployeeScreen();
         break;
       case NamedRouter.signUpScreen:

@@ -22,6 +22,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String userId = user.uid;
     final userFuture = FireBaseController.getUserInfo();
     return DefaultTabController(
       length: 3,
@@ -66,6 +67,7 @@ class HomeScreen extends StatelessWidget {
                                 );
                               },
                               imageUrl: userData.profileImageUrl.toString(),
+                              userId: userId,
                             );
                           } else if (snapshot.hasError) {
                             return BuildSliverAppBar(
@@ -76,6 +78,7 @@ class HomeScreen extends StatelessWidget {
                                 return Container();
                               },
                               imageUrl: '',
+                              userId: userId,
                             );
                           } else {
                             List<TaskModel> userTasks = snapshot.data!;
@@ -110,7 +113,7 @@ class HomeScreen extends StatelessWidget {
                                       color: const Color(0xffF3CCFF),
                                       title: 'Completed',
                                       taskNumber:
-                                      completedTasksCount.toString(),
+                                          completedTasksCount.toString(),
                                     );
                                   default:
                                     return const CustomContainer(
@@ -118,6 +121,7 @@ class HomeScreen extends StatelessWidget {
                                 }
                               },
                               imageUrl: userData.profileImageUrl ?? '',
+                              userId: userId,
                             );
                           }
                         },
@@ -131,21 +135,24 @@ class HomeScreen extends StatelessWidget {
                         state: 'today',
                         label: 'today',
                         userTask: FireBaseController.getUserTasksStream(
-                            userId: user.uid),
+                          userId: userId,
+                        ),
                       ),
                       CustomTaskList(
                         userName: userData.userName,
                         state: 'upcoming',
                         label: 'Upcoming',
                         userTask: FireBaseController.getUserTasksStream(
-                            userId: user.uid),
+                          userId: userId,
+                        ),
                       ),
                       CustomTaskList(
                         userName: userData.userName,
                         state: 'completed',
                         label: 'Completed',
                         userTask: FireBaseController.getUserTasksStream(
-                            userId: user.uid),
+                          userId: userId,
+                        ),
                       ),
                     ],
                   ),
@@ -167,26 +174,25 @@ class BuildSliverAppBar extends StatelessWidget {
     required this.itemCount,
     required this.itemBuilder,
     required this.imageUrl,
+    required this.userId,
   }) : super(key: key);
 
-  final String userName;
-  final String taskNumber, imageUrl;
+  final String userName, taskNumber, imageUrl, userId;
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery
-        .of(context)
-        .size;
+    var screenSize = MediaQuery.of(context).size;
     return SliverPersistentHeader(
-      delegate: MySliverAppBar(
-        expandedHeight:screenSize.height *.36,
+      delegate: CustomSliverAppBar(
+        expandedHeight: screenSize.height * .36,
         userName: userName,
         taskNumber: taskNumber,
         itemBuilder: itemBuilder,
         itemCount: itemCount,
         imageUrl: imageUrl,
+        userId: userId,
       ),
     );
   }

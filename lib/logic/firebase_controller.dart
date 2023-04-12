@@ -145,6 +145,70 @@ class FireBaseController {
     return userModel;
   }
 
+  static Stream<List<TaskModel>> getUserTasksByDateToCalender(
+      {required String userId}) {
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+    final tasksCollection = userDoc.collection('tasks');
+    return tasksCollection
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+        .map((doc) => TaskModel.fromSnapshot(doc))
+        .toList());
+  }
+
+  // static Future<List<TaskModel>> getUserTasksByDateToCalender(
+  //     {required String userId}) async {
+  //
+  //   final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+  //   final tasksCollection = userDoc.collection('tasks');
+  //   final querySnapshot = await tasksCollection.orderBy('createdAt', descending: true).get();
+  //
+  //   final tasksByDate = <DateTime, List<TaskModel>>{};
+  //   for (var doc in querySnapshot.docs) {
+  //     final task = TaskModel.fromSnapshot(doc);
+  //     final date = task.createdAt.toDate();
+  //     if (tasksByDate.containsKey(date)) {
+  //       tasksByDate[date]!.add(task);
+  //     } else {
+  //       tasksByDate[date] = [task];
+  //     }
+  //   }
+  //
+  //   final tasks = tasksByDate.values.expand((element) => element).toList();
+  //   return tasks;
+  // }
+
+  // static Stream<Map<DateTime, List<TaskModel>>> getUserTasksByDateToCalender({
+  //   required String userId,
+  // }) {
+  //   final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+  //   final tasksCollection = userDoc.collection('tasks');
+  //   final snapshots =
+  //   tasksCollection.orderBy('createdAt', descending: true).snapshots();
+  //   return snapshots.map((querySnapshot) {
+  //     final tasksByDate = <DateTime, List<TaskModel>>{};
+  //     for (var doc in querySnapshot.docs) {
+  //       final task = TaskModel.fromSnapshot(doc);
+  //       final date = task.createdAt.toDate();
+  //
+  //       if (tasksByDate.containsKey(date)) {
+  //         tasksByDate[date]!.add(task);
+  //       } else {
+  //         tasksByDate[date] = [task];
+  //       }
+  //     }
+  //     return tasksByDate;
+  //   }).map((tasksByDate) {
+  //     // Sort the keys (i.e. the dates) in ascending order
+  //     final sortedKeys = tasksByDate.keys.toList()..sort();
+  //     final sortedTasksByDate =
+  //     Map.fromEntries(sortedKeys.map((date) => MapEntry(date, tasksByDate[date]!)));
+  //     return sortedTasksByDate;
+  //   });
+  // }
+  //
+
   static Stream<List<TaskModel>> getUserTasksStream({required String userId}) {
     final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
     final tasksCollection = userDoc.collection('tasks');

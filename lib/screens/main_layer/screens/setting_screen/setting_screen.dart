@@ -75,7 +75,7 @@ class SettingScreen extends StatelessWidget {
                           AppRouter.goTo(screenName: NamedRouter.profileScreen);
                           break;
                         case 1:
-                          AppRouter.goTo(screenName: NamedRouter.employee);
+                          AppRouter.goTo(screenName: NamedRouter.employeeScreen);
 
                           break;
                         case 2:

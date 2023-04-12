@@ -8,14 +8,17 @@ import 'package:task_mangment/core/routes/generate_routes.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
 
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/utils/utils_config.dart';
+
+import 'model/task_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // FireBaseController.getUserInfo();
-  // print(await FireBaseController.getUserTasks(userId: 'i8I9c76QJxOUU6hjIiJ0ND23kIi2'));
-  // print(getAllUsers());
+  var userId = FirebaseAuth.instance.currentUser!.uid;
+  getUserTasksByDateToCalender(userId: userId);
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(const TaskManageMentApp()),
   );
@@ -48,10 +51,17 @@ class TaskManageMentApp extends StatelessWidget {
   }
 }
 
-// Future<List<DocumentSnapshot>> getAllUsers() async {
-//   final QuerySnapshot querySnapshot =
-//       await FirebaseFirestore.instance.collection('users').get();
-//
-//   print(querySnapshot.docs.length);
-//   return querySnapshot.docs;
-// }
+Stream<List<TaskModel>> getUserTasksByDateToCalender({required String userId}) {
+  final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+  final tasksCollection = userDoc.collection('tasks');
+  var data = tasksCollection
+      .orderBy('createdAt', descending: true)
+      .snapshots()
+      .map((querySnapshot) {
+    final tasks =
+        querySnapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList();
+    print("Length : ${tasks.length}");
+    return tasks;
+  });
+  return data;
+}

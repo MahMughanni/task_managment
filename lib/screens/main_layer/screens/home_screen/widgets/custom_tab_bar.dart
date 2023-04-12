@@ -13,9 +13,10 @@ class CustomTabBarViewTabs extends StatelessWidget {
     required this.itemBuilder,
     required this.itemCount,
     required this.imageUrl,
+    required this.userId,
   }) : super(key: key);
 
-  final String userName, taskNumber;
+  final String userName, taskNumber, userId;
   final Widget? Function(BuildContext, int) itemBuilder;
   final int itemCount;
   final String imageUrl;
@@ -82,10 +83,17 @@ class CustomTabBarViewTabs extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Icon(
-                    Icons.calendar_month_sharp,
-                    size: 30,
-                    color: Colors.black54,
+                  IconButton(
+                    onPressed: () {
+                      AppRouter.goTo(
+                          screenName: NamedRouter.calenderScreen,
+                          arguments: userId);
+                    },
+                    icon: const Icon(
+                      Icons.calendar_month_sharp,
+                      size: 30,
+                      color: Colors.black54,
+                    ),
                   )
                 ],
               ),
