@@ -3,8 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/task_model.dart';
 
 class CalenderController {
-  static Future<List<TaskModel>> getTasksForDay(
-      DateTime day, String userId) async {
+  static Future<List<TaskModel>> getTasksForDay(DateTime day, String userId) async {
     final startOfDay = DateTime.utc(day.year, day.month, day.day);
     final endOfDay = startOfDay
         .add(const Duration(days: 1))
@@ -14,8 +13,7 @@ class CalenderController {
         .collection('users')
         .doc(userId)
         .collection('tasks')
-        .where('createdAt',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+        .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
         .where('createdAt', isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
         .get();
 
