@@ -8,16 +8,12 @@ import 'package:task_mangment/core/routes/generate_routes.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
 
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
-import 'model/task_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  var userId = FirebaseAuth.instance.currentUser!.uid;
-  getUserTasksByDateToCalender(userId: userId);
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(const TaskManageMentApp()),
@@ -51,17 +47,3 @@ class TaskManageMentApp extends StatelessWidget {
   }
 }
 
-Stream<List<TaskModel>> getUserTasksByDateToCalender({required String userId}) {
-  final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
-  final tasksCollection = userDoc.collection('tasks');
-  var data = tasksCollection
-      .orderBy('createdAt', descending: true)
-      .snapshots()
-      .map((querySnapshot) {
-    final tasks =
-        querySnapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList();
-    print("Length : ${tasks.length}");
-    return tasks;
-  });
-  return data;
-}
