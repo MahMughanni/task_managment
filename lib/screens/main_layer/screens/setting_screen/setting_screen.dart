@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
 import 'package:task_mangment/utils/app_constants.dart';
-import 'package:task_mangment/utils/extentions/padding_extention.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
 import '../../../../core/routes/named_router.dart';
