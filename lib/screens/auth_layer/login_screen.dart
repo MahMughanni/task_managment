@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_mangment/screens/auth_layer/controller/authentication_cubit.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/header_widget.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/login_body_widget.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
-import '../../logic/firebase_controller.dart';
 import '../main_layer/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,14 +17,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-
   late TextEditingController emailController;
   late TextEditingController passwordController;
+  late AuthenticationCubit authCubit;
+
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    authCubit = BlocProvider.of<AuthenticationCubit>(context);
     emailController = TextEditingController();
     passwordController = TextEditingController();
   }
@@ -39,18 +42,18 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text('Something went wrong'),
-              );
-            } else if (snapshot.hasData) {
+        child: BlocConsumer<AuthenticationCubit, AuthenticationState>(
+          listener: (context, state) {
+            if (state is LoginInProgress) {
+              UtilsConfig.showSnackBarMessage(message: 'loading', status: false);
+            }
+              if (state is LoginFailure) {
+              debugPrint(state.errorMessage.toString());
+              UtilsConfig.showSnackBarMessage(message: 'Email Or Password is Wrong', status: false);
+            }
+          },
+          builder: (context, state) {
+            if (state is LoginSuccess) {
               return const MainScreen();
             } else {
               return SingleChildScrollView(
@@ -59,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     horizontal: 34,
                   ),
                   child: Form(
-                    key: _formKey,
+                    key: formKey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,23 +72,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         34.ph,
                         LoginScreenBodyWidget(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              FireBaseController.logIn(
+                          onPressed: () async {
+                            if (formKey.currentState!.validate()) {
+                              await authCubit.logIn(
                                   emailController.text.trim().toString(),
                                   passwordController.text.trim().toString());
-
-
-                            }
-                            else {
+                            } else {
                               UtilsConfig.showSnackBarMessage(
-                                  message: 'Enter valid Information',
-                                  status: false);
+                                message: 'Enter valid Information',
+                                status: false,
+                              );
                             }
                           },
                           emailController: emailController,
                           passwordController: passwordController,
-                        )
+                        ),
                       ],
                     ),
                   ),

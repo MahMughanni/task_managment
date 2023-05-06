@@ -48,19 +48,19 @@ class CompanyTasksScreen extends StatelessWidget {
                 state: 'today',
                 label: '',
                 userTask:
-                    FireBaseController.getUserTasksStream(userId: user.uid),
+                    FireBaseRepository.getUserTasksStream(userId: user.uid),
               ),
               CustomTaskList(
                 state: 'upcoming',
                 label: '',
                 userTask:
-                    FireBaseController.getUserTasksStream(userId: user.uid),
+                    FireBaseRepository.getUserTasksStream(userId: user.uid),
               ),
               CustomTaskList(
                 state: 'completed',
                 label: '',
                 userTask:
-                    FireBaseController.getUserTasksStream(userId: user.uid),
+                    FireBaseRepository.getUserTasksStream(userId: user.uid),
               ),
             ],
           ),

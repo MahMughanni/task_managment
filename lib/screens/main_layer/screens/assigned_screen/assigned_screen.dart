@@ -25,7 +25,7 @@ class AssignedScreen extends StatelessWidget {
         ],
       ),
       body: StreamBuilder<List<TaskModel>>(
-        stream: FireBaseController.getUserTasksStream(userId: user.uid),
+        stream: FireBaseRepository.getUserTasksStream(userId: user.uid),
         builder:
             (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,7 +45,7 @@ class AssignedScreen extends StatelessWidget {
             return CustomTaskList(
               state: 'upcoming',
               label: '',
-              userTask: FireBaseController.getUserTasksStream(userId: user.uid),
+              userTask: FireBaseRepository.getUserTasksStream(userId: user.uid),
             );
           }
         },

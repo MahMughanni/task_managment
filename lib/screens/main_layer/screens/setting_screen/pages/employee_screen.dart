@@ -18,7 +18,7 @@ class EmployeeScreen extends StatelessWidget {
         action: [],
       ),
       body: FutureBuilder<List<DocumentSnapshot>>(
-        future: FireBaseController.getAllUsers(),
+        future: FireBaseRepository.getAllUsers(),
         builder: (BuildContext context,
             AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
           if (snapshot.hasData) {

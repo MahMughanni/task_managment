@@ -192,7 +192,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                   _isUploading = true;
                                 });
                                 try {
-                                  await FireBaseController.addTask(
+                                  await FireBaseRepository.addTask(
                                     title:
                                         titleController.text.toString().trim(),
                                     description: descriptionController.text

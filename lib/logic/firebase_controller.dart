@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:task_mangment/model/task_model.dart';
-import 'package:task_mangment/utils/utils_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
@@ -10,54 +9,8 @@ import 'package:path/path.dart' as path;
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class FireBaseController {
+class FireBaseRepository {
   final user = FirebaseAuth.instance.currentUser!;
-
-  static Future logIn(String email, String password) async {
-    try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      UtilsConfig.showSnackBarMessage(
-          message: ' Login Success !', status: true);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        UtilsConfig.showSnackBarMessage(
-            message: 'No user found for that email.', status: false);
-      } else if (e.code == 'wrong-password') {
-        UtilsConfig.showSnackBarMessage(
-            message: 'Wrong password provided for that user.', status: false);
-      }
-    }
-  }
-
-  static Future<void> createUserAccount(
-      String email, String password, String username, String phone) async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final FirebaseFirestore fireStore = FirebaseFirestore.instance;
-
-    try {
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-
-      String userId = userCredential.user!.uid;
-
-      await fireStore.collection('users').doc(userId).set({
-        'username': username,
-        'phone': phone,
-        'role': 'user',
-        'profileImageUrl': '',
-        'position': '',
-      });
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        UtilsConfig.showSnackBarMessage(
-            message: 'No user found for that email.', status: false);
-      } else if (e.code == 'wrong-password') {
-        UtilsConfig.showSnackBarMessage(
-            message: 'Wrong password provided for that user.', status: false);
-      }
-    }
-  }
 
   static Future<List<DocumentSnapshot>> getAllUsers() async {
     final QuerySnapshot querySnapshot =
@@ -157,58 +110,6 @@ class FireBaseController {
         .toList());
   }
 
-  // static Future<List<TaskModel>> getUserTasksByDateToCalender(
-  //     {required String userId}) async {
-  //
-  //   final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
-  //   final tasksCollection = userDoc.collection('tasks');
-  //   final querySnapshot = await tasksCollection.orderBy('createdAt', descending: true).get();
-  //
-  //   final tasksByDate = <DateTime, List<TaskModel>>{};
-  //   for (var doc in querySnapshot.docs) {
-  //     final task = TaskModel.fromSnapshot(doc);
-  //     final date = task.createdAt.toDate();
-  //     if (tasksByDate.containsKey(date)) {
-  //       tasksByDate[date]!.add(task);
-  //     } else {
-  //       tasksByDate[date] = [task];
-  //     }
-  //   }
-  //
-  //   final tasks = tasksByDate.values.expand((element) => element).toList();
-  //   return tasks;
-  // }
-
-  // static Stream<Map<DateTime, List<TaskModel>>> getUserTasksByDateToCalender({
-  //   required String userId,
-  // }) {
-  //   final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
-  //   final tasksCollection = userDoc.collection('tasks');
-  //   final snapshots =
-  //   tasksCollection.orderBy('createdAt', descending: true).snapshots();
-  //   return snapshots.map((querySnapshot) {
-  //     final tasksByDate = <DateTime, List<TaskModel>>{};
-  //     for (var doc in querySnapshot.docs) {
-  //       final task = TaskModel.fromSnapshot(doc);
-  //       final date = task.createdAt.toDate();
-  //
-  //       if (tasksByDate.containsKey(date)) {
-  //         tasksByDate[date]!.add(task);
-  //       } else {
-  //         tasksByDate[date] = [task];
-  //       }
-  //     }
-  //     return tasksByDate;
-  //   }).map((tasksByDate) {
-  //     // Sort the keys (i.e. the dates) in ascending order
-  //     final sortedKeys = tasksByDate.keys.toList()..sort();
-  //     final sortedTasksByDate =
-  //     Map.fromEntries(sortedKeys.map((date) => MapEntry(date, tasksByDate[date]!)));
-  //     return sortedTasksByDate;
-  //   });
-  // }
-  //
-
   static Stream<List<TaskModel>> getUserTasksStream({required String userId}) {
     final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
     final tasksCollection = userDoc.collection('tasks');
@@ -282,6 +183,5 @@ class FireBaseController {
         .collection('tasks')
         .add(task.toMap());
 
-    // print('add success');
   }
 }

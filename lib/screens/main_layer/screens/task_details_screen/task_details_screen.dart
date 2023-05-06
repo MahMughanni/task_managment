@@ -14,7 +14,7 @@ class TaskDetailsScreen extends StatelessWidget {
   final String userName;
   final TaskModel task;
 
-  final user = FireBaseController.getUserInfo();
+  final user = FireBaseRepository.getUserInfo();
 
   @override
   Widget build(BuildContext context) {

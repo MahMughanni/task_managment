@@ -15,7 +15,7 @@ class HeaderWidget extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     return Container(
       alignment: Alignment.topCenter,
-      height: height * .35,
+      height: height * .30,
       width: width * .5,
       decoration: const BoxDecoration(
         image: DecorationImage(

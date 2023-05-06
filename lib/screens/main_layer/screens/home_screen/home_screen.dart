@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String userId = user.uid;
-    final userFuture = FireBaseController.getUserInfo();
+    final userFuture = FireBaseRepository.getUserInfo();
     return DefaultTabController(
       length: 3,
       child: SafeArea(
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                       (BuildContext context, bool innerBoxIsScrolled) {
                     return [
                       StreamBuilder<List<TaskModel>>(
-                        stream: FireBaseController.getUserTasksStream(
+                        stream: FireBaseRepository.getUserTasksStream(
                             userId: user.uid),
                         builder: (context2, snapshot) {
                           if (snapshot.connectionState ==
@@ -134,7 +134,7 @@ class HomeScreen extends StatelessWidget {
                         userName: userData.userName,
                         state: 'today',
                         label: 'today',
-                        userTask: FireBaseController.getUserTasksStream(
+                        userTask: FireBaseRepository.getUserTasksStream(
                           userId: userId,
                         ),
                       ),
@@ -142,7 +142,7 @@ class HomeScreen extends StatelessWidget {
                         userName: userData.userName,
                         state: 'upcoming',
                         label: 'Upcoming',
-                        userTask: FireBaseController.getUserTasksStream(
+                        userTask: FireBaseRepository.getUserTasksStream(
                           userId: userId,
                         ),
                       ),
@@ -150,7 +150,7 @@ class HomeScreen extends StatelessWidget {
                         userName: userData.userName,
                         state: 'completed',
                         label: 'Completed',
-                        userTask: FireBaseController.getUserTasksStream(
+                        userTask: FireBaseRepository.getUserTasksStream(
                           userId: userId,
                         ),
                       ),

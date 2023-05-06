@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/logic/firebase_controller.dart';
+import 'package:task_mangment/logic/base_cubit.dart';
+import 'package:task_mangment/screens/auth_layer/controller/authentication_cubit.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/custom_rich_text.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
@@ -22,12 +25,12 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  bool _isPassword = true;
 
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late TextEditingController userNameController;
   late TextEditingController phoneController;
+  late AuthenticationCubit authCubit;
 
   @override
   void initState() {
@@ -36,6 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     passwordController = TextEditingController();
     phoneController = TextEditingController();
     userNameController = TextEditingController();
+    authCubit = BlocProvider.of<AuthenticationCubit>(context);
   }
 
   @override
@@ -49,148 +53,173 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 34,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const HeaderWidget(
-                    title: 'SIGN UP',
-                  ),
-                  34.ph,
-                  CustomTextFormField(
-                    controller: userNameController,
-                    validator: (value) {
-                      if (!value!.isValidName) {
-                        return 'enter valid name';
-                      }
-                      return null;
-                    },
-                    labelText: 'Name',
-                  ),
-                  16.ph,
-                  CustomTextFormField(
-                    controller: emailController,
-                    validator: (value) {
-                      if (!value!.isValidEmail) {
-                        return 'enter valid email';
-                      }
-                      return null;
-                    },
-                    labelText: 'Email',
-                  ),
-                  16.ph,
-                  CustomTextFormField(
-                    controller: passwordController,
-                    suffixIcon: IconButton(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      disabledColor: Colors.transparent,
-                      color: _isPassword ? Colors.grey : Colors.blue,
-                      onPressed: () {
-                        setState(() {
-                          _isPassword = !_isPassword;
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.remove_red_eye_outlined,
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'enter valid password';
-                      }
-                      if (value.trim().length < 6) {
-                        return 'minimum length 6 ';
-                      }
-                      if (!value.isContainSmallLetter(value)) {
-                        return 'Should contain at least a small letter';
-                      }
-                      if (!value.isContainCapitalLetter(value)) {
-                        return 'Should contain at least a capital letter';
-                      }
-                      if (!value.isContainSpecialCharacter(value)) {
-                        return 'Should contain at least a Special Character';
-                      }
-                      if (!value.isContainNumber(value)) {
-                        return 'Should contain at least a Number';
-                      }
-                      return null;
-                    },
-                    isPassword: _isPassword,
-                    labelText: 'Password',
-                  ),
-                  24.ph,
-                  CustomTextFormField(
-                    controller: phoneController,
-                    validator: (value) {
-                      if (!value!.isValidNumber) {
-                        return 'enter valid phone must start with +970 ';
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.phone,
-                    hintText: '+970',
-                    labelText: 'phone',
-                  ),
-                  16.ph,
-                  CustomButton(
-                    title: 'SIGN UP',
-                    width: double.infinity,
-                    height: 52,
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        FireBaseController.createUserAccount(
-                          emailController.text.trim().toString(),
-                          passwordController.text.trim().toString(),
-                          userNameController.text.trim().toString(),
-                          phoneController.text.trim().toString(),
-                        );
-                        AppRouter.goToAndRemove(
-                            screenName: NamedRouter.loginScreen);
+    return BlocConsumer<BaseCubit, BaseCubitState>(
+      listener: (context, state) {
+        if (state is SignUpSuccess) {
+          AppRouter.goToAndRemove(screenName: NamedRouter.homeScreen);
 
-                        UtilsConfig.showSnackBarMessage(
-                            message: 'Thanks for signing up!.', status: true);
-                      } else {
-                        UtilsConfig.showSnackBarMessage(
-                            message: 'Enter valid Information', status: false);
-                      }
-                    },
-                  ),
-                  CustomRichText(
-                    title: 'Don\'t have an account yet ?',
-                    subTitle: ' LOG IN',
-                    subTextStyle: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(
-                            fontWeight: AppConstFontWeight.bold,
-                            color: ColorConstManger.primaryColor),
-                    tapGestureRecognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Navigator.pop(context);
-                      },
-                    padding: const EdgeInsets.all(20),
-                    titleStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Colors.black.withOpacity(.7),
+          UtilsConfig.showSnackBarMessage(
+            message: 'Thanks for signing up!',
+            status: true,
+          );
+        }
+        if (state is SignUpProgress) {
+          UtilsConfig.showSnackBarMessage(message: 'loading', status: false);
+        }
+        if (state is SignUpFailure) {
+          UtilsConfig.showSnackBarMessage(
+              message: 'Email Or Password is Wrong', status: false);
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 34,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const HeaderWidget(
+                        title: 'SIGN UP',
+                      ),
+                      34.ph,
+                      CustomTextFormField(
+                        controller: userNameController,
+                        validator: (value) {
+                          if (!value!.isValidName) {
+                            return 'enter valid name';
+                          }
+                          return null;
+                        },
+                        labelText: 'Name',
+                      ),
+                      16.ph,
+                      CustomTextFormField(
+                        controller: emailController,
+                        validator: (value) {
+                          if (!value!.isValidEmail) {
+                            return 'enter valid email';
+                          }
+                          return null;
+                        },
+                        labelText: 'Email',
+                      ),
+                      16.ph,
+                      CustomTextFormField(
+                        controller: passwordController,
+                        suffixIcon: IconButton(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          disabledColor: Colors.transparent,
+                          color: BlocProvider.of<BaseCubit>(context).isPassword
+                              ? Colors.grey
+                              : Colors.blue,
+                          onPressed: () {
+                            BlocProvider.of<BaseCubit>(context).showPassword();
+                          },
+                          icon: const Icon(
+                            Icons.remove_red_eye_outlined,
+                          ),
                         ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'enter valid password';
+                          }
+                          if (value.trim().length < 6) {
+                            return 'minimum length 6 ';
+                          }
+                          if (!value.isContainSmallLetter(value)) {
+                            return 'Should contain at least a small letter';
+                          }
+                          if (!value.isContainCapitalLetter(value)) {
+                            return 'Should contain at least a capital letter';
+                          }
+                          if (!value.isContainSpecialCharacter(value)) {
+                            return 'Should contain at least a Special Character';
+                          }
+                          if (!value.isContainNumber(value)) {
+                            return 'Should contain at least a Number';
+                          }
+                          return null;
+                        },
+                        isPassword:
+                            BlocProvider.of<BaseCubit>(context).isPassword,
+                        labelText: 'Password',
+                      ),
+                      24.ph,
+                      CustomTextFormField(
+                        controller: phoneController,
+                        validator: (value) {
+                          if (!value!.isValidNumber) {
+                            return 'enter valid phone must start with +970 ';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.phone,
+                        hintText: '+970',
+                        labelText: 'phone',
+                      ),
+                      16.ph,
+                      CustomButton(
+                        title: 'SIGN UP',
+                        width: double.infinity,
+                        height: 52,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            authCubit.signUp(
+                              emailController.text.trim().toString(),
+                              passwordController.text.trim().toString(),
+                              userNameController.text.trim().toString(),
+                              phoneController.text.trim().toString(),
+                            );
+
+                            AppRouter.goToAndRemove(
+                                screenName: NamedRouter.loginScreen);
+                          } else {
+                            UtilsConfig.showSnackBarMessage(
+                                message: 'Enter valid Information',
+                                status: false);
+                          }
+                        },
+                      ),
+                      CustomRichText(
+                        title: 'Don\'t have an account yet ?',
+                        subTitle: ' LOG IN',
+                        subTextStyle: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(
+                                fontWeight: AppConstFontWeight.bold,
+                                color: ColorConstManger.primaryColor),
+                        tapGestureRecognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            BlocProvider.of<BaseCubit>(context)
+                                .resetPasswordVisibility();
+
+                            Navigator.pop(context);
+                          },
+                        padding: const EdgeInsets.all(20),
+                        titleStyle:
+                            Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  color: Colors.black.withOpacity(.7),
+                                ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

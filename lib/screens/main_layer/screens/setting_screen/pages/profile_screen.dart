@@ -12,7 +12,7 @@ class ProfileScreen extends StatelessWidget {
     // final Size screenSize = MediaQuery.of(context).size;
 
     return FutureBuilder(
-      future: FireBaseController.getUserInfo(),
+      future: FireBaseRepository.getUserInfo(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:

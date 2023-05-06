@@ -97,7 +97,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         phoneController.text.isEmpty &&
                         positionController.text.isEmpty) {
                       try {
-                        await FireBaseController.editProfileImage(_newImage);
+                        await FireBaseRepository.editProfileImage(_newImage);
                         AppRouter.goToAndRemove(
                             screenName: NamedRouter.mainScreen);
                         debugPrint(_newImage?.path.toString() ?? '');
@@ -106,7 +106,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       }
                     } else if (formKey.currentState!.validate()) {
                       try {
-                        await FireBaseController.editUserInfo(
+                        await FireBaseRepository.editUserInfo(
                             userName: userNameController.text.trim(),
                             phone: phoneController.text.trim(),
                             position: positionController.text.trim(),
