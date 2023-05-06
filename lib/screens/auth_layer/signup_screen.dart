@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/logic/base_cubit.dart';
@@ -56,8 +57,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return BlocConsumer<BaseCubit, BaseCubitState>(
       listener: (context, state) {
         if (state is SignUpSuccess) {
-          AppRouter.goToAndRemove(screenName: NamedRouter.homeScreen);
-
           UtilsConfig.showSnackBarMessage(
             message: 'Thanks for signing up!',
             status: true,
@@ -77,8 +76,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 34,
-                ),
+                  horizontal: 16,
+                ).r,
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -88,8 +87,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const HeaderWidget(
                         title: 'SIGN UP',
                       ),
-                      34.ph,
+                      24.verticalSpace,
                       CustomTextFormField(
+                        focus: (_) => FocusScope.of(context).nearestScope,
                         controller: userNameController,
                         validator: (value) {
                           if (!value!.isValidName) {
@@ -99,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         labelText: 'Name',
                       ),
-                      16.ph,
+                      8.verticalSpace,
                       CustomTextFormField(
                         controller: emailController,
                         validator: (value) {
@@ -109,9 +109,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                         labelText: 'Email',
+                        focus: (_) => FocusScope.of(context).nearestScope,
                       ),
-                      16.ph,
+                      8.verticalSpace,
                       CustomTextFormField(
+                        focus: (_) => FocusScope.of(context).nearestScope,
                         controller: passwordController,
                         suffixIcon: IconButton(
                           highlightColor: Colors.transparent,
@@ -154,8 +156,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             BlocProvider.of<BaseCubit>(context).isPassword,
                         labelText: 'Password',
                       ),
-                      24.ph,
+                      8.verticalSpace,
                       CustomTextFormField(
+                        focus: (_) => FocusScope.of(context).nearestScope,
                         controller: phoneController,
                         validator: (value) {
                           if (!value!.isValidNumber) {
@@ -167,11 +170,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         hintText: '+970',
                         labelText: 'phone',
                       ),
-                      16.ph,
+                      16.verticalSpace,
                       CustomButton(
                         title: 'SIGN UP',
                         width: double.infinity,
-                        height: 52,
+                        height: 42.h,
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             authCubit.signUp(
@@ -180,9 +183,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               userNameController.text.trim().toString(),
                               phoneController.text.trim().toString(),
                             );
-
-                            AppRouter.goToAndRemove(
-                                screenName: NamedRouter.loginScreen);
+                            //
+                            // AppRouter.goToAndRemove(
+                            //     screenName: NamedRouter.loginScreen);
                           } else {
                             UtilsConfig.showSnackBarMessage(
                                 message: 'Enter valid Information',
@@ -198,17 +201,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             .bodyLarge!
                             .copyWith(
                                 fontWeight: AppConstFontWeight.bold,
+                                fontSize: 12.sp,
                                 color: ColorConstManger.primaryColor),
                         tapGestureRecognizer: TapGestureRecognizer()
                           ..onTap = () {
                             BlocProvider.of<BaseCubit>(context)
                                 .resetPasswordVisibility();
-
-                            Navigator.pop(context);
+                            AppRouter.goToAndRemove(
+                                screenName: NamedRouter.loginScreen);
                           },
                         padding: const EdgeInsets.all(20),
                         titleStyle:
                             Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  fontSize: 12.sp,
                                   color: Colors.black.withOpacity(.7),
                                 ),
                       ),

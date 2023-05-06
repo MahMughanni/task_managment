@@ -1,6 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_mangment/core/routes/app_router.dart';
+import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/logic/base_cubit.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 import 'package:task_mangment/utils/extentions/string_validate_extention.dart';
@@ -31,9 +34,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BaseCubit, BaseCubitState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Column(
           children: [
@@ -47,7 +48,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
               },
               labelText: 'Email',
             ),
-            16.ph,
+            8.verticalSpace,
             CustomTextFormField(
               controller: widget.passwordController,
               suffixIcon: IconButton(
@@ -90,19 +91,24 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
               isPassword: BlocProvider.of<BaseCubit>(context).isPassword,
               labelText: 'Password',
             ),
-            8.ph,
+            8.verticalSpace,
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {},
-                child: const Text('forget password ?'),
+                child: Text(
+                  'forget password ?',
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                  ),
+                ),
               ),
             ),
-            24.ph,
+            8.verticalSpace,
             CustomButton(
               title: 'LOG IN',
               width: double.infinity,
-              height: 52,
+              height: 42.h,
               onPressed: widget.onPressed,
             ),
             CustomRichText(
@@ -110,18 +116,16 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
               subTitle: ' SIGN UP',
               subTextStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   fontWeight: AppConstFontWeight.bold,
+                  fontSize: 12.sp,
                   color: ColorConstManger.primaryColor),
               tapGestureRecognizer: TapGestureRecognizer()
                 ..onTap = () {
                   BlocProvider.of<BaseCubit>(context).resetPasswordVisibility();
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SignUpScreen()));
+                  AppRouter.goToAndRemove(screenName: NamedRouter.signUpScreen);
                 },
               padding: const EdgeInsets.all(20),
               titleStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    fontSize: 12.sp,
                     color: Colors.black.withOpacity(.7),
                   ),
             ),

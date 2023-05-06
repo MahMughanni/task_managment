@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'custom_circle_image.dart';
 
@@ -99,8 +100,8 @@ class ListViewItemBody extends StatelessWidget {
             ),
             CustomCircleImage(
               image: url,
-              width: 60,
-              height: 60,
+              width: 60.w,
+              height: 60.h,
             ),
           ],
         ),

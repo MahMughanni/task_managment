@@ -56,6 +56,7 @@ class CreateTaskBody extends StatelessWidget {
                   },
                   child: AbsorbPointer(
                     child: CustomTextFormField(
+                      focus: (_) => FocusScope.of(context).nearestScope,
                       suffixIcon: const Icon(Icons.calendar_today),
                       labelText: 'Start',
                       hintText: '5.apr 10:00pm',
@@ -96,6 +97,7 @@ class CreateTaskBody extends StatelessWidget {
                   },
                   child: AbsorbPointer(
                     child: CustomTextFormField(
+                      focus: (_) => FocusScope.of(context).nearestScope,
                       suffixIcon: const Icon(Icons.calendar_today),
                       labelText: 'End',
                       hintText: '5.apr 10:00pm',
@@ -117,6 +119,7 @@ class CreateTaskBody extends StatelessWidget {
           8.ph,
           CustomTextFormField(
             padding: const EdgeInsetsDirectional.all(0),
+            focus: (_) => FocusScope.of(context).nearestScope,
             validator: validator,
             controller: descriptionController,
             maxLine: 10,
@@ -126,8 +129,9 @@ class CreateTaskBody extends StatelessWidget {
           20.ph,
           GestureDetector(
             onTap: onTap,
-            child: const CustomTextFormField(
-              suffixIcon: Icon(Icons.link_sharp),
+            child:  CustomTextFormField(
+              focus: (_) => FocusScope.of(context).nearestScope,
+              suffixIcon: const Icon(Icons.link_sharp),
               enabled: false,
               hintText: '',
               labelText: 'Attach files',

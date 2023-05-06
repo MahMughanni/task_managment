@@ -1,19 +1,18 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/screens/auth_layer/controller/authentication_cubit.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/header_widget.dart';
 import 'package:task_mangment/screens/auth_layer/widgets/login_body_widget.dart';
-import 'package:task_mangment/utils/utils_config.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
-
+import 'package:task_mangment/utils/utils_config.dart';
 import '../main_layer/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -45,11 +44,13 @@ class _LoginScreenState extends State<LoginScreen> {
         child: BlocConsumer<AuthenticationCubit, AuthenticationState>(
           listener: (context, state) {
             if (state is LoginInProgress) {
-              UtilsConfig.showSnackBarMessage(message: 'loading', status: false);
+              UtilsConfig.showSnackBarMessage(
+                  message: 'loading', status: false);
             }
-              if (state is LoginFailure) {
+            if (state is LoginFailure) {
               debugPrint(state.errorMessage.toString());
-              UtilsConfig.showSnackBarMessage(message: 'Email Or Password is Wrong', status: false);
+              UtilsConfig.showSnackBarMessage(
+                  message: 'Email Or Password is Wrong', status: false);
             }
           },
           builder: (context, state) {
@@ -58,9 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
             } else {
               return SingleChildScrollView(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 34,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16).r,
                   child: Form(
                     key: formKey,
                     child: Column(
@@ -70,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         const HeaderWidget(
                           title: 'LOG IN',
                         ),
-                        34.ph,
+                        30.verticalSpace,
                         LoginScreenBodyWidget(
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {

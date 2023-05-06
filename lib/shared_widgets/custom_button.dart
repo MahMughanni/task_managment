@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 
 class CustomButton extends StatelessWidget {
@@ -26,6 +27,7 @@ class CustomButton extends StatelessWidget {
       child: Text(
         title.toString(),
         style: Theme.of(context).textTheme.titleLarge!.copyWith(
+          fontSize: 16.sp,
               color: Colors.white,
             ),
       ),

@@ -117,6 +117,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     children: [
                       24.ph,
                       CustomTextFormField(
+                        focus: (_) => FocusScope.of(context).nearestScope,
+
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'enter valid title';
