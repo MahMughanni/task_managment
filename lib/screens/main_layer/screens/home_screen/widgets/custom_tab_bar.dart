@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
@@ -24,17 +25,17 @@ class CustomTabBarViewTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8).r,
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            20.ph,
+            12.verticalSpace,
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4).r,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,19 +44,19 @@ class CustomTabBarViewTabs extends StatelessWidget {
                     children: [
                       CustomCircleImage(
                         image: imageUrl,
-                        width: 70,
-                        height: 70,
+                        width: 50.w,
+                        height: 50.h,
                       ),
-                      8.pw,
+                      8.horizontalSpace,
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0).r,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             RichText(
                               text: TextSpan(
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 16),
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16.sp),
                                   text: 'Hi ,',
                                   children: [
                                     TextSpan(
@@ -65,7 +66,7 @@ class CustomTabBarViewTabs extends StatelessWidget {
                                             .titleLarge),
                                   ]),
                             ),
-                            6.ph,
+                            2.verticalSpace,
                             RichText(
                               text: TextSpan(
                                 style: const TextStyle(color: Colors.black),
@@ -73,7 +74,8 @@ class CustomTabBarViewTabs extends StatelessWidget {
                                 children: [
                                   TextSpan(
                                       text: '$taskNumber Task',
-                                      style: const TextStyle(
+                                      style: TextStyle(
+                                          fontSize: 12.sp,
                                           color: Colors.blueAccent)),
                                 ],
                               ),
@@ -89,9 +91,9 @@ class CustomTabBarViewTabs extends StatelessWidget {
                           screenName: NamedRouter.calenderScreen,
                           arguments: userId);
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.calendar_month_sharp,
-                      size: 30,
+                      size: 20.r,
                       color: Colors.black54,
                     ),
                   )
@@ -99,7 +101,7 @@ class CustomTabBarViewTabs extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 130,
+              height: 90.h,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
@@ -109,12 +111,12 @@ class CustomTabBarViewTabs extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Company tasks',
                   style: TextStyle(
                       color: Colors.blueAccent,
                       fontWeight: FontWeight.w800,
-                      fontSize: 20),
+                      fontSize: 18.sp),
                 ),
                 TextButton(
                     onPressed: () {
@@ -123,19 +125,19 @@ class CustomTabBarViewTabs extends StatelessWidget {
                     child: Text(
                       'see more',
                       style: TextStyle(
-                          color: Colors.black.withOpacity(.7), fontSize: 13),
+                          color: Colors.black.withOpacity(.7), fontSize: 12.sp),
                     )),
               ],
             ),
-            16.ph,
+            4.verticalSpace,
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(9),
+                borderRadius: BorderRadius.circular(9).r,
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
                     spreadRadius: 1,
-                    blurRadius: 16,
+                    blurRadius: 16.r,
                     color: Colors.grey.shade200,
                   )
                 ],

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/addtask_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/assigned_screen/assigned_screen.dart';
@@ -44,12 +45,8 @@ class _MainScreenState extends State<MainScreen> {
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(
-          CupertinoIcons.add,
-          color: Colors.white,
-          size: 30,
-        ),
-        title: (" "),
+        icon: const Icon(CupertinoIcons.add, size: 30),
+        title: ("Add Task"),
         activeColorPrimary: ColorConstManger.primaryColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
@@ -70,39 +67,41 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      context,
-      controller: _controller,
-      screens: _buildScreens(),
-      items: _navBarsItems(),
-      confineInSafeArea: true,
-      backgroundColor: Colors.white,
-      handleAndroidBackButtonPress: true,
-      resizeToAvoidBottomInset: true,
-      stateManagement: true,
-      hideNavigationBarWhenKeyboardShows: true,
-      decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(2.0),
-          colorBehindNavBar: Colors.white,
-          boxShadow: [
-            const BoxShadow(
-              spreadRadius: 1,
-              blurRadius: 16,
-              color: Colors.black12,
-            )
-          ]),
-      popAllScreensOnTapOfSelectedTab: true,
-      popActionScreens: PopActionScreensType.all,
-      itemAnimationProperties: const ItemAnimationProperties(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeOutSine,
-      ),
-      screenTransitionAnimation: const ScreenTransitionAnimation(
-        animateTabTransition: true,
-        curve: Curves.easeOutSine,
-        duration: Duration(milliseconds: 300),
-      ),
-      navBarStyle: NavBarStyle.style15,
-    );
+    return PersistentTabView(context,
+        controller: _controller,
+        screens: _buildScreens(),
+        items: _navBarsItems(),
+        confineInSafeArea: true,
+        backgroundColor: Colors.white,
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        stateManagement: true,
+        hideNavigationBarWhenKeyboardShows: true,
+        decoration: NavBarDecoration(
+            borderRadius: BorderRadius.circular(2.0).r,
+            colorBehindNavBar: Colors.white,
+            adjustScreenBottomPaddingOnCurve: false
+          // boxShadow: [
+          //   const BoxShadow(
+          //     offset: Offset(0, -2),
+          //     spreadRadius: 1,
+          //     blurRadius: 10,
+          //     blurStyle: BlurStyle.outer,
+          //     color: Colors.black12,
+          //   )
+          // ],
+        ),
+        popAllScreensOnTapOfSelectedTab: true,
+        popActionScreens: PopActionScreensType.all,
+        itemAnimationProperties: const ItemAnimationProperties(
+          duration: Duration(milliseconds: 250),
+          curve: Curves.linear,
+        ),
+        screenTransitionAnimation: const ScreenTransitionAnimation(
+          animateTabTransition: true,
+          curve: Curves.linear,
+          duration: Duration(milliseconds: 250),
+        ),
+        navBarStyle: NavBarStyle.style9)  ;
   }
 }

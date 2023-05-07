@@ -18,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
     this.padding,
     this.contentPadding,
     this.focus,
+    this.suffixIconConstraints,
   }) : super(key: key);
   final String? hintText, initialValue, labelText;
   final String? Function(String?)? validator;
@@ -30,11 +31,12 @@ class CustomTextFormField extends StatelessWidget {
   final EdgeInsetsDirectional? padding;
   final EdgeInsetsDirectional? contentPadding;
   final void Function(String)? focus;
+  final BoxConstraints? suffixIconConstraints;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ??  REdgeInsets.all(8),
+      padding: padding ?? REdgeInsets.all(8),
       child: TextFormField(
         enabled: enabled,
         maxLines: maxLine ?? 1,
@@ -47,8 +49,9 @@ class CustomTextFormField extends StatelessWidget {
         validator: validator,
         style: TextStyle(fontSize: 12.sp),
         decoration: InputDecoration(
+          suffixIconConstraints: suffixIconConstraints,
           hintStyle: TextStyle(fontSize: 12.sp),
-          contentPadding: contentPadding ??  REdgeInsets.all(15),
+          contentPadding: contentPadding ?? REdgeInsets.all(15),
           label: Text(labelText ?? ''),
           suffixIcon: suffixIcon,
           fillColor: ColorConstManger.formFieldFiledColor,

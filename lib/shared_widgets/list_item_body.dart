@@ -26,7 +26,7 @@ class ListViewItemBody extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      height: screenSize.height * .16,
+      height: screenSize.height * .11.h,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -45,10 +45,10 @@ class ListViewItemBody extends StatelessWidget {
             color: Colors.grey.withOpacity(.3),
           ),
         ],
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10).r,
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 0.0, left: 16, right: 8),
+        padding: const EdgeInsets.only(top: 0.0, left: 16, right: 8).r,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -61,16 +61,9 @@ class ListViewItemBody extends StatelessWidget {
                 RichText(
                   text: TextSpan(
                     text: userName,
-                    style: const TextStyle(
-                        color: Colors.black, overflow: TextOverflow.ellipsis),
-                    children: [
-                      WidgetSpan(
-                          child: Icon(
-                        Icons.messenger,
-                        color: Colors.green.shade100,
-                        size: 19,
-                      ))
-                    ],
+                    style: TextStyle(
+                        color: Colors.black, overflow: TextOverflow.ellipsis,
+                    fontSize: 14.sp, ),
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.clip,
@@ -79,11 +72,11 @@ class ListViewItemBody extends StatelessWidget {
                   text: TextSpan(
                       text: startTime,
                       style: const TextStyle(color: Colors.red),
-                      children: const [
+                      children:  [
                         WidgetSpan(
                             child: Icon(
                           Icons.calendar_month,
-                          size: 20,
+                          size: 15.r,
                         ))
                       ]),
                   maxLines: 2,
@@ -100,8 +93,8 @@ class ListViewItemBody extends StatelessWidget {
             ),
             CustomCircleImage(
               image: url,
-              width: 60.w,
-              height: 60.h,
+              width: 50.w,
+              height: 50.h,
             ),
           ],
         ),

@@ -42,28 +42,28 @@ class CompanyTasksScreen extends StatelessWidget {
                   ),
                 ]),
           ),
-          body: TabBarView(
-            children: [
-              CustomTaskList(
-                state: 'today',
-                label: '',
-                userTask:
-                    FireBaseRepository.getUserTasksStream(userId: user.uid),
-              ),
-              CustomTaskList(
-                state: 'upcoming',
-                label: '',
-                userTask:
-                    FireBaseRepository.getUserTasksStream(userId: user.uid),
-              ),
-              CustomTaskList(
-                state: 'completed',
-                label: '',
-                userTask:
-                    FireBaseRepository.getUserTasksStream(userId: user.uid),
-              ),
-            ],
-          ),
+          // body: TabBarView(
+          //   children: [
+          //     CustomTaskList(
+          //       state: 'today',
+          //       label: '',
+          //       userTask:
+          //           FireBaseRepository.getUserTasksStream(userId: user.uid),
+          //     ),
+          //     CustomTaskList(
+          //       state: 'upcoming',
+          //       label: '',
+          //       userTask:
+          //           FireBaseRepository.getUserTasksStream(userId: user.uid),
+          //     ),
+          //     CustomTaskList(
+          //       state: 'completed',
+          //       label: '',
+          //       userTask:
+          //           FireBaseRepository.getUserTasksStream(userId: user.uid),
+          //     ),
+          //   ],
+          // ),
         ),
       ),
     );

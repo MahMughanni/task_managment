@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'package:task_mangment/core/routes/named_router.dart';
 
 import 'package:task_mangment/logic/base_cubit.dart';
 import 'package:task_mangment/screens/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
 void main() async {

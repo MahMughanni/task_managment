@@ -113,6 +113,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       8.verticalSpace,
                       CustomTextFormField(
+                        suffixIconConstraints: BoxConstraints(
+                          maxWidth: 100.r,
+                        ),
                         focus: (_) => FocusScope.of(context).nearestScope,
                         controller: passwordController,
                         suffixIcon: IconButton(
@@ -127,8 +130,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onPressed: () {
                             BlocProvider.of<BaseCubit>(context).showPassword();
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.remove_red_eye_outlined,
+                            size: 16.r,
                           ),
                         ),
                         validator: (value) {
@@ -194,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
                       CustomRichText(
-                        title: 'Don\'t have an account yet ?',
+                        title: 'Already have an account?',
                         subTitle: ' LOG IN',
                         subTextStyle: Theme.of(context)
                             .textTheme

@@ -13,38 +13,36 @@ import 'named_router.dart';
 
 class OnGenerateRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    // dynamic data = settings.arguments;
-    Widget result;
+    Widget page;
     switch (settings.name) {
       case NamedRouter.mainScreen:
-        result = const MainScreen();
+        page = const MainScreen();
         break;
 
       case NamedRouter.loginScreen:
-        result = const LoginScreen();
+        page = const LoginScreen();
         break;
       case NamedRouter.companyTasks:
-        result = CompanyTasksScreen();
+        page = CompanyTasksScreen();
         break;
       case NamedRouter.splashScreen:
-        result = const SplashScreen();
+        page = const SplashScreen();
         break;
       case NamedRouter.profileScreen:
-        result = const ProfileScreen();
+        page = const ProfileScreen();
         break;
       case NamedRouter.calenderScreen:
         return MaterialPageRoute(builder: (BuildContext context) {
           return CalendarScreen(userId: settings.arguments?.toString() ?? '');
         });
       case NamedRouter.employeeScreen:
-        result = const EmployeeScreen();
+        page = const EmployeeScreen();
         break;
       case NamedRouter.signUpScreen:
-        result = const SignUpScreen();
+        page = const SignUpScreen();
         break;
-
       default:
-        result = const Scaffold(
+        page = const Scaffold(
           body: Center(
             child: Text(
               'Wrong path',
@@ -53,6 +51,25 @@ class OnGenerateRouter {
           ),
         );
     }
-    return MaterialPageRoute(builder: (context) => result);
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = const Offset(-1.0, 0.0); // slide from left to right
+        var end = const Offset(0.0, 0.0);
+        var tween = Tween<Offset>(
+          begin: begin,
+          end: end,
+        );
+        var curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: Curves.fastOutSlowIn,
+          reverseCurve: Curves.fastOutSlowIn,
+        );
+        return SlideTransition(
+          position: tween.animate(curvedAnimation),
+          child: child,
+        );
+      },
+    );
   }
 }

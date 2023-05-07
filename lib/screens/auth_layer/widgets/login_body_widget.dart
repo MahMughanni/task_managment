@@ -5,13 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/logic/base_cubit.dart';
-import 'package:task_mangment/utils/extentions/padding_extention.dart';
 import 'package:task_mangment/utils/extentions/string_validate_extention.dart';
 
 import '../../../shared_widgets/custom_button.dart';
 import '../../../shared_widgets/custom_form_field.dart';
 import '../../../utils/app_constants.dart';
-import '../signup_screen.dart';
 import 'custom_rich_text.dart';
 
 class LoginScreenBodyWidget extends StatefulWidget {
@@ -50,6 +48,9 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
             ),
             8.verticalSpace,
             CustomTextFormField(
+              suffixIconConstraints: BoxConstraints(
+                maxWidth:100.r,
+              ),
               controller: widget.passwordController,
               suffixIcon: IconButton(
                 highlightColor: Colors.transparent,
@@ -63,8 +64,10 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
                 onPressed: () {
                   BlocProvider.of<BaseCubit>(context).showPassword();
                 },
-                icon: const Icon(
+                icon:  Icon(
+
                   Icons.remove_red_eye_outlined,
+                  size: 16.r,
                 ),
               ),
               validator: (value) {

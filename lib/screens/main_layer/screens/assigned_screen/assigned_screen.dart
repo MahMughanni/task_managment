@@ -42,11 +42,12 @@ class AssignedScreen extends StatelessWidget {
               ),
             );
           } else {
-            return CustomTaskList(
-              state: 'upcoming',
-              label: '',
-              userTask: FireBaseRepository.getUserTasksStream(userId: user.uid),
-            );
+            return Container();
+            // return CustomTaskList(
+            //   state: 'upcoming',
+            //   label: '',
+            //   userTask: FireBaseRepository.getUserTasksStream(userId: user.uid),
+            // );
           }
         },
       ),

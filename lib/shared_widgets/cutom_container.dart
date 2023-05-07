@@ -17,18 +17,18 @@ class CustomContainer extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     return Container(
       alignment: Alignment.center,
-      margin: const EdgeInsets.all(6),
+      margin: const EdgeInsets.all(4).r,
       decoration:
           BoxDecoration(color: color, borderRadius: BorderRadius.circular(15)),
-      height: height * .20.h,
-      width: width * .29.w,
+      height: height * .15.h,
+      width: width * .25.w,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14.sp),
           ),
           Text(taskNumber),
         ],
