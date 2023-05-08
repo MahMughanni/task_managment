@@ -43,8 +43,8 @@ class CustomTabBarViewTabs extends StatelessWidget {
                     children: [
                       CustomCircleImage(
                         image: imageUrl,
-                        width: 50.w,
-                        height: 50.h,
+                        width: 45.r,
+                        height: 45.r,
                       ),
                       8.horizontalSpace,
                       Padding(

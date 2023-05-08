@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class ImageConstManger {
   static const String imagePath = 'assets/images';
   static const String logoImage = '$imagePath/logo.png';
@@ -23,6 +25,7 @@ class ColorConstManger {
   static const int primaryTextColor = 0xFF000000;
   static const int primaryButtonColor = 0xFF4375FF;
   static const int borderSnackBarTrue = 0xFF70B668;
+  static const Color red = Colors.red;
 }
 
 

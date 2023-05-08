@@ -58,7 +58,7 @@ class ListViewItemBody extends StatelessWidget {
               children: [
                 Text(
                   taskCategory,
-                  style: TextStyle(fontSize: 13.sp),
+                  style: TextStyle(fontSize: 14.sp),
                 ),
                 Expanded(
                   child: RichText(
@@ -67,7 +67,7 @@ class ListViewItemBody extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.black,
                         overflow: TextOverflow.ellipsis,
-                        fontSize: 15.sp,
+                        fontSize: 14.sp,
                       ),
                     ),
                     maxLines: 2,
@@ -78,7 +78,8 @@ class ListViewItemBody extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                         text: startTime,
-                        style: const TextStyle(color: Colors.red),
+                        style: TextStyle(
+                            color: Colors.deepOrange, fontSize: 11.sp),
                         children: [
                           WidgetSpan(
                               child: Icon(
@@ -99,10 +100,13 @@ class ListViewItemBody extends StatelessWidget {
                 4.verticalSpace,
               ],
             ),
-            CustomCircleImage(
-              image: url,
-              width: 50.w,
-              height: 50.h,
+            Padding(
+              padding: const EdgeInsets.all(8.0).r,
+              child: CustomCircleImage(
+                image: url,
+                width: 40.r,
+                height: 40.r,
+              ),
             ),
           ],
         ),

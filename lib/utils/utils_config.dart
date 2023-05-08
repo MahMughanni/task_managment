@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import 'app_constants.dart';
@@ -7,7 +9,8 @@ import 'app_constants.dart';
 class UtilsConfig {
   static final navigatorKey = GlobalKey<NavigatorState>();
 
-  static final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+  static final GlobalKey<ScaffoldMessengerState> scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   static showSnackBarMessage({required String message, required bool status}) {
     return scaffoldKey.currentState!.showSnackBar(
@@ -54,4 +57,68 @@ class UtilsConfig {
     return formattedDate;
   }
 
+  static showSnakBar(String content, {bool Success = false}) {
+    return AppRouter.snackBarKey.currentState?.showSnackBar(SnackBar(
+      content: Text(
+        content,
+      ),
+      backgroundColor:
+          Success ? ColorConstManger.primaryColor : ColorConstManger.red,
+      behavior: SnackBarBehavior.floating,
+    ));
+  }
+
+  static void showFirebaseException(FirebaseException e) {
+    String errorMessage;
+    switch (e.code) {
+      case 'invalid-email':
+        errorMessage = 'The email address is not valid.';
+        break;
+      case 'user-not-found':
+        errorMessage = 'The user with the provided email does not exist.';
+        break;
+      case 'wrong-password':
+        errorMessage = 'The password is incorrect.';
+        break;
+      // Add more cases as needed
+      default:
+        errorMessage = e.message!;
+    }
+    showSnakBar(errorMessage, Success: false);
+  }
+
+  static void showBottomSheet(Widget widget) {
+    showModalBottomSheet<dynamic>(
+      backgroundColor: Colors.transparent,
+      context: AppRouter.navigatorKey.currentContext!,
+      builder: (context) {
+        return Popover(
+          child: widget,
+        );
+      },
+    );
+  }
+}
+
+class Popover extends StatelessWidget {
+  const Popover({
+    Key? key,
+    this.child,
+  }) : super(key: key);
+
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(23.0), topRight: Radius.circular(23.0)),
+      ),
+      child: child!,
+    );
+  }
 }

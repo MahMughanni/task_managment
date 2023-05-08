@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -10,7 +11,7 @@ import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
-part 'add_task_state.dart';
+import 'add_task_state.dart';
 
 class AddTaskCubit extends Cubit<AddTaskState> {
   AddTaskCubit() : super(AddTaskInitial());
@@ -23,14 +24,14 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   late TextEditingController startTimeController;
   late TextEditingController endTimeController;
 
-  init (){
+  init() {
     titleController = TextEditingController();
     descriptionController = TextEditingController();
     startTimeController = TextEditingController();
     endTimeController = TextEditingController();
   }
 
-  dispose (){
+  dispose() {
     titleController.dispose();
     descriptionController.dispose();
     startTimeController.dispose();
@@ -61,7 +62,6 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     emit(RemoveTaskImageUpdated(imageFiles));
   }
 
-
   void uploadTask({
     required String title,
     required String description,
@@ -86,13 +86,13 @@ class AddTaskCubit extends Cubit<AddTaskState> {
       imageFiles.clear();
       emit(AddTaskUploadSuccess());
       AppRouter.goToAndRemove(routeName: NamedRouter.mainScreen);
+    } on FirebaseException catch (e) {
+      UtilsConfig.showFirebaseException(e);
     } catch (e) {
-      print(e.toString());
       UtilsConfig.showSnackBarMessage(message: e.toString(), status: false);
       emit(AddTaskUploadFailed());
     }
   }
-
 
   Future<void> updateSelectedDropdownValue(String value) async {
     selectedDropdownValue = value;

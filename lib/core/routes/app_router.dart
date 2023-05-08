@@ -4,6 +4,11 @@ class AppRouter {
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
 
+
+  static final GlobalKey<ScaffoldMessengerState> snackBarKey =
+  GlobalKey<ScaffoldMessengerState>();
+
+
   static void goToAndRemove({required String routeName, Object? arguments}) {
     if (navigatorKey.currentState != null) {
       navigatorKey.currentState!.pushNamedAndRemoveUntil(
