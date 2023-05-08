@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../../../logic/firebase_controller.dart';
-import '../../../../shared_widgets/custom_appbar.dart';
-import '../home_screen/widgets/custom_task_list.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_task_list.dart';
+import 'package:task_mangment/shared_widgets/custom_appbar.dart';
 
 class CompanyTasksScreen extends StatelessWidget {
   CompanyTasksScreen({Key? key}) : super(key: key);
@@ -42,28 +41,28 @@ class CompanyTasksScreen extends StatelessWidget {
                   ),
                 ]),
           ),
-          // body: TabBarView(
-          //   children: [
-          //     CustomTaskList(
-          //       state: 'today',
-          //       label: '',
-          //       userTask:
-          //           FireBaseRepository.getUserTasksStream(userId: user.uid),
-          //     ),
-          //     CustomTaskList(
-          //       state: 'upcoming',
-          //       label: '',
-          //       userTask:
-          //           FireBaseRepository.getUserTasksStream(userId: user.uid),
-          //     ),
-          //     CustomTaskList(
-          //       state: 'completed',
-          //       label: '',
-          //       userTask:
-          //           FireBaseRepository.getUserTasksStream(userId: user.uid),
-          //     ),
-          //   ],
-          // ),
+          body: TabBarView(
+            children: [
+              CustomTaskList(
+                state: 'today',
+                label: '',
+                userName: '',
+                userId: user.uid,
+              ),
+              CustomTaskList(
+                state: 'upcoming',
+                label: '',
+                userName: '',
+                userId: user.uid,
+              ),
+              CustomTaskList(
+                state: 'completed',
+                userId: user.uid,
+                label: '',
+                userName: '',
+              ),
+            ],
+          ),
         ),
       ),
     );

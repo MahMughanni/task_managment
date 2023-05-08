@@ -50,7 +50,7 @@ class CustomTextFormField extends StatelessWidget {
         style: TextStyle(fontSize: 12.sp),
         decoration: InputDecoration(
           suffixIconConstraints: suffixIconConstraints,
-          hintStyle: TextStyle(fontSize: 12.sp),
+          hintStyle: TextStyle(fontSize: 13.sp),
           contentPadding: contentPadding ?? REdgeInsets.all(15),
           label: Text(labelText ?? ''),
           suffixIcon: suffixIcon,

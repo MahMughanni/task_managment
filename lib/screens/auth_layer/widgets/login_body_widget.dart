@@ -29,6 +29,14 @@ class LoginScreenBodyWidget extends StatefulWidget {
 }
 
 class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
+  String? _email;
+  String? _password;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BaseCubit, BaseCubitState>(
@@ -49,7 +57,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
             8.verticalSpace,
             CustomTextFormField(
               suffixIconConstraints: BoxConstraints(
-                maxWidth:100.r,
+                maxWidth: 100.r,
               ),
               controller: widget.passwordController,
               suffixIcon: IconButton(
@@ -64,8 +72,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
                 onPressed: () {
                   BlocProvider.of<BaseCubit>(context).showPassword();
                 },
-                icon:  Icon(
-
+                icon: Icon(
                   Icons.remove_red_eye_outlined,
                   size: 16.r,
                 ),
@@ -124,7 +131,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
               tapGestureRecognizer: TapGestureRecognizer()
                 ..onTap = () {
                   BlocProvider.of<BaseCubit>(context).resetPasswordVisibility();
-                  AppRouter.goToAndRemove(screenName: NamedRouter.signUpScreen);
+                  AppRouter.goToAndRemove(routeName: NamedRouter.signUpScreen);
                 },
               padding: const EdgeInsets.all(20),
               titleStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(

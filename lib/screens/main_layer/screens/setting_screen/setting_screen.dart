@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
+import 'package:task_mangment/logic/base_cubit.dart';
+import 'package:task_mangment/screens/auth_layer/controller/authentication_cubit.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
@@ -67,13 +71,14 @@ class SettingScreen extends StatelessWidget {
                       color: const Color(0xffF8FCFF),
                       borderRadius: BorderRadius.circular(14)),
                   child: ListTile(
-                    onTap: () {
+                    onTap: () async {
                       switch (index) {
                         case 0:
                           AppRouter.goTo(screenName: NamedRouter.profileScreen);
                           break;
                         case 1:
-                          AppRouter.goTo(screenName: NamedRouter.employeeScreen);
+                          AppRouter.goTo(
+                              screenName: NamedRouter.employeeScreen);
 
                           break;
                         case 2:
@@ -85,9 +90,12 @@ class SettingScreen extends StatelessWidget {
                               message: index.toString(), status: true);
                           break;
                         case 4:
+                          final storage = FlutterSecureStorage();
+                          await storage.deleteAll();
+
                           FirebaseAuth.instance.signOut();
                           AppRouter.goToAndRemove(
-                              screenName: NamedRouter.loginScreen);
+                              routeName: NamedRouter.loginScreen);
                           break;
 
                         default:

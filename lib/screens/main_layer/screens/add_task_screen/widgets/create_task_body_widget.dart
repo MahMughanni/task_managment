@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
@@ -23,7 +24,7 @@ class CreateTaskBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0).r,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -71,7 +72,7 @@ class CreateTaskBody extends StatelessWidget {
                   ),
                 ),
               ),
-              16.pw,
+              6.horizontalSpace,
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
@@ -114,29 +115,19 @@ class CreateTaskBody extends StatelessWidget {
               ),
             ],
           ),
-          16.ph,
+          12.verticalSpace,
           const Text('Task Description'),
-          8.ph,
+          8.verticalSpace,
           CustomTextFormField(
             padding: const EdgeInsetsDirectional.all(0),
             focus: (_) => FocusScope.of(context).nearestScope,
             validator: validator,
             controller: descriptionController,
-            maxLine: 10,
+            maxLine: 5,
             keyboardType: TextInputType.multiline,
             hintText: '',
           ),
-          20.ph,
-          GestureDetector(
-            onTap: onTap,
-            child:  CustomTextFormField(
-              focus: (_) => FocusScope.of(context).nearestScope,
-              suffixIcon: const Icon(Icons.link_sharp),
-              enabled: false,
-              hintText: '',
-              labelText: 'Attach files',
-            ),
-          ),
+          16.verticalSpace,
         ],
       ),
     );

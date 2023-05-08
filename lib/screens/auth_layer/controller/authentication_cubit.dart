@@ -2,23 +2,53 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
 part 'authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth firebaseAuth ;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  User? loggedInUser;
 
-  AuthenticationCubit() : super(AuthenticationInitial());
+  AuthenticationCubit(this.firebaseAuth) : super(AuthenticationInitial());
+
+  Future<void> autoLogin() async {
+    const storage = FlutterSecureStorage();
+    final email = await storage.read(key: 'email');
+    final password = await storage.read(key: 'password');
+
+    if (email != null && password != null) {
+      try {
+        final userCredential = await firebaseAuth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+
+        loggedInUser = userCredential.user;
+
+        emit(LoginSuccess(userCredential.user!));
+      } catch (e) {
+        emit(LoginFailure('An error occurred during auto login.'));
+      }
+    } else {
+      emit(LoginInitial());
+    }
+  }
 
   Future<void> logIn(String email, String password) async {
     try {
       emit(LoginInProgress());
 
-      final UserCredential userCredential = await _firebaseAuth
+      final UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
+
+      // Save user info to secure storage
+      const storage = FlutterSecureStorage();
+      await storage.write(key: 'email', value: email);
+      await storage.write(key: 'password', value: password);
 
       UtilsConfig.showSnackBarMessage(
           message: ' Login Success !', status: true);
@@ -42,7 +72,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       emit(SignUpProgress());
 
-      UserCredential userCredential = await _firebaseAuth
+      UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
       String userId = userCredential.user!.uid;
 

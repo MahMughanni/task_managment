@@ -22,11 +22,13 @@ class UtilsConfig {
               color: Color(ColorConstManger.borderSnackBarFalse),
             ),
             16.pw,
-            Text(
-              message,
-              style: const TextStyle(
-                  fontSize: 16,
-                  color: Color(ColorConstManger.primaryTextColor)),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(ColorConstManger.primaryTextColor)),
+              ),
             ),
           ],
         ),

@@ -99,7 +99,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       try {
                         await FireBaseRepository.editProfileImage(_newImage);
                         AppRouter.goToAndRemove(
-                            screenName: NamedRouter.mainScreen);
+                            routeName: NamedRouter.mainScreen);
                         debugPrint(_newImage?.path.toString() ?? '');
                       } catch (error) {
                         debugPrint(error.toString());
@@ -116,7 +116,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                         debugPrint('Edit Success');
                         AppRouter.goToAndRemove(
-                            screenName: NamedRouter.mainScreen);
+                            routeName: NamedRouter.mainScreen);
                       } catch (error) {
                         debugPrint("Edit error $error");
                         // handle error

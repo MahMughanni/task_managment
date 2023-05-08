@@ -18,8 +18,8 @@ class CustomCircleImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
+      width: width.r ,
+      height: height.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.grey[100],
@@ -49,6 +49,8 @@ class CustomCircleImage extends StatelessWidget {
                     size: 25.r,
                   );
                 },
+                scale: 2,
+
               )
             : Image.file(
                 image as File, // Cast image to a File

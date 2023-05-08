@@ -7,7 +7,6 @@ import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/hom
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
-  final user = FirebaseAuth.instance.currentUser!;
   final List taskTitles = [
     'Tasks',
     'Assigned',
@@ -17,13 +16,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     debugPrint('Build');
-    String userId = user.uid;
-    return BlocProvider(
-      create: (context) => UserCubit(userId),
-      child: DefaultTabController(
-        length: 3,
-        child: SafeArea(
-          bottom: true,
+    String? userId = FirebaseAuth.instance.currentUser!.uid;
+    debugPrint(userId ?? '');
+
+    return SafeArea(
+      child: Scaffold(
+        body: DefaultTabController(
+          length: 3,
           child: Scaffold(
             backgroundColor: Colors.white,
             body: HomeScreenBody(

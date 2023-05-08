@@ -212,7 +212,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             BlocProvider.of<BaseCubit>(context)
                                 .resetPasswordVisibility();
                             AppRouter.goToAndRemove(
-                                screenName: NamedRouter.loginScreen);
+                                routeName: NamedRouter.loginScreen);
                           },
                         padding: const EdgeInsets.all(20),
                         titleStyle:

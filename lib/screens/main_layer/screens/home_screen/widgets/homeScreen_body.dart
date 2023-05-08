@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
@@ -34,7 +33,6 @@ class HomeScreenBody extends StatelessWidget {
                     int completedTasksCount = userTasks
                         .where((task) => task.state == 'completed')
                         .length;
-
                     switch (index) {
                       case 0:
                         return CustomContainer(
@@ -69,16 +67,19 @@ class HomeScreenBody extends StatelessWidget {
                   userName: userData.userName,
                   state: 'today',
                   label: 'today',
+                  userId: userId,
                 ),
                 CustomTaskList(
                   userName: userData.userName,
                   state: 'upcoming',
                   label: 'Upcoming',
+                  userId: userId,
                 ),
                 CustomTaskList(
                   userName: userData.userName,
                   state: 'completed',
                   label: 'Completed',
+                  userId: userId,
                 ),
               ],
             ),

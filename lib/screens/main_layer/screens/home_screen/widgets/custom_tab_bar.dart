@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../../../../shared_widgets/custom_circle_image.dart';
 
@@ -56,20 +55,22 @@ class CustomTabBarViewTabs extends StatelessWidget {
                             RichText(
                               text: TextSpan(
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 16.sp),
+                                      color: Colors.black, fontSize: 15.sp),
                                   text: 'Hi ,',
                                   children: [
                                     TextSpan(
                                         text: userName,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .titleLarge),
+                                            .titleLarge!
+                                            .copyWith(fontSize: 13.sp)),
                                   ]),
                             ),
                             2.verticalSpace,
                             RichText(
                               text: TextSpan(
-                                style: const TextStyle(color: Colors.black),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 12.sp),
                                 text: ' You Have',
                                 children: [
                                   TextSpan(
@@ -143,6 +144,7 @@ class CustomTabBarViewTabs extends StatelessWidget {
                 ],
               ),
               child: TabBar(
+                labelStyle: TextStyle(fontSize: 14.sp),
                   unselectedLabelColor: Colors.black,
                   splashBorderRadius: const BorderRadius.all(
                     Radius.circular(5),
@@ -161,7 +163,8 @@ class CustomTabBarViewTabs extends StatelessWidget {
                       ]),
                   tabs: const [
                     Tab(
-                      text: 'Today',
+                      text: 'Today' ,
+
                     ),
                     Tab(
                       text: 'Upcoming',

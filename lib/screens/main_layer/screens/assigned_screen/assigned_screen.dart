@@ -1,55 +1,46 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:task_mangment/logic/firebase_controller.dart';
-import 'package:task_mangment/model/task_model.dart';
-
-import '../../../../shared_widgets/custom_appbar.dart';
-import '../home_screen/widgets/custom_task_list.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_mangment/screens/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_task_list.dart';
+import 'package:task_mangment/shared_widgets/custom_appbar.dart';
 
 class AssignedScreen extends StatelessWidget {
-  AssignedScreen({Key? key}) : super(key: key);
-
-  final user = FirebaseAuth.instance.currentUser!;
+  const AssignedScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CustomAppbar(
-        title: 'Assigned Tasks',
-        action: [
-          Icon(
-            Icons.menu,
-            color: Colors.black,
-          ),
-        ],
-      ),
-      body: StreamBuilder<List<TaskModel>>(
-        stream: FireBaseRepository.getUserTasksStream(userId: user.uid),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Container();
-          } else if (!snapshot.hasData || snapshot.data == null) {
-            return const Center(
-              child: Text(
-                'No data found.',
-                style: TextStyle(fontSize: 30, color: Colors.black),
-              ),
-            );
-          } else {
-            return Container();
-            // return CustomTaskList(
-            //   state: 'upcoming',
-            //   label: '',
-            //   userTask: FireBaseRepository.getUserTasksStream(userId: user.uid),
-            // );
-          }
-        },
+    final user =
+        BlocProvider.of<AuthenticationCubit>(context).firebaseAuth.currentUser!;
+    return BlocProvider<UserCubit>(
+      create: (context) => UserCubit(userId: user.uid.toString()),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: const CustomAppbar(
+          title: 'Assigned Tasks',
+          action: [],
+        ),
+        body: BlocBuilder<UserCubit, HomeState>(
+          builder: (context, state) {
+            if (state is UserLoadingState) {
+              return const CircularProgressIndicator();
+            } else if (state is UserErrorState) {
+              return const Center(
+                child: Text('Something Went Wrong'),
+              );
+            } else if (state is UserLoadedState) {
+              return CustomTaskList(
+                state: 'upcoming',
+                label: 'upcoming',
+                userName: state.user.userName.toString(),
+                userId: user.uid,
+              );
+            } else {
+              return Container();
+            }
+          },
+        ),
       ),
     );
   }

@@ -12,7 +12,7 @@ class UserCubit extends Cubit<HomeState> {
   late StreamSubscription<List<TaskModel>> tasksSubscription;
   late StreamSubscription<DocumentSnapshot> userSubscription;
 
-  UserCubit(this.userId) : super(UserInitial()) {
+  UserCubit({required this.userId}) : super(UserInitial()) {
     final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
     userSubscription = userDoc.snapshots().listen((userData) async {
       try {

@@ -18,15 +18,14 @@ class ListViewItemBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int maxLength = 20;
-    var screenSize = MediaQuery.of(context).size;
 
     String shortString = title.length > maxLength
         ? "${title.substring(0, maxLength)}..."
         : title;
     return Container(
       alignment: Alignment.center,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      height: screenSize.height * .11.h,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8).r,
+      height: ScreenUtil().setHeight(110),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -48,7 +47,7 @@ class ListViewItemBody extends StatelessWidget {
         borderRadius: BorderRadius.circular(10).r,
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 0.0, left: 16, right: 8).r,
+        padding: const EdgeInsets.only(left: 16, right: 8).r,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -57,38 +56,47 @@ class ListViewItemBody extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(taskCategory),
-                RichText(
-                  text: TextSpan(
-                    text: userName,
-                    style: TextStyle(
-                        color: Colors.black, overflow: TextOverflow.ellipsis,
-                    fontSize: 14.sp, ),
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.clip,
+                Text(
+                  taskCategory,
+                  style: TextStyle(fontSize: 13.sp),
                 ),
-                RichText(
-                  text: TextSpan(
-                      text: startTime,
-                      style: const TextStyle(color: Colors.red),
-                      children:  [
-                        WidgetSpan(
-                            child: Icon(
-                          Icons.calendar_month,
-                          size: 15.r,
-                        ))
-                      ]),
-                  maxLines: 2,
-                  overflow: TextOverflow.clip,
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      text: userName,
+                      style: TextStyle(
+                        color: Colors.black,
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 15.sp,
+                      ),
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.clip,
+                  ),
+                ),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                        text: startTime,
+                        style: const TextStyle(color: Colors.red),
+                        children: [
+                          WidgetSpan(
+                              child: Icon(
+                            Icons.calendar_month,
+                            size: 15.r,
+                          ))
+                        ]),
+                    maxLines: 1,
+                    overflow: TextOverflow.clip,
+                  ),
                 ),
                 Text(
                   shortString,
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style:
-                      const TextStyle(fontSize: 16, color: Colors.blueAccent),
+                  style: TextStyle(fontSize: 14.sp, color: Colors.blueAccent),
                 ),
+                4.verticalSpace,
               ],
             ),
             CustomCircleImage(

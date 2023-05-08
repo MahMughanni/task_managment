@@ -23,14 +23,4 @@ class NamedRouter {
   static const String employeeScreen = '/employee';
   static const String calenderScreen = '/calender';
 
-  static  dynamic routes = {
-    splashScreen: (context) => const SplashScreen(),
-    homeScreen: (context) => HomeScreen(),
-    loginScreen: (context) => const LoginScreen(),
-    signUpScreen: (context) => const SignUpScreen(),
-    mainScreen: (context) => const MainScreen(),
-    companyTasks: (context) => CompanyTasksScreen(),
-    profileScreen: (context) => const ProfileScreen(),
-    employeeScreen: (context) => const EmployeeScreen(),
-  };
 }

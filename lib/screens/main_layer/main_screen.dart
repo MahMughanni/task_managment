@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/addtask_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/assigned_screen/assigned_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/home_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/notification_screen/notification_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/setting_screen.dart';
-import 'package:task_mangment/utils/app_constants.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -17,91 +15,113 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final PersistentTabController _controller =
-      PersistentTabController(initialIndex: 0);
-
-  List<Widget> _buildScreens() {
-    return [
-      HomeScreen(),
-      AssignedScreen(),
-      const AddTaskScreen(),
-      const NotificationScreen(),
-      SettingScreen(),
-    ];
-  }
-
-  List<PersistentBottomNavBarItem> _navBarsItems() {
-    return [
-      PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.home),
-        title: ("Home"),
-        activeColorPrimary: CupertinoColors.activeBlue,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.doc_checkmark),
-        title: ("Assigned"),
-        activeColorPrimary: CupertinoColors.activeBlue,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.add, size: 30),
-        title: ("Add Task"),
-        activeColorPrimary: ColorConstManger.primaryColor,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(Icons.notifications_none_sharp),
-        title: ("Notification"),
-        activeColorPrimary: CupertinoColors.activeBlue,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.settings_solid),
-        title: ("Setting"),
-        activeColorPrimary: CupertinoColors.activeBlue,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
-      ),
-    ];
-  }
+  List screen = [
+    HomeScreen(),
+    AssignedScreen(),
+    const AddTaskScreen(),
+    const NotificationScreen(),
+    SettingScreen(),
+  ];
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(context,
-        controller: _controller,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
-        confineInSafeArea: true,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
+      extendBody: true,
+      body: screen[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 0,
         backgroundColor: Colors.white,
-        handleAndroidBackButtonPress: true,
-        resizeToAvoidBottomInset: true,
-        stateManagement: true,
-        hideNavigationBarWhenKeyboardShows: true,
-        decoration: NavBarDecoration(
-            borderRadius: BorderRadius.circular(2.0).r,
-            colorBehindNavBar: Colors.white,
-            adjustScreenBottomPaddingOnCurve: false
-          // boxShadow: [
-          //   const BoxShadow(
-          //     offset: Offset(0, -2),
-          //     spreadRadius: 1,
-          //     blurRadius: 10,
-          //     blurStyle: BlurStyle.outer,
-          //     color: Colors.black12,
-          //   )
-          // ],
+        type: BottomNavigationBarType.fixed,
+        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.blueAccent,
+        currentIndex: currentIndex,
+        onTap: onTapNavBottom,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(
+                CupertinoIcons.home,
+                size: 20.r,
+              ),
+              label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                CupertinoIcons.doc_checkmark,
+                size: 20.r,
+              ),
+              label: 'Assigned'),
+          const BottomNavigationBarItem(
+              icon: Icon(
+                Icons.shopping_bag,
+                color: Colors.transparent,
+              ),
+              label: ''),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.notifications_none_sharp,
+                size: 20.r,
+              ),
+              label: 'Notification'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                CupertinoIcons.settings_solid,
+                size: 20.r,
+              ),
+              label: 'Setting'),
+        ],
+      ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButton: CustomFloatingBtn(
+        onBtnPressed: () => setState(() {
+          currentIndex = 2;
+        }),
+        color: (currentIndex == 2) ? Colors.blueAccent : Colors.grey,
+      ),
+    );
+  }
+
+  void onTapNavBottom(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+}
+
+class CustomFloatingBtn extends StatelessWidget {
+  const CustomFloatingBtn(
+      {Key? key, required this.onBtnPressed, required this.color})
+      : super(key: key);
+
+  final Function() onBtnPressed;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0).r,
+      child: SizedBox(
+        height: 50.h,
+        width: 50.w,
+        child: FloatingActionButton(
+          backgroundColor: color,
+          onPressed: onBtnPressed,
+          child: Theme(
+            data: ThemeData(
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+                size: 40,
+              ),
+            ),
+            child: const Icon(
+              CupertinoIcons.add,
+              color: Colors.white,
+            ),
+          ),
         ),
-        popAllScreensOnTapOfSelectedTab: true,
-        popActionScreens: PopActionScreensType.all,
-        itemAnimationProperties: const ItemAnimationProperties(
-          duration: Duration(milliseconds: 250),
-          curve: Curves.linear,
-        ),
-        screenTransitionAnimation: const ScreenTransitionAnimation(
-          animateTabTransition: true,
-          curve: Curves.linear,
-          duration: Duration(milliseconds: 250),
-        ),
-        navBarStyle: NavBarStyle.style9)  ;
+      ),
+    );
   }
 }

@@ -21,10 +21,8 @@ class BuildSliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
     return SliverPersistentHeader(
       delegate: CustomSliverAppBar(
-        expandedHeight: screenSize.height * .26.h,
         userName: userName,
         taskNumber: taskNumber,
         itemBuilder: itemBuilder,
@@ -37,21 +35,18 @@ class BuildSliverAppBar extends StatelessWidget {
 }
 
 class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
-  final double expandedHeight;
+  final String userName, taskNumber, imageUrl, userId;
+  final Widget? Function(BuildContext, int) itemBuilder;
+  final int itemCount;
 
   CustomSliverAppBar({
     required this.imageUrl,
     required this.itemBuilder,
     required this.itemCount,
     required this.userId,
-    required this.expandedHeight,
     required this.userName,
     required this.taskNumber,
   });
-
-  final String userName, taskNumber, imageUrl, userId;
-  final Widget? Function(BuildContext, int) itemBuilder;
-  final int itemCount;
 
   @override
   Widget build(
@@ -67,7 +62,8 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => expandedHeight;
+  double get maxExtent =>
+      ScreenUtil().screenHeight * 0.30 + kToolbarHeight;
 
   @override
   double get minExtent => kToolbarHeight;

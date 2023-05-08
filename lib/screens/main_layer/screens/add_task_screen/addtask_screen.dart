@@ -2,14 +2,16 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/logic/firebase_controller.dart';
+import 'package:task_mangment/screens/main_layer/screens/add_task_screen/add_task_cubit.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/widgets/custom_drop_down.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
 import 'package:task_mangment/utils/utils_config.dart';
-import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
 import '../../../../shared_widgets/custom_button.dart';
 import '../../../../shared_widgets/custom_form_field.dart';
@@ -22,77 +24,26 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  late TextEditingController titleController;
-  late TextEditingController descriptionController;
-  late TextEditingController _startTimeController;
-
-  late TextEditingController _endTimeController;
+  late AddTaskCubit addTaskCubit;
 
   @override
   void initState() {
     super.initState();
-
-    titleController = TextEditingController();
-    descriptionController = TextEditingController();
-    _startTimeController = TextEditingController();
-    _endTimeController = TextEditingController();
+    addTaskCubit = BlocProvider.of<AddTaskCubit>(context);
+    addTaskCubit.init();
   }
 
   @override
   void dispose() {
     super.dispose();
-    titleController.dispose();
-    descriptionController.dispose();
-    _startTimeController.dispose();
-    _endTimeController.dispose();
-  }
-
-  List<File> _imageFiles = [];
-
-  String _selectedDropdownValue = 'Today';
-
-
-  Future<void> _pickImages() async {
-    await requestPermissions(); // Call the permission request function
-    var status = await Permission.storage.request();
-    if (status.isGranted) {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: true,
-      );
-
-      if (result != null) {
-        setState(() {
-          _imageFiles = result.paths.map((path) => File(path!)).toList();
-        });
-      }
-    } else {
-    }
-  }
-
-  Future<void> requestPermissions() async {
-    final statusStorage = await Permission.storage.request();
-    final statusCamera = await Permission.camera.request();
-    final statusMicrophone = await Permission.microphone.request();
-    if (statusStorage.isDenied ||
-        statusCamera.isDenied ||
-        statusMicrophone.isDenied) {
-      // Permission has been denied
-      return;
-    }
-    if (statusStorage.isPermanentlyDenied ||
-        statusCamera.isPermanentlyDenied ||
-        statusMicrophone.isPermanentlyDenied) {
-      // Permission has been permanently denied on iOS, navigate to app settings.
-      openAppSettings();
-    }
+    addTaskCubit.dispose();
   }
 
   final _formKey = GlobalKey<FormState>();
-  bool _isUploading = false;
 
   @override
   Widget build(BuildContext context) {
+    var addTaskCubit = context.read<AddTaskCubit>();
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -104,21 +55,19 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
+      body: ListView(
+        children:[
+          Form(
+            key: _formKey,
+            child: BlocBuilder<AddTaskCubit, AddTaskState>(
+              builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
                     children: [
-                      24.ph,
+                      8.verticalSpace,
                       CustomTextFormField(
                         focus: (_) => FocusScope.of(context).nearestScope,
-
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'enter valid title';
@@ -127,15 +76,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         },
                         labelText: 'Task Title',
                         hintText: '',
-                        controller: titleController,
+                        controller: addTaskCubit.titleController,
                       ),
-                      16.ph,
+                      4.verticalSpace,
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: CustomDropDown(
-                          onChanged: (value) =>
-                              setState(() => _selectedDropdownValue = value!),
-                          dropDownValue: _selectedDropdownValue,
+                          onChanged: (value) => setState(
+                                  () => addTaskCubit.selectedDropdownValue = value!),
+                          dropDownValue: addTaskCubit.selectedDropdownValue,
                           items: const [
                             DropdownMenuItem(
                                 value: 'Upcoming', child: Text('Upcoming')),
@@ -146,8 +95,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           ],
                         ),
                       ),
-                      16.ph,
-                      16.ph,
+                      8.verticalSpace,
                       CreateTaskBody(
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -155,90 +103,98 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           }
                           return null;
                         },
-                        descriptionController: descriptionController,
-                        onTap: _pickImages,
-                        startTimeController: _startTimeController,
-                        endTimeController: _endTimeController,
+                        descriptionController: addTaskCubit.descriptionController,
+                        onTap: addTaskCubit.pickImages,
+                        startTimeController: addTaskCubit.startTimeController,
+                        endTimeController: addTaskCubit.endTimeController,
                       ),
-                      8.ph,
-                      if (_imageFiles.isNotEmpty)
+                      GestureDetector(
+                        onTap: () async {
+                          await addTaskCubit.pickImages();
+                        },
+                        child: CustomTextFormField(
+                          focus: (_) => FocusScope.of(context).nearestScope,
+                          suffixIcon: const Icon(Icons.link_sharp),
+                          enabled: false,
+                          hintText: '',
+                          labelText: 'Attach files',
+                        ),
+                      ),
+                      4.verticalSpace,
+                      if (addTaskCubit.imageFiles.isNotEmpty)
                         Wrap(
                           direction: Axis.horizontal,
                           spacing: 4,
                           crossAxisAlignment: WrapCrossAlignment.start,
                           runSpacing: 4,
                           clipBehavior: Clip.antiAlias,
-                          children: _imageFiles
-                              .map(
-                                (imageFile) => Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                          children: [
+                            ...addTaskCubit.imageFiles.map(
+                                  (imageFile) => Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(16.0).r,
+                                    child: Image.file(
+                                      imageFile,
+                                      fit: BoxFit.cover,
+                                      width: 150.r,
+                                      height: 150.r,
+                                    ),
                                   ),
-                                  child: Image.file(
-                                    imageFile,
-                                    fit: BoxFit.contain,
-                                    width: 250,
-                                    height: 250,
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        addTaskCubit.removeImage(imageFile);
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(2),
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                        ),
+                                        child: const Icon(
+                                          Icons.close,
+                                          size: 18,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              )
-                              .toList(),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      32.ph,
+                      8.verticalSpace,
                       Stack(
                         children: [
                           CustomButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                setState(() {
-                                  _isUploading = true;
-                                });
-                                try {
-                                  await FireBaseRepository.addTask(
-                                    title:
-                                        titleController.text.toString().trim(),
-                                    description: descriptionController.text
-                                        .toString()
-                                        .trim(),
-                                    startTime: _startTimeController.text
-                                        .toString()
-                                        .trim(),
-                                    endTime: _endTimeController.text
-                                        .toString()
-                                        .trim(),
-                                    state: _selectedDropdownValue.toLowerCase(),
-                                    imageFiles: _imageFiles,
-                                  );
-                                  UtilsConfig.showSnackBarMessage(
-                                      message: 'Add Success', status: true);
-                                  titleController.clear();
-                                  descriptionController.clear();
-                                  _startTimeController.clear();
-                                  _endTimeController.clear();
-                                  setState(
-                                    () {
-                                      _imageFiles.clear();
-                                      _isUploading = false;
-                                    },
-                                  );
-
-                                  AppRouter.goToAndRemove(
-                                      screenName: NamedRouter.mainScreen);
-                                } catch (e) {
-                                  // print(e.toString());
-                                  UtilsConfig.showSnackBarMessage(
-                                      message: e.toString(), status: false);
-                                  setState(() {
-                                    _isUploading = false;
-                                  });
-                                }
+                                addTaskCubit.uploadTask(
+                                  title: addTaskCubit.titleController.text
+                                      .toString()
+                                      .trim(),
+                                  description: addTaskCubit
+                                      .descriptionController.text
+                                      .toString()
+                                      .trim(),
+                                  startTime: addTaskCubit.startTimeController.text
+                                      .toString()
+                                      .trim(),
+                                  endTime: addTaskCubit.endTimeController.text
+                                      .toString()
+                                      .trim(),
+                                );
                               }
                             },
                             title: 'Upload',
                             width: double.infinity,
-                            height: 60,
+                            height: 42.h,
                           ),
-                          if (_isUploading)
+                          if (addTaskCubit.isUploading)
                             Positioned.fill(
                               child: Container(
                                 color: Colors.black.withOpacity(0.5),
@@ -251,11 +207,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       ),
                     ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
-        ),
+        ]
       ),
     );
   }
