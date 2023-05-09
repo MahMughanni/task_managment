@@ -133,18 +133,20 @@ class CustomTabBarViewTabs extends StatelessWidget {
             4.verticalSpace,
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(9).r,
+                borderRadius: BorderRadius.circular(5).r,
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    spreadRadius: 1,
+                    spreadRadius: 1.r,
                     blurRadius: 16.r,
                     color: Colors.grey.shade200,
                   )
                 ],
               ),
               child: TabBar(
-                labelStyle: TextStyle(fontSize: 14.sp),
+                  labelColor: Colors.white,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  labelStyle: TextStyle(fontSize: 14.sp, color: Colors.white),
                   unselectedLabelColor: Colors.black,
                   splashBorderRadius: const BorderRadius.all(
                     Radius.circular(5),
@@ -155,16 +157,15 @@ class CustomTabBarViewTabs extends StatelessWidget {
                         Radius.circular(5),
                       ),
                       color: Colors.blueAccent.withOpacity(.8),
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(
                             spreadRadius: 1,
-                            blurRadius: 10,
+                            blurRadius: 10.r,
                             color: Colors.black12)
                       ]),
                   tabs: const [
                     Tab(
-                      text: 'Today' ,
-
+                      text: 'Today',
                     ),
                     Tab(
                       text: 'Upcoming',

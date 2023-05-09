@@ -15,8 +15,8 @@ ThemeData getAppTheme() => ThemeData(
 
 TextTheme getTextTheme() => TextTheme(
       titleLarge: TextStyle(
-        fontSize: 25.sp,
-        fontWeight: AppConstFontWeight.bold,
+        fontSize: 22.sp,
+        fontWeight: AppConstFontWeight.semiBold,
         color: ColorConstManger.primaryColor,
       ),
     );

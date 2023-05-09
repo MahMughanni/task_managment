@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/controller/add_task_state.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/widgets/custom_drop_down.dart';
@@ -85,13 +84,12 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomDropDown(
-                      onChanged: (value) => addTaskCubit.updateValue(value!) ,
+                      onChanged: (value) => addTaskCubit.updateValue(value!),
                       dropDownValue: addTaskCubit.selectedDropdownValue,
                       items: const [
                         DropdownMenuItem(
                             value: 'Upcoming', child: Text('Upcoming')),
-                        DropdownMenuItem(
-                            value: 'Today', child: Text('Today')),
+                        DropdownMenuItem(value: 'Today', child: Text('Today')),
                         // DropdownMenuItem(
                         //     value: 'Completed', child: Text('Completed') ,
                         // ),
@@ -157,7 +155,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                                       shape: BoxShape.circle,
                                       color: Colors.white,
                                     ),
-                                    child:  Icon(
+                                    child: Icon(
                                       Icons.close,
                                       size: 18.r,
                                       color: Colors.red,

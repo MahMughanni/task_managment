@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/shared_widgets/custom_circle_image.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
@@ -32,10 +33,11 @@ class EmployeeScreen extends StatelessWidget {
                 final userImage = userData['profileImageUrl'] ?? '';
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12)
+                          .r,
                   child: Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16).r,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
@@ -55,8 +57,8 @@ class EmployeeScreen extends StatelessWidget {
                         children: [
                           CustomCircleImage(
                             image: userImage,
-                            width: 90,
-                            height: 90,
+                            width: 60.r,
+                            height: 60.r,
                           ),
                           16.pw,
                           const VerticalDivider(

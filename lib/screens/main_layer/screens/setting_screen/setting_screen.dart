@@ -38,26 +38,24 @@ class SettingScreen extends StatelessWidget {
               floating: true,
               snap: true,
               pinned: true,
-              title: Text(
-                'Setting',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: AppConstFontWeight.regular,
-                  fontSize: 25.sp,
+              title: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Setting',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-              titleSpacing: 24,
+              titleSpacing: 12,
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
-                  color: Colors.white,
-                  width: 100.w,
-                  height: 100.h,
                   child: Image.asset(
                     ImageConstManger.logoImage,
+                    width: 80.r,
+                    height: 80.r,
                   ),
                 ),
               ),
-              expandedHeight: 150.h,
+              expandedHeight: 200.h,
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(

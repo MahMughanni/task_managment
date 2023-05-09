@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_task_list.dart';
 import 'package:task_mangment/shared_widgets/custom_appbar.dart';
@@ -16,10 +17,14 @@ class CompanyTasksScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: CustomAppbar(
-          height: 150,
+          height: 120.h,
           title: 'Company Tasks',
           action: const [],
           bottom: TabBar(
+              padding: const EdgeInsets.all(8).r,
+              labelColor: Colors.white,
+              labelStyle: const TextStyle(color: Colors.white),
+              indicatorSize: TabBarIndicatorSize.tab,
               unselectedLabelColor: Colors.black,
               splashBorderRadius: const BorderRadius.all(
                 Radius.circular(5),
@@ -29,7 +34,7 @@ class CompanyTasksScreen extends StatelessWidget {
                   borderRadius: const BorderRadius.all(
                     Radius.circular(5),
                   ),
-                  color: Colors.blueAccent.withOpacity(.8)),
+                  color: Colors.blueAccent.withOpacity(.9)),
               tabs: const [
                 Tab(
                   text: 'Today',
