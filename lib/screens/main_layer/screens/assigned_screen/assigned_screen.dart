@@ -24,7 +24,7 @@ class AssignedScreen extends StatelessWidget {
         body: BlocBuilder<UserCubit, HomeState>(
           builder: (context, state) {
             if (state is UserLoadingState) {
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             } else if (state is UserErrorState) {
               return const Center(
                 child: Text('Something Went Wrong'),

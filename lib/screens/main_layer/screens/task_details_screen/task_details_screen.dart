@@ -19,7 +19,7 @@ class TaskDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const style = TextStyle(
-      fontWeight: AppConstFontWeight.normal,
+      fontWeight: AppConstFontWeight.regular,
       fontSize: 22,
     );
     // print(user.toString());

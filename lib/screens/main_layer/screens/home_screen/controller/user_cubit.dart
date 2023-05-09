@@ -8,9 +8,9 @@ import 'package:task_mangment/model/user_model.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
 
 class UserCubit extends Cubit<HomeState> {
-  final String userId;
-  late StreamSubscription<List<TaskModel>> tasksSubscription;
-  late StreamSubscription<DocumentSnapshot> userSubscription;
+  late String userId;
+  late StreamSubscription<List<TaskModel>>? tasksSubscription;
+  late StreamSubscription<DocumentSnapshot>? userSubscription;
 
   UserCubit({required this.userId}) : super(UserInitial()) {
     final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
@@ -21,7 +21,7 @@ class UserCubit extends Cubit<HomeState> {
 
         final tasksCollection = userDoc.collection('tasks');
         final querySnapshot =
-        await tasksCollection.orderBy('createdAt', descending: true).get();
+            await tasksCollection.orderBy('createdAt', descending: true).get();
 
         final tasks = <TaskModel>[];
         for (var doc in querySnapshot.docs) {
@@ -29,8 +29,9 @@ class UserCubit extends Cubit<HomeState> {
           tasks.add(task);
         }
 
-        tasksSubscription = FireBaseRepository.getUserTasksStream(userId: userId)
-            .listen((tasks) {
+        tasksSubscription =
+            FireBaseRepository.getUserTasksStream(userId: userId).listen(
+                (tasks) {
           emit(UserLoadedState(user: user, tasks: tasks));
         }, onError: (error) {
           emit(UserErrorState(error: error.toString()));
@@ -41,10 +42,11 @@ class UserCubit extends Cubit<HomeState> {
     });
   }
 
-   getUserTasksStream({required String userId}) {
+  getUserTasksStream({required String userId}) {
     final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
     final tasksCollection = userDoc.collection('tasks');
-    final snapshots = tasksCollection.orderBy('createdAt', descending: true).snapshots();
+    final snapshots =
+        tasksCollection.orderBy('createdAt', descending: true).snapshots();
     return snapshots.map((querySnapshot) {
       final tasks = <TaskModel>[];
       for (var doc in querySnapshot.docs) {
@@ -57,8 +59,8 @@ class UserCubit extends Cubit<HomeState> {
 
   @override
   Future<void> close() {
-    tasksSubscription.cancel();
-    userSubscription.cancel();
+    tasksSubscription?.cancel();
+    userSubscription?.cancel();
     return super.close();
   }
 }

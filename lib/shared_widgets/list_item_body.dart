@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_mangment/utils/app_constants.dart';
 
 import 'custom_circle_image.dart';
 
@@ -58,7 +59,10 @@ class ListViewItemBody extends StatelessWidget {
               children: [
                 Text(
                   taskCategory,
-                  style: TextStyle(fontSize: 14.sp),
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: AppConstFontWeight.medium,
+                  ),
                 ),
                 Expanded(
                   child: RichText(
@@ -68,6 +72,7 @@ class ListViewItemBody extends StatelessWidget {
                         color: Colors.black,
                         overflow: TextOverflow.ellipsis,
                         fontSize: 14.sp,
+                        fontWeight: AppConstFontWeight.regular,
                       ),
                     ),
                     maxLines: 2,
@@ -79,7 +84,9 @@ class ListViewItemBody extends StatelessWidget {
                     text: TextSpan(
                         text: startTime,
                         style: TextStyle(
-                            color: Colors.deepOrange, fontSize: 11.sp),
+                            fontWeight: AppConstFontWeight.regular,
+                            color: Colors.deepOrange,
+                            fontSize: 11.sp),
                         children: [
                           WidgetSpan(
                               child: Icon(
@@ -95,7 +102,11 @@ class ListViewItemBody extends StatelessWidget {
                   shortString,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 14.sp, color: Colors.blueAccent),
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.blueAccent,
+                    fontWeight: AppConstFontWeight.regular,
+                  ),
                 ),
                 4.verticalSpace,
               ],

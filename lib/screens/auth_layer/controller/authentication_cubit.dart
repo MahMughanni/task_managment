@@ -91,4 +91,18 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       emit(SignUpFailure('An unknown error occurred.'));
     }
   }
+
+
+
+  Future<void> logOut() async {
+    await firebaseAuth.signOut();
+
+    // Remove user info from secure storage
+    const storage = FlutterSecureStorage();
+    await storage.delete(key: 'email');
+    await storage.delete(key: 'password');
+
+    emit(LoginInitial());
+  }
+
 }

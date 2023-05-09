@@ -30,7 +30,7 @@ class CustomDetailsRichText extends StatelessWidget {
               style: subTitleStyle ??
                   TextStyle(
                     color: Colors.green.withOpacity(.8),
-                    fontWeight: AppConstFontWeight.normal,
+                    fontWeight: AppConstFontWeight.regular,
                     fontSize: 18,
                   ),
             ),

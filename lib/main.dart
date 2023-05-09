@@ -11,6 +11,7 @@ import 'package:task_mangment/logic/base_cubit.dart';
 import 'package:task_mangment/screens/auth_layer/controller/authentication_cubit.dart';
 import 'package:task_mangment/screens/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
+import 'package:task_mangment/utils/app_theme/app_theme_light.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
 void main() async {
@@ -47,14 +48,6 @@ class TaskManageMentApp extends StatelessWidget {
               lazy: false,
               create: (BuildContext context) => BaseCubit(),
             ),
-            BlocProvider<UserCubit>(
-              lazy: false,
-              create: (BuildContext context) => UserCubit(userId: user!.uid),
-            ),
-            BlocProvider<AddTaskCubit>(
-              lazy: true,
-              create: (BuildContext context) => AddTaskCubit(),
-            ),
             BlocProvider<AuthenticationCubit>(
               create: (BuildContext context) => AuthenticationCubit(userAUTH),
             ),
@@ -63,7 +56,7 @@ class TaskManageMentApp extends StatelessWidget {
             onGenerateRoute: OnGenerateRouter.onGenerateRoute,
             navigatorKey: AppRouter.navigatorKey,
             initialRoute: NamedRouter.splashScreen,
-            theme: ThemeData(fontFamily: 'Cairo'),
+            theme: getAppTheme(),
             scaffoldMessengerKey: UtilsConfig.scaffoldKey,
             debugShowCheckedModeBanner: false,
           ),

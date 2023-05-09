@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
@@ -39,6 +38,12 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   }
 
   String selectedDropdownValue = 'Today';
+
+  void updateValue(String value) {
+    selectedDropdownValue = value;
+    final newState = AddTaskDropdownValueUpdated(selectedDropdownValue);
+    emit(newState);
+  }
 
   Future<void> pickImages() async {
     await requestPermissions(); // Call the permission request function

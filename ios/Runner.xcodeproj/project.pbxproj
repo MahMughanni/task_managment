@@ -124,7 +124,6 @@
 				111A5E23FDA35F60079FFCF3 /* Pods-Runner.release.xcconfig */,
 				326492E31E43C5AF37C5873B /* Pods-Runner.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -369,7 +368,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.taskMangment;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mahm.taskManagement;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

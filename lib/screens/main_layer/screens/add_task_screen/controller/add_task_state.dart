@@ -26,6 +26,15 @@ class RemoveTaskImageUpdated extends AddTaskState {
   RemoveTaskImageUpdated(this.imageFiles);
 }
 
+class AddTaskLoading extends AddTaskState {}
+
+class AddTaskSuccess extends AddTaskState {}
+
+
+class AddTaskFailure extends AddTaskState {
+  final String errorMessage;
+  AddTaskFailure({required this.errorMessage});
+}
 class AddTaskUploading extends AddTaskState {}
 
 class AddTaskUploadSuccess extends AddTaskState {}

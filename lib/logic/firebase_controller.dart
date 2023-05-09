@@ -106,14 +106,15 @@ class FireBaseRepository {
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs
-        .map((doc) => TaskModel.fromSnapshot(doc))
-        .toList());
+            .map((doc) => TaskModel.fromSnapshot(doc))
+            .toList());
   }
 
   static Stream<List<TaskModel>> getUserTasksStream({required String userId}) {
     final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
     final tasksCollection = userDoc.collection('tasks');
-    final snapshots = tasksCollection.orderBy('createdAt', descending: true).snapshots();
+    final snapshots =
+        tasksCollection.orderBy('createdAt', descending: true).snapshots();
     return snapshots.map((querySnapshot) {
       final tasks = <TaskModel>[];
       for (var doc in querySnapshot.docs) {
@@ -181,6 +182,5 @@ class FireBaseRepository {
         .doc(user.uid)
         .collection('tasks')
         .add(task.toMap());
-
   }
 }
