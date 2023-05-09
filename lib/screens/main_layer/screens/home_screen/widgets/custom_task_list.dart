@@ -16,87 +16,129 @@ class CustomTaskList extends StatelessWidget {
     required this.label,
     required this.userName,
     required this.userId,
+    this.userCubit,
   }) : super(key: key);
 
   final String state;
   final String label;
   final String? userName;
   final String userId;
+  final UserCubit? userCubit;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => UserCubit(userId: userId),
-      child: BlocBuilder<UserCubit, HomeState>(
-        builder: (context, state) {
-          if (state is UserLoadingState) {
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: 15,
-                itemBuilder: (context, index) =>
-                    const ShimmerListViewItemBody());
-          }
-          if (state is UserErrorState) {
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: 15,
-                itemBuilder: (context, index) =>
-                    const ShimmerListViewItemBody());
-          }
-          if (state is UserLoadedState) {
-            final tasks = state.tasks;
-            final stateTasks =
-                tasks.where((task) => task.state == this.state).toList();
-            return stateTasks.isNotEmpty
-                ? Column(
-                    children: [
-                      Text(
-                        label,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                fontWeight: AppConstFontWeight.medium,
-                                color: Colors.blueAccent,
-                                fontSize: 12.sp),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: stateTasks.length,
-                          itemBuilder: (context, index) => GestureDetector(
-                            onLongPress: () {
-                              print('long Press');
-                            },
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => TaskDetailsScreen(
-                                    task: stateTasks[index],
-                                    userName: userName ?? '',
+
+    return BlocBuilder<UserCubit, HomeState>(
+      builder: (context, state) {
+        if (state is UserLoadingState) {
+          return ListView.builder(
+              shrinkWrap: true,
+              itemCount: 15,
+              itemBuilder: (context, index) => const ShimmerListViewItemBody());
+        }
+        if (state is UserErrorState) {
+          return ListView.builder(
+              shrinkWrap: true,
+              itemCount: 15,
+              itemBuilder: (context, index) => const ShimmerListViewItemBody());
+        }
+        if (state is UserLoadedState) {
+          final tasks = state.tasks;
+          final stateTasks =
+              tasks.where((task) => task.state == this.state).toList();
+          return stateTasks.isNotEmpty
+              ? Column(
+                  children: [
+                    Text(
+                      label,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontWeight: AppConstFontWeight.medium,
+                          color: Colors.blueAccent,
+                          fontSize: 12.sp),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: stateTasks.length,
+                        itemBuilder: (context, index) => GestureDetector(
+                          onLongPress: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    "Delete task?",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
                                   ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text(
+                                        "Cancel",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text(
+                                        "Delete",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(color: Colors.red),
+                                      ),
+                                      onPressed: () {
+                                        final task = stateTasks[index];
+                                        userCubit?.deleteTask(
+                                            userId: userId, id: task.id!);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TaskDetailsScreen(
+                                  task: stateTasks[index],
+                                  userName: userName ?? '',
                                 ),
-                              );
-                            },
-                            child: ListViewItemBody(
-                                title: stateTasks[index].description,
-                                startTime: stateTasks[index].startTime,
-                                userName: stateTasks[index].title,
-                                taskCategory: stateTasks[index].state,
-                                url: stateTasks[index].imageUrls.isNotEmpty
-                                    ? stateTasks[index].imageUrls.first
-                                    : ''),
-                          ),
+                              ),
+                            );
+                          },
+                          child: ListViewItemBody(
+                              title: stateTasks[index].description,
+                              startTime: stateTasks[index].startTime,
+                              userName: stateTasks[index].title,
+                              taskCategory: stateTasks[index].state,
+                              url: stateTasks[index].imageUrls.isNotEmpty
+                                  ? stateTasks[index].imageUrls.first
+                                  : ''),
                         ),
                       ),
-                    ],
-                  )
-                : Container();
-          }
-          return Container(); // default return
-        },
-      ),
+                    ),
+                  ],
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 15,
+                  itemBuilder: (context, index) =>
+                      const ShimmerListViewItemBody());
+        }
+        return ListView.builder(
+            shrinkWrap: true,
+            itemCount: 15,
+            itemBuilder: (context, index) =>
+                const ShimmerListViewItemBody()); // default return
+      },
     );
   }
 }

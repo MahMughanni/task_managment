@@ -57,6 +57,19 @@ class UserCubit extends Cubit<HomeState> {
     });
   }
 
+  Future<void> deleteTask({required String userId, required String id}) async {
+    try {
+      final taskDoc = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('tasks')
+          .doc(id);
+      await taskDoc.delete();
+    } catch (e) {
+      emit(UserErrorState(error: e.toString()));
+    }
+  }
+
   @override
   Future<void> close() {
     tasksSubscription?.cancel();

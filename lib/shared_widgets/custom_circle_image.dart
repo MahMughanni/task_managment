@@ -18,7 +18,7 @@ class CustomCircleImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width.r ,
+      width: width.r,
       height: height.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -43,14 +43,14 @@ class CustomCircleImage extends StatelessWidget {
                 },
                 errorBuilder: (BuildContext context, Object error,
                     StackTrace? stackTrace) {
-                  return Icon(
-                    Icons.image_not_supported_outlined,
-                    color: Colors.black,
-                    size: 25.r,
+                  return Image.network(
+                    'https://via.placeholder.com/150',
+                    fit: BoxFit.contain,
+                    width: 25.r,
+                    height: 25.r,
                   );
                 },
                 scale: 2,
-
               )
             : Image.file(
                 image as File, // Cast image to a File

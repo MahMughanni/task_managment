@@ -55,7 +55,7 @@ class TaskManageMentApp extends StatelessWidget {
           child: MaterialApp(
             onGenerateRoute: OnGenerateRouter.onGenerateRoute,
             navigatorKey: AppRouter.navigatorKey,
-            initialRoute: NamedRouter.splashScreen,
+            initialRoute: NamedRouter.mainScreen,
             theme: getAppTheme(),
             scaffoldMessengerKey: UtilsConfig.scaffoldKey,
             debugShowCheckedModeBanner: false,

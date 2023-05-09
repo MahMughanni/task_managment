@@ -168,6 +168,7 @@ class FireBaseRepository {
     }
 
     final task = TaskModel(
+      id: '',
       title: title,
       description: description,
       startTime: startTime,
@@ -177,10 +178,14 @@ class FireBaseRepository {
       createdAt: Timestamp.now(),
     );
 
-    await fireStore
+    final DocumentReference docRef = await fireStore
         .collection('users')
         .doc(user.uid)
         .collection('tasks')
         .add(task.toMap());
+
+    final String taskId = docRef.id;
+
+    await docRef.update({'id': taskId});
   }
 }

@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerListViewItemBody extends StatelessWidget {
-  const ShimmerListViewItemBody({Key? key});
+  const ShimmerListViewItemBody({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_task_list.dart';
+import 'package:task_mangment/shared_widgets/custom_shimmer.dart';
 import 'package:task_mangment/shared_widgets/cutom_container.dart';
 
 class HomeScreenBody extends StatelessWidget {
@@ -53,7 +55,12 @@ class HomeScreenBody extends StatelessWidget {
                           taskNumber: completedTasksCount.toString(),
                         );
                       default:
-                        return const CustomContainer(title: '', taskNumber: '');
+                        return Shimmer.fromColors(
+                          baseColor: Colors.grey.shade300,
+                          highlightColor: Colors.grey.shade100,
+                          child:
+                              const CustomContainer(title: '', taskNumber: ''),
+                        );
                     }
                   },
                   imageUrl: userData.profileImageUrl ?? '',
@@ -68,18 +75,21 @@ class HomeScreenBody extends StatelessWidget {
                   state: 'today',
                   label: 'today',
                   userId: userId,
+                  userCubit: BlocProvider.of<UserCubit>(context),
                 ),
                 CustomTaskList(
                   userName: userData.userName,
                   state: 'upcoming',
                   label: 'Upcoming',
                   userId: userId,
+                  userCubit: BlocProvider.of<UserCubit>(context),
                 ),
                 CustomTaskList(
                   userName: userData.userName,
                   state: 'completed',
                   label: 'Completed',
                   userId: userId,
+                  userCubit: BlocProvider.of<UserCubit>(context),
                 ),
               ],
             ),
@@ -88,7 +98,10 @@ class HomeScreenBody extends StatelessWidget {
           return Text('Error: ${state.error}');
         } else {
           // Handle other states (e.g. UserInitial)
-          return Container();
+          return ListView.builder(
+              shrinkWrap: true,
+              itemCount: 15,
+              itemBuilder: (context, index) => const ShimmerListViewItemBody());
         }
       },
     );

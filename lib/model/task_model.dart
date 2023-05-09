@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskModel {
+  final String? id;
   final String title;
   final String description;
   final String startTime;
@@ -10,6 +13,7 @@ class TaskModel {
   final Timestamp createdAt;
 
   TaskModel({
+    this.id,
     required this.title,
     required this.description,
     required this.startTime,
@@ -22,6 +26,7 @@ class TaskModel {
   factory TaskModel.fromJson(Map<String, dynamic> json) {
     final imageUrls = List<String>.from(json['imageUrls'] ?? []);
     return TaskModel(
+      id: json['id'],
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       startTime: json['startTime'] ?? '',
@@ -39,6 +44,7 @@ class TaskModel {
     final imageUrls = List<String>.from(data['imageUrls'] ?? []);
 
     return TaskModel(
+      id: data['id'] ?? '',
       title: data['title'] ?? '',
       description: data['description'] ?? '',
       startTime: data['startTime'] ?? '',
@@ -51,6 +57,7 @@ class TaskModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'title': title,
       'description': description,
       'startTime': startTime,
@@ -63,6 +70,6 @@ class TaskModel {
 
   @override
   String toString() {
-    return 'TaskModel{title: $title, description: $description, startTime: $startTime, endTime: $endTime, state: $state, imageUrls: $imageUrls}';
+    return 'TaskModel{ Id: $id, title: $title, description: $description, startTime: $startTime, endTime: $endTime, state: $state, imageUrls: $imageUrls}';
   }
 }
