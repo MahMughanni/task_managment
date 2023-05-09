@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
 import 'package:task_mangment/screens/main_layer/screens/task_details_screen/task_details_screen.dart';
+import 'package:task_mangment/shared_widgets/custom_shimmer.dart';
 import 'package:task_mangment/shared_widgets/list_item_body.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 
@@ -30,19 +30,18 @@ class CustomTaskList extends StatelessWidget {
       child: BlocBuilder<UserCubit, HomeState>(
         builder: (context, state) {
           if (state is UserLoadingState) {
-            return Shimmer.fromColors(
-                baseColor: Colors.grey.shade300,
-                highlightColor: Colors.grey.shade100,
-                child: const ListViewItemBody(
-                  title: '',
-                  startTime: '',
-                  userName: '',
-                  taskCategory: '',
-                  url: '',
-                ));
+            return ListView.builder(
+                shrinkWrap: true,
+                itemCount: 15,
+                itemBuilder: (context, index) =>
+                    const ShimmerListViewItemBody());
           }
           if (state is UserErrorState) {
-            return Center(child: Text('Error: ${state.error}'));
+            return ListView.builder(
+                shrinkWrap: true,
+                itemCount: 15,
+                itemBuilder: (context, index) =>
+                    const ShimmerListViewItemBody());
           }
           if (state is UserLoadedState) {
             final tasks = state.tasks;
@@ -57,15 +56,16 @@ class CustomTaskList extends StatelessWidget {
                             .textTheme
                             .titleMedium!
                             .copyWith(
-                          fontWeight: AppConstFontWeight.medium,
-                                color: Colors.blueAccent, fontSize: 12.sp),
+                                fontWeight: AppConstFontWeight.medium,
+                                color: Colors.blueAccent,
+                                fontSize: 12.sp),
                       ),
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: stateTasks.length,
                           itemBuilder: (context, index) => GestureDetector(
-                            onLongPress: (){
+                            onLongPress: () {
                               print('long Press');
                             },
                             onTap: () {
