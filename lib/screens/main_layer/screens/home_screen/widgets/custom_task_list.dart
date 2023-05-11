@@ -28,7 +28,7 @@ class CustomTaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return BlocBuilder<UserCubit, HomeState>(
+    return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         if (state is UserLoadingState) {
           return ListView.builder(

@@ -3,11 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/screens/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/screens/main_layer/main_screen.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/home_screen.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 
-import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

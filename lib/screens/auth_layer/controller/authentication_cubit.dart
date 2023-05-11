@@ -9,7 +9,8 @@ import 'package:task_mangment/utils/utils_config.dart';
 part 'authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
-  final FirebaseAuth firebaseAuth ;
+  final FirebaseAuth firebaseAuth;
+
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   User? loggedInUser;
 
@@ -21,21 +22,26 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     final password = await storage.read(key: 'password');
 
     if (email != null && password != null) {
-      try {
-        final userCredential = await firebaseAuth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
+      if (firebaseAuth != null) { // check if firebaseAuth is not null
+        try {
+          final userCredential = await firebaseAuth.signInWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
 
-        loggedInUser = userCredential.user;
+          loggedInUser = userCredential.user;
 
-        emit(LoginSuccess(userCredential.user!));
-      } catch (e) {
-        emit(LoginFailure('An error occurred during auto login.'));
+          emit(LoginSuccess(userCredential.user));
+        } catch (e) {
+          emit(LoginFailure('An error occurred during auto login.'));
+        }
+      } else {
+        emit(LoginFailure('firebaseAuth is null.')); // handle the case where firebaseAuth is null
       }
     } else {
       emit(LoginInitial());
     }
+
   }
 
   Future<void> logIn(String email, String password) async {
@@ -92,8 +98,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     }
   }
 
-
-
   Future<void> logOut() async {
     await firebaseAuth.signOut();
 
@@ -104,5 +108,4 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
     emit(LoginInitial());
   }
-
 }

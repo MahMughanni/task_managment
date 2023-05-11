@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -21,22 +22,34 @@ void main() async {
   final userAUTH = FirebaseAuth.instance;
   final user = userAUTH.currentUser;
 
+  final ConnectivityResult connectivityResult =
+      await Connectivity().checkConnectivity();
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(TaskManageMentApp(
+    (value) => runApp(TaskManagementApp(
       userAUTH: userAUTH,
       user: user,
+      connectivityResult: connectivityResult,
     )),
   );
 }
 
-class TaskManageMentApp extends StatelessWidget {
-  const TaskManageMentApp({Key? key, required this.userAUTH, this.user})
+class TaskManagementApp extends StatelessWidget {
+  const TaskManagementApp(
+      {Key? key,
+      required this.userAUTH,
+      this.user,
+      required this.connectivityResult})
       : super(key: key);
   final FirebaseAuth userAUTH;
   final User? user;
+  final ConnectivityResult connectivityResult;
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Build userAUTH  ${userAUTH.currentUser?.email}');
+    debugPrint('Build ${user?.uid ?? ''}');
+
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
@@ -55,7 +68,7 @@ class TaskManageMentApp extends StatelessWidget {
           child: MaterialApp(
             onGenerateRoute: OnGenerateRouter.onGenerateRoute,
             navigatorKey: AppRouter.navigatorKey,
-            initialRoute: NamedRouter.mainScreen,
+            initialRoute: NamedRouter.splashScreen,
             theme: getAppTheme(),
             scaffoldMessengerKey: UtilsConfig.scaffoldKey,
             debugShowCheckedModeBanner: false,

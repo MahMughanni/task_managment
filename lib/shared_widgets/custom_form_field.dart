@@ -19,6 +19,8 @@ class CustomTextFormField extends StatelessWidget {
     this.contentPadding,
     this.focus,
     this.suffixIconConstraints,
+    this.hintStyle,
+    this.titleStyle,
   }) : super(key: key);
   final String? hintText, initialValue, labelText;
   final String? Function(String?)? validator;
@@ -32,6 +34,8 @@ class CustomTextFormField extends StatelessWidget {
   final EdgeInsetsDirectional? contentPadding;
   final void Function(String)? focus;
   final BoxConstraints? suffixIconConstraints;
+  final TextStyle? hintStyle;
+  final TextStyle? titleStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +51,13 @@ class CustomTextFormField extends StatelessWidget {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         obscureText: isPassword ?? false,
         validator: validator,
-        style: TextStyle(fontSize: 12.sp),
+        style: titleStyle ?? Theme.of(context).textTheme.bodySmall,
         decoration: InputDecoration(
           suffixIconConstraints: suffixIconConstraints,
-          hintStyle: TextStyle(fontSize: 13.sp),
+          hintStyle: hintStyle ?? Theme.of(context).textTheme.bodySmall,
           contentPadding: contentPadding ?? REdgeInsets.all(15),
           label: Text(labelText ?? ''),
+          labelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.grey),
           suffixIcon: suffixIcon,
           fillColor: ColorConstManger.formFieldFiledColor,
           filled: true,

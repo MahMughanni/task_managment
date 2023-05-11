@@ -64,151 +64,152 @@ class _AddTaskBodyState extends State<AddTaskBody> {
         child: BlocBuilder<AddTaskCubit, AddTaskState>(
           builder: (context, state) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Column(
-                children: [
-                  8.verticalSpace,
-                  CustomTextFormField(
-                    focus: (_) => FocusScope.of(context).nearestScope,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'enter valid title';
-                      }
-                      return null;
-                    },
-                    labelText: 'Task Title',
-                    hintText: '',
-                    controller: addTaskCubit.titleController,
-                  ),
-                  4.verticalSpace,
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CustomDropDown(
-                      onChanged: (value) => addTaskCubit.updateValue(value!),
-                      dropDownValue: addTaskCubit.selectedDropdownValue,
-                      items: const [
-                        DropdownMenuItem(
-                            value: 'Upcoming', child: Text('Upcoming')),
-                        DropdownMenuItem(value: 'Today', child: Text('Today')),
-                        // DropdownMenuItem(
-                        //     value: 'Completed', child: Text('Completed') ,
-                        // ),
-                      ],
-                    ),
-                  ),
-                  8.verticalSpace,
-                  CreateTaskBody(
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'enter valid text';
-                      }
-                      return null;
-                    },
-                    descriptionController: addTaskCubit.descriptionController,
-                    onTap: addTaskCubit.pickImages,
-                    startTimeController: addTaskCubit.startTimeController,
-                    endTimeController: addTaskCubit.endTimeController,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      await addTaskCubit.pickImages();
-                    },
-                    child: CustomTextFormField(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  children: [
+                    8.verticalSpace,
+                    CustomTextFormField(
                       focus: (_) => FocusScope.of(context).nearestScope,
-                      suffixIcon: const Icon(Icons.link_sharp),
-                      enabled: false,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'enter valid title';
+                        }
+                        return null;
+                      },
+                      labelText: 'Task Title',
                       hintText: '',
-                      labelText: 'Attach files',
+                      controller: addTaskCubit.titleController,
                     ),
-                  ),
-                  4.verticalSpace,
-                  if (addTaskCubit.imageFiles.isNotEmpty)
-                    Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 4,
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      runSpacing: 4,
-                      clipBehavior: Clip.antiAlias,
-                      children: [
-                        ...addTaskCubit.imageFiles.map(
-                          (imageFile) => Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(16.0).r,
-                                child: Image.file(
-                                  imageFile,
-                                  fit: BoxFit.cover,
-                                  width: 150.r,
-                                  height: 150.r,
+                    4.verticalSpace,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomDropDown(
+                        onChanged: (value) => addTaskCubit.updateValue(value!),
+                        dropDownValue: addTaskCubit.selectedDropdownValue,
+                        items: const [
+                          DropdownMenuItem(
+                              value: 'Upcoming', child: Text('Upcoming')),
+                          DropdownMenuItem(
+                              value: 'Today', child: Text('Today')),
+                          // DropdownMenuItem(
+                          //     value: 'Completed', child: Text('Completed') ,
+                          // ),
+                        ],
+                      ),
+                    ),
+                    8.verticalSpace,
+                    CreateTaskBody(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'enter valid text';
+                        }
+                        return null;
+                      },
+                      descriptionController: addTaskCubit.descriptionController,
+                      onTap: addTaskCubit.pickImages,
+                      startTimeController: addTaskCubit.startTimeController,
+                      endTimeController: addTaskCubit.endTimeController,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await addTaskCubit.pickImages();
+                      },
+                      child: CustomTextFormField(
+                        focus: (_) => FocusScope.of(context).nearestScope,
+                        suffixIcon: const Icon(Icons.link_sharp),
+                        enabled: false,
+                        hintText: '',
+                        labelText: 'Attach files',
+                      ),
+                    ),
+                    4.verticalSpace,
+                    if (addTaskCubit.imageFiles.isNotEmpty)
+                      Wrap(
+                        direction: Axis.horizontal,
+                        spacing: 4,
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        runSpacing: 4,
+                        clipBehavior: Clip.antiAlias,
+                        children: [
+                          ...addTaskCubit.imageFiles.map(
+                            (imageFile) => Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(16.0).r,
+                                  child: Image.file(
+                                    imageFile,
+                                    fit: BoxFit.cover,
+                                    width: 150.r,
+                                    height: 150.r,
+                                  ),
                                 ),
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    addTaskCubit.removeImage(imageFile);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(2),
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                    ),
-                                    child: Icon(
-                                      Icons.close,
-                                      size: 18.r,
-                                      color: Colors.red,
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      addTaskCubit.removeImage(imageFile);
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(2),
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white,
+                                      ),
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 18.r,
+                                        color: Colors.red,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  8.verticalSpace,
-                  Stack(
-                    children: [
-                      CustomButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            addTaskCubit.uploadTask(
-                              title: addTaskCubit.titleController.text
-                                  .toString()
-                                  .trim(),
-                              description: addTaskCubit
-                                  .descriptionController.text
-                                  .toString()
-                                  .trim(),
-                              startTime: addTaskCubit.startTimeController.text
-                                  .toString()
-                                  .trim(),
-                              endTime: addTaskCubit.endTimeController.text
-                                  .toString()
-                                  .trim(),
-                            );
-                          }
-                        },
-                        title: 'Upload',
-                        width: double.infinity,
-                        height: 42.h,
-                      ),
-                      if (addTaskCubit.isUploading)
-                        Positioned.fill(
-                          child: Container(
-                            color: Colors.black.withOpacity(0.5),
-                            child: const Center(
-                              child: CircularProgressIndicator(),
+                              ],
                             ),
                           ),
+                        ],
+                      ),
+                    8.verticalSpace,
+                    Stack(
+                      children: [
+                        CustomButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              addTaskCubit.uploadTask(
+                                title: addTaskCubit.titleController.text
+                                    .toString()
+                                    .trim(),
+                                description: addTaskCubit
+                                    .descriptionController.text
+                                    .toString()
+                                    .trim(),
+                                startTime: addTaskCubit.startTimeController.text
+                                    .toString()
+                                    .trim(),
+                                endTime: addTaskCubit.endTimeController.text
+                                    .toString()
+                                    .trim(),
+                              );
+                            }
+                            addTaskCubit.uploadSuccess();
+                          },
+                          title: 'Upload',
+                          width: double.infinity,
+                          height: 42.h,
                         ),
-                    ],
-                  ),
-                ],
-              ),
-            );
+                        if (addTaskCubit.isUploading)
+                          Positioned.fill(
+                            child: Container(
+                              color: Colors.black.withOpacity(0.5),
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ));
           },
         ),
       ),

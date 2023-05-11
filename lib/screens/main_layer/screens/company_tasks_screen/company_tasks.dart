@@ -17,7 +17,7 @@ class CompanyTasksScreen extends StatelessWidget {
     return BlocProvider(
       lazy: true,
       create: (context) => UserCubit(userId: user.uid),
-      child: BlocBuilder<UserCubit, HomeState>(
+      child: BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
           return DefaultTabController(
             length: 3,

@@ -10,7 +10,7 @@ class LoginInitial extends AuthenticationState {}
 class LoginInProgress extends AuthenticationState {}
 
 class LoginSuccess extends AuthenticationState {
-  final User user;
+  final User? user;
 
   LoginSuccess(this.user);
 }

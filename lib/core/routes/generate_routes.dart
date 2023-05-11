@@ -51,25 +51,28 @@ class OnGenerateRouter {
           ),
         );
     }
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = const Offset(-1.0, 0.0); // slide from left to right
-        var end = const Offset(0.0, 0.0);
-        var tween = Tween<Offset>(
-          begin: begin,
-          end: end,
-        );
-        var curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: Curves.fastOutSlowIn,
-          reverseCurve: Curves.fastOutSlowIn,
-        );
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      },
-    );
+    return MaterialPageRoute(builder: (_) {
+      return page;
+    });
+    // return PageRouteBuilder(
+    //   pageBuilder: (context, animation, secondaryAnimation) => page,
+    //   transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //     var begin = const Offset(-1.0, 0.0); // slide from left to right
+    //     var end = const Offset(0.0, 0.0);
+    //     var tween = Tween<Offset>(
+    //       begin: begin,
+    //       end: end,
+    //     );
+    //     var curvedAnimation = CurvedAnimation(
+    //       parent: animation,
+    //       curve: Curves.fastOutSlowIn,
+    //       reverseCurve: Curves.fastOutSlowIn,
+    //     );
+    //     return SlideTransition(
+    //       position: tween.animate(curvedAnimation),
+    //       child: child,
+    //     );
+    //   },
+    // );
   }
 }

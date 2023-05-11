@@ -29,18 +29,35 @@ TextTheme getTextTheme() => TextTheme(
         fontWeight: AppConstFontWeight.semiBold,
         color: ColorConstManger.black,
       ),
-      bodyLarge: TextStyle(
+      displayLarge: TextStyle(
         fontSize: 18.sp,
         fontWeight: AppConstFontWeight.medium,
         color: ColorConstManger.primaryColor,
       ),
-      bodyMedium: TextStyle(
+
+
+      displayMedium: TextStyle(
         fontSize: 16.sp,
         fontWeight: AppConstFontWeight.regular,
         color: ColorConstManger.primaryColor,
       ),
-      bodySmall: TextStyle(
+      displaySmall: TextStyle(
         fontSize: 14.sp,
+        fontWeight: AppConstFontWeight.regular,
+        color: ColorConstManger.primaryColor,
+      ),
+      bodyLarge: TextStyle(
+        fontSize: 16.sp,
+        fontWeight: AppConstFontWeight.regular,
+        color: ColorConstManger.primaryColor,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14.sp,
+        fontWeight: AppConstFontWeight.regular,
+        color: ColorConstManger.primaryColor,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 12.sp,
         fontWeight: AppConstFontWeight.regular,
         color: ColorConstManger.primaryColor,
       ),

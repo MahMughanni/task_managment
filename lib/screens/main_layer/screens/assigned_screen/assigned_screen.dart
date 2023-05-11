@@ -11,17 +11,18 @@ class AssignedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user =
-        BlocProvider.of<AuthenticationCubit>(context).firebaseAuth.currentUser!;
+    final user = BlocProvider.of<AuthenticationCubit>(context)
+        .firebaseAuth
+        ?.currentUser!;
     return BlocProvider<UserCubit>(
-      create: (context) => UserCubit(userId: user.uid.toString()),
+      create: (context) => UserCubit(userId: user!.uid.toString()),
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: const CustomAppbar(
           title: 'Assigned Tasks',
           action: [],
         ),
-        body: BlocBuilder<UserCubit, HomeState>(
+        body: BlocBuilder<UserCubit, UserState>(
           builder: (context, state) {
             if (state is UserLoadingState) {
               return const Center(child: CircularProgressIndicator());
@@ -34,7 +35,7 @@ class AssignedScreen extends StatelessWidget {
                 state: 'upcoming',
                 label: 'upcoming',
                 userName: state.user.userName.toString(),
-                userId: user.uid,
+                userId: user!.uid,
               );
             } else {
               return Container();

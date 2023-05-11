@@ -44,8 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: BlocConsumer<AuthenticationCubit, AuthenticationState>(
           listener: (context, state) {
             if (state is LoginInProgress) {
-              UtilsConfig.showSnackBarMessage(
-                  message: 'loading', status: false);
+              UtilsConfig.showSnackBarMessage(message: 'loading', status: false);
             }
             if (state is LoginFailure) {
               debugPrint(state.errorMessage.toString());

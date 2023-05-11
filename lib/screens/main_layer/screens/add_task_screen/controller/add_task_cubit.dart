@@ -39,6 +39,11 @@ class AddTaskCubit extends Cubit<AddTaskState> {
 
   String selectedDropdownValue = 'Today';
 
+  void uploadSuccess() {
+    isUploading = !isUploading;
+    emit(UploadSuccess(isSuccess: isUploading));
+  }
+
   void updateValue(String value) {
     selectedDropdownValue = value;
     final newState = AddTaskDropdownValueUpdated(selectedDropdownValue);

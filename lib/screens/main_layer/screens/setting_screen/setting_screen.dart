@@ -39,7 +39,7 @@ class SettingScreen extends StatelessWidget {
               snap: true,
               pinned: true,
               title: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0).r,
                 child: Text(
                   'Setting',
                   style: Theme.of(context).textTheme.titleLarge,
@@ -47,12 +47,10 @@ class SettingScreen extends StatelessWidget {
               ),
               titleSpacing: 12,
               flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  child: Image.asset(
-                    ImageConstManger.logoImage,
-                    width: 80.r,
-                    height: 80.r,
-                  ),
+                background: Image.asset(
+                  ImageConstManger.logoImage,
+                  width: 80.r,
+                  height: 80.r,
                 ),
               ),
               expandedHeight: 200.h,
@@ -62,6 +60,7 @@ class SettingScreen extends StatelessWidget {
                 (context, index) => Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8)
+                          .r
                           .r,
                   child: Container(
                     decoration: BoxDecoration(
@@ -108,7 +107,10 @@ class SettingScreen extends StatelessWidget {
                           imageList[index],
                         ),
                       ), //C
-                      title: Text(titleList[index]), // enter
+                      title: Text(
+                        titleList[index],
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ), // enter
                     ),
                   ),
                 ), //ListTile

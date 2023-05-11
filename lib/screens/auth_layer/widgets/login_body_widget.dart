@@ -106,12 +106,8 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {},
-                child: Text(
-                  'forget password ?',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                  ),
-                ),
+                child: Text('forget password ?',
+                    style: Theme.of(context).textTheme.bodySmall),
               ),
             ),
             8.verticalSpace,
@@ -124,9 +120,8 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
             CustomRichText(
               title: 'Don\'t have an account yet ?',
               subTitle: ' SIGN UP',
-              subTextStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              subTextStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                   fontWeight: AppConstFontWeight.bold,
-                  fontSize: 12.sp,
                   color: ColorConstManger.primaryColor),
               tapGestureRecognizer: TapGestureRecognizer()
                 ..onTap = () {
@@ -134,8 +129,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
                   AppRouter.goToAndRemove(routeName: NamedRouter.signUpScreen);
                 },
               padding: const EdgeInsets.all(20),
-              titleStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontSize: 12.sp,
+              titleStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.black.withOpacity(.7),
                   ),
             ),

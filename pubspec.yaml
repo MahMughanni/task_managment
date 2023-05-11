@@ -27,6 +27,7 @@ dependencies:
   flutter_bloc: ^8.0.0
   flutter_screenutil: ^5.7.0
   flutter_secure_storage:
+  connectivity_plus: ^4.0.0
 
 
 dev_dependencies:

@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 abstract class AddTaskState {}
@@ -30,11 +28,18 @@ class AddTaskLoading extends AddTaskState {}
 
 class AddTaskSuccess extends AddTaskState {}
 
+class UploadSuccess extends AddTaskState {
+  final bool isSuccess;
+
+  UploadSuccess({required this.isSuccess});
+}
 
 class AddTaskFailure extends AddTaskState {
   final String errorMessage;
+
   AddTaskFailure({required this.errorMessage});
 }
+
 class AddTaskUploading extends AddTaskState {}
 
 class AddTaskUploadSuccess extends AddTaskState {}
