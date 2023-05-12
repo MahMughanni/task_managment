@@ -12,7 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 class FireBaseRepository {
   final user = FirebaseAuth.instance.currentUser!;
 
-  static Future<List<DocumentSnapshot>> getAllUsers() async {
+  Future<List<DocumentSnapshot>> getAllUsers() async {
     final QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('users').get();
 
@@ -71,7 +71,6 @@ class FireBaseRepository {
   static Future<UserModel> getUserInfo() async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
-
     final userData = await fireStore.collection('users').doc(userId).get();
     final userName = userData.get('username');
     final role = userData.get('role');

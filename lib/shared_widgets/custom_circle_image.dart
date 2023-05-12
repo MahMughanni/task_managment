@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_mangment/utils/app_constants.dart';
 
 class CustomCircleImage extends StatelessWidget {
   final dynamic image;
@@ -43,8 +44,8 @@ class CustomCircleImage extends StatelessWidget {
                 },
                 errorBuilder: (BuildContext context, Object error,
                     StackTrace? stackTrace) {
-                  return Image.network(
-                    'https://via.placeholder.com/150',
+                  return Image.asset(
+                    ImageConstManger.logoImage,
                     fit: BoxFit.contain,
                     width: 25.r,
                     height: 25.r,

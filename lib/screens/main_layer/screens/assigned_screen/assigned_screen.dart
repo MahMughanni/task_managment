@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_mangment/screens/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_state.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_task_list.dart';
 import 'package:task_mangment/shared_widgets/custom_appbar.dart';
 
@@ -14,15 +14,15 @@ class AssignedScreen extends StatelessWidget {
     final user = BlocProvider.of<AuthenticationCubit>(context)
         .firebaseAuth
         ?.currentUser!;
-    return BlocProvider<UserCubit>(
-      create: (context) => UserCubit(userId: user!.uid.toString()),
+    return BlocProvider<TaskCubit>(
+      create: (context) => TaskCubit(userId: user!.uid.toString()),
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: const CustomAppbar(
           title: 'Assigned Tasks',
           action: [],
         ),
-        body: BlocBuilder<UserCubit, UserState>(
+        body: BlocBuilder<TaskCubit, TaskState>(
           builder: (context, state) {
             if (state is UserLoadingState) {
               return const Center(child: CircularProgressIndicator());

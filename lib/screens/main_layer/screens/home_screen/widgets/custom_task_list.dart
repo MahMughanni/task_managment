@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_state.dart';
 import 'package:task_mangment/screens/main_layer/screens/task_details_screen/task_details_screen.dart';
 import 'package:task_mangment/shared_widgets/custom_shimmer.dart';
 import 'package:task_mangment/shared_widgets/list_item_body.dart';
@@ -23,12 +23,12 @@ class CustomTaskList extends StatelessWidget {
   final String label;
   final String? userName;
   final String userId;
-  final UserCubit? userCubit;
+  final TaskCubit? userCubit;
 
   @override
   Widget build(BuildContext context) {
 
-    return BlocBuilder<UserCubit, UserState>(
+    return BlocBuilder<TaskCubit, TaskState>(
       builder: (context, state) {
         if (state is UserLoadingState) {
           return ListView.builder(

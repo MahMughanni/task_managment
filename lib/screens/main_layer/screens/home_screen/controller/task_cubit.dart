@@ -6,15 +6,15 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/model/task_model.dart';
 import 'package:task_mangment/model/user_model.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_state.dart';
 
-class UserCubit extends Cubit<UserState> {
+class TaskCubit extends Cubit<TaskState> {
   final String userId;
   StreamSubscription<List<TaskModel>>? tasksSubscription;
   StreamSubscription<DocumentSnapshot>? userSubscription;
   DocumentReference? userDoc;
 
-  UserCubit({required this.userId}) : super(UserInitial()) {
+  TaskCubit({required this.userId}) : super(UserInitial()) {
     userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
     userSubscription = userDoc?.snapshots().listen((userData) async {
       try {

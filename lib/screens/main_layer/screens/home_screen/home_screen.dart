@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_state.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/homeScreen_body.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -21,10 +21,10 @@ class HomeScreen extends StatelessWidget {
     // debugPrint(userId ?? '');
 
     return BlocProvider(
-      create: (context) => UserCubit(userId: userId!),
+      create: (context) => TaskCubit(userId: userId!),
       child: SafeArea(
         child: Scaffold(
-          body: BlocConsumer<UserCubit, UserState>(
+          body: BlocConsumer<TaskCubit, TaskState>(
             listener: (context, state) {
               if (state is UserErrorState) {
                 ScaffoldMessenger.of(context).showSnackBar(

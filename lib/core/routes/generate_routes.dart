@@ -36,7 +36,7 @@ class OnGenerateRouter {
           return CalendarScreen(userId: settings.arguments?.toString() ?? '');
         });
       case NamedRouter.employeeScreen:
-        page = const EmployeeScreen();
+        page = EmployeeScreen();
         break;
       case NamedRouter.signUpScreen:
         page = const SignUpScreen();

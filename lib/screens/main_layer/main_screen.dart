@@ -17,7 +17,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   List screen = [
     HomeScreen(),
-    AssignedScreen(),
+    const AssignedScreen(),
     const AddTaskScreen(),
     const NotificationScreen(),
     SettingScreen(),
@@ -102,17 +102,21 @@ class CustomFloatingBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0).r,
-      child: SizedBox(
-        height: 50.h,
-        width: 50.w,
+      child: Container(
+        width: 52.r,
+        height: 52.r,
+        decoration: const BoxDecoration(shape: BoxShape.circle),
         child: FloatingActionButton(
+          shape: const CircleBorder(),
+
+          elevation: 7,
           backgroundColor: color,
           onPressed: onBtnPressed,
           child: Theme(
             data: ThemeData(
-              iconTheme: const IconThemeData(
+              iconTheme: IconThemeData(
                 color: Colors.white,
-                size: 40,
+                size: 30.r,
               ),
             ),
             child: const Icon(

@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_state.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_task_list.dart';
 import 'package:task_mangment/shared_widgets/custom_appbar.dart';
 
@@ -16,8 +16,8 @@ class CompanyTasksScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       lazy: true,
-      create: (context) => UserCubit(userId: user.uid),
-      child: BlocBuilder<UserCubit, UserState>(
+      create: (context) => TaskCubit(userId: user.uid),
+      child: BlocBuilder<TaskCubit, TaskState>(
         builder: (context, state) {
           return DefaultTabController(
             length: 3,
@@ -60,20 +60,20 @@ class CompanyTasksScreen extends StatelessWidget {
                     label: '',
                     userName: '',
                     userId: user.uid,
-                    userCubit: BlocProvider.of<UserCubit>(context),
+                    userCubit: BlocProvider.of<TaskCubit>(context),
                   ),
                   CustomTaskList(
                     state: 'upcoming',
                     label: '',
                     userName: '',
-                    userCubit: BlocProvider.of<UserCubit>(context),
+                    userCubit: BlocProvider.of<TaskCubit>(context),
                     userId: user.uid,
                   ),
                   CustomTaskList(
                     state: 'completed',
                     userId: user.uid,
                     label: '',
-                    userCubit: BlocProvider.of<UserCubit>(context),
+                    userCubit: BlocProvider.of<TaskCubit>(context),
                     userName: '',
                   ),
                 ],

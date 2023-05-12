@@ -49,8 +49,8 @@ class SettingScreen extends StatelessWidget {
               flexibleSpace: FlexibleSpaceBar(
                 background: Image.asset(
                   ImageConstManger.logoImage,
-                  width: 80.r,
-                  height: 80.r,
+                  width: 70.r,
+                  height: 70.r,
                 ),
               ),
               expandedHeight: 200.h,
@@ -60,12 +60,11 @@ class SettingScreen extends StatelessWidget {
                 (context, index) => Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8)
-                          .r
                           .r,
                   child: Container(
                     decoration: BoxDecoration(
                         color: const Color(0xffF8FCFF),
-                        borderRadius: BorderRadius.circular(14)),
+                        borderRadius: BorderRadius.circular(14).r),
                     child: ListTile(
                       onTap: () async {
                         switch (index) {

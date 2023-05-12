@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_cubit.dart';
-import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/user_state.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_mangment/screens/main_layer/screens/home_screen/controller/task_state.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
 import 'package:task_mangment/screens/main_layer/screens/home_screen/widgets/custom_task_list.dart';
 import 'package:task_mangment/shared_widgets/custom_shimmer.dart';
@@ -15,7 +15,7 @@ class HomeScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, UserState>(
+    return BlocBuilder<TaskCubit, TaskState>(
       builder: (context, state) {
         if (state is UserLoadedState) {
           final userData = state.user;
@@ -75,21 +75,21 @@ class HomeScreenBody extends StatelessWidget {
                   state: 'today',
                   label: 'today',
                   userId: userId,
-                  userCubit: BlocProvider.of<UserCubit>(context),
+                  userCubit: BlocProvider.of<TaskCubit>(context),
                 ),
                 CustomTaskList(
                   userName: userData.userName,
                   state: 'upcoming',
                   label: 'Upcoming',
                   userId: userId,
-                  userCubit: BlocProvider.of<UserCubit>(context),
+                  userCubit: BlocProvider.of<TaskCubit>(context),
                 ),
                 CustomTaskList(
                   userName: userData.userName,
                   state: 'completed',
                   label: 'Completed',
                   userId: userId,
-                  userCubit: BlocProvider.of<UserCubit>(context),
+                  userCubit: BlocProvider.of<TaskCubit>(context),
                 ),
               ],
             ),
