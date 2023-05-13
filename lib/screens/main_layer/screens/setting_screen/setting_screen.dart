@@ -45,21 +45,24 @@ class SettingScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-              titleSpacing: 12,
+              titleSpacing: 4,
               flexibleSpace: FlexibleSpaceBar(
-                background: Image.asset(
-                  ImageConstManger.logoImage,
-                  width: 70.r,
-                  height: 70.r,
+                background: Padding(
+                  padding: const EdgeInsets.all(16.0).r,
+                  child: Image.asset(
+                    ImageConstManger.logoImage,
+                    width: 50.r,
+                    height: 50.r,
+                  ),
                 ),
               ),
-              expandedHeight: 200.h,
+              expandedHeight: 150.h,
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) => Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8)
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16)
                           .r,
                   child: Container(
                     decoration: BoxDecoration(
