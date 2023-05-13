@@ -26,6 +26,26 @@ class UserErrorState extends TaskState {
 
 class UserConnectedState extends TaskState {}
 
+class ChangeTaskState extends TaskState {
+  final bool isTaskCompleted;
+
+  ChangeTaskState({required this.isTaskCompleted});
+}
+
 class UserReconnectedState extends TaskState {}
 
 class UserDisconnectedState extends TaskState {}
+
+class TaskLoading extends TaskState {}
+
+class TaskLoaded extends TaskState {
+  final List<TaskModel> tasks;
+
+  TaskLoaded(this.tasks);
+}
+
+class TaskError extends TaskState {
+  final String errorMessage;
+
+  TaskError(this.errorMessage);
+}

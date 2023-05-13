@@ -27,7 +27,6 @@ class CustomTaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<TaskCubit, TaskState>(
       builder: (context, state) {
         if (state is UserLoadingState) {
@@ -110,6 +109,7 @@ class CustomTaskList extends StatelessWidget {
                                 builder: (context) => TaskDetailsScreen(
                                   task: stateTasks[index],
                                   userName: userName ?? '',
+                                  userId: userId,
                                 ),
                               ),
                             );

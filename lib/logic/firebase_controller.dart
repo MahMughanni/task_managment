@@ -19,6 +19,16 @@ class FireBaseRepository {
     return querySnapshot.docs;
   }
 
+  static Future<void> updateTask(
+      {required String userId,
+      required String taskId,
+      required String newState}) async {
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+    final taskDoc = userDoc.collection('tasks').doc(taskId);
+
+    await taskDoc.update({'state': newState});
+  }
+
   static Future<void> editUserInfo({
     required String userName,
     required String phone,
@@ -66,6 +76,34 @@ class FireBaseRepository {
     final uploadTask = ref.putFile(imageFile, metadata);
     final downloadUrl = await (await uploadTask).ref.getDownloadURL();
     return downloadUrl.toString();
+  }
+
+  static Future<UserModel> getUserInfo2({String? userId}) async {
+    final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+    final userData = await fireStore.collection('users').doc(userId).get();
+    final userName = userData.get('username');
+    final role = userData.get('role');
+    final phone = userData.get('phone');
+    final profileImageUrl = userData.get('profileImageUrl');
+    final position = userData.get('position');
+    final email = FirebaseAuth.instance.currentUser!.email;
+    final password =
+        FirebaseAuth.instance.currentUser!.providerData[0].providerId ==
+                'password'
+            ? '********'
+            : '';
+
+    final userModel = UserModel(
+      userName: userName,
+      uId: userId,
+      phone: phone,
+      role: role,
+      profileImageUrl: profileImageUrl,
+      position: position,
+      email: email!,
+      password: password,
+    );
+    return userModel;
   }
 
   static Future<UserModel> getUserInfo() async {

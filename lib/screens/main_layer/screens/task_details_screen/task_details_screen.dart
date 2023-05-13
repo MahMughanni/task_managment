@@ -1,28 +1,43 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:task_mangment/logic/firebase_controller.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/model/task_model.dart';
 import 'package:task_mangment/screens/main_layer/screens/task_details_screen/widgets/custom_rich_text.dart';
 import 'package:task_mangment/shared_widgets/custom_appbar.dart';
 import 'package:task_mangment/shared_widgets/custom_form_field.dart';
 import 'package:task_mangment/utils/app_constants.dart';
-import 'package:task_mangment/utils/extentions/padding_extention.dart';
 
-class TaskDetailsScreen extends StatelessWidget {
-  TaskDetailsScreen({Key? key, required this.task, required this.userName})
-      : super(key: key);
+class TaskDetailsScreen extends StatefulWidget {
+  const TaskDetailsScreen({
+    Key? key,
+    required this.task,
+    required this.userName,
+    required this.userId,
+  }) : super(key: key);
 
-  final String userName;
+  final String userName, userId;
   final TaskModel task;
 
-  final user = FireBaseRepository.getUserInfo();
+  @override
+  State<TaskDetailsScreen> createState() => _TaskDetailsScreenState();
+}
+
+class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
+  bool isTaskCompleted = false;
+
+  void _updateTaskState(bool isDone) {
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(widget.userId);
+    final taskDoc = userDoc.collection('tasks').doc(widget.task.id);
+    setState(() {
+      isTaskCompleted = isDone;
+    });
+
+    taskDoc.update({'state': isDone ? 'completed' : 'upcoming'});
+  }
 
   @override
   Widget build(BuildContext context) {
-    const style = TextStyle(
-      fontWeight: AppConstFontWeight.regular,
-      fontSize: 22,
-    );
-    // print(user.toString());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppbar(
@@ -35,88 +50,100 @@ class TaskDetailsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(widget.task.title.toString(),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: ColorConstManger.primaryColor,
+                      )),
+              4.verticalSpace,
               Text(
-                task.title.toString(),
-                style: TextStyle(
-                  fontWeight: AppConstFontWeight.semiBold,
-                  fontSize: 22,
-                  color: ColorConstManger.primaryColor.withOpacity(.7),
-                ),
+                widget.task.state.toString(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(color: Colors.black),
               ),
-              10.ph,
-              Text(
-                task.state.toString(),
-                style: style,
-              ),
-              10.ph,
               CustomDetailsRichText(
                 title: 'Uploaded by   ',
-                titleStyle: style,
-                subTitle: userName,
+                titleStyle: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(color: Colors.black),
+                subTitle: widget.userName,
               ),
               CustomDetailsRichText(
                 title: 'Uploaded on  ',
-                titleStyle: style,
-                subTitle: task.startTime.toString(),
-                subTitleStyle: style.copyWith(
-                  color: Colors.blueAccent,
-                  fontSize: 18,
-                  fontWeight: AppConstFontWeight.light,
-                ),
+                titleStyle: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(color: Colors.black),
+                subTitle: widget.task.startTime.toString(),
+                subTitleStyle: Theme.of(context).textTheme.bodySmall,
               ),
               CustomDetailsRichText(
-                title: 'Dead line  ',
-                titleStyle: style,
-                subTitle: task.endTime.toString(),
-                subTitleStyle: style.copyWith(
-                  color: Colors.blueAccent,
-                  fontSize: 18,
-                  fontWeight: AppConstFontWeight.light,
-                ),
-              ),
-              16.ph,
-              Text(
-                'Task Description ',
-                style: style.copyWith(
-                  fontSize: 20,
-                  fontWeight: AppConstFontWeight.light,
-                ),
-              ),
-              16.ph,
+                  title: 'Dead line  ',
+                  titleStyle: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(color: Colors.black),
+                  subTitle: widget.task.endTime.toString(),
+                  subTitleStyle: Theme.of(context).textTheme.bodySmall),
+              Text('Task Description ',
+                  style: Theme.of(context).textTheme.bodyLarge),
               CustomTextFormField(
                 enabled: false,
-                initialValue: task.description.toString(),
-                maxLine: 10,
+                initialValue: widget.task.description.toString(),
+                maxLine: 6,
                 keyboardType: TextInputType.multiline,
                 hintText: '',
               ),
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: task.imageUrls.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16.0,
-                        horizontal: 8,
+              widget.task.imageUrls.isNotEmpty
+                  ? SizedBox(
+                      height: 170.h,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: widget.task.imageUrls.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16.0,
+                              horizontal: 8,
+                            ).r,
+                            child: Container(
+                              width: 120.w,
+                              height: 150.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(9).r,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                      widget.task.imageUrls[index]),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      child: Container(
-                        width: 120,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(9),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(task.imageUrls[index]),
-                          ),
-                        ),
+                    )
+                  : const SizedBox(),
+              widget.task.state == 'upcoming' || widget.task.state == 'today'
+                  ? CheckboxListTile(
+                      contentPadding: const EdgeInsets.all(16).r,
+                      value: isTaskCompleted,
+                      onChanged: (val) {
+                       setState(() {
+                         _updateTaskState(val ?? false);
+                       });
+                      },
+                      title: Text(
+                        'Mark as Done',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(color: Colors.black),
                       ),
-                    );
-                  },
-                ),
-              ),
+                    )
+                  : const SizedBox(),
             ],
           ),
         ),

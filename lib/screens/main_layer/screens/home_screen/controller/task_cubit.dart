@@ -14,6 +14,8 @@ class TaskCubit extends Cubit<TaskState> {
   StreamSubscription<DocumentSnapshot>? userSubscription;
   DocumentReference? userDoc;
 
+  bool isTaskCompleted = false;
+
   TaskCubit({required this.userId}) : super(UserInitial()) {
     userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
     userSubscription = userDoc?.snapshots().listen((userData) async {
@@ -57,6 +59,11 @@ class TaskCubit extends Cubit<TaskState> {
           break;
       }
     });
+  }
+
+  void changeTaskState(isDone) {
+    isTaskCompleted = isDone;
+    emit(ChangeTaskState(isTaskCompleted: isTaskCompleted));
   }
 
   void _loadUserTasks() async {

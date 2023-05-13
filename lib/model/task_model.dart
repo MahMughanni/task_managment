@@ -8,7 +8,7 @@ class TaskModel {
   final String description;
   final String startTime;
   final String endTime;
-  final String state;
+  String state;
   final List<String> imageUrls;
   final Timestamp createdAt;
 
