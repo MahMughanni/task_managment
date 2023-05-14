@@ -115,13 +115,15 @@ class CustomTaskList extends StatelessWidget {
                             );
                           },
                           child: ListViewItemBody(
-                              title: stateTasks[index].description,
-                              startTime: stateTasks[index].startTime,
-                              userName: stateTasks[index].title,
-                              taskCategory: stateTasks[index].state,
-                              url: stateTasks[index].imageUrls.isNotEmpty
-                                  ? stateTasks[index].imageUrls.first
-                                  : ''),
+                            title: stateTasks[index].description,
+                            startTime: stateTasks[index].startTime,
+                            userName: stateTasks[index].title,
+                            taskCategory: stateTasks[index].state,
+                            url: stateTasks[index].imageUrls.isNotEmpty
+                                ? stateTasks[index].imageUrls.first
+                                : '',
+                            status: stateTasks[index].state,
+                          ),
                         ),
                       ),
                     ),

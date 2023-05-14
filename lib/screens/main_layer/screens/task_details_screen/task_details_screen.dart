@@ -24,16 +24,25 @@ class TaskDetailsScreen extends StatefulWidget {
 
 class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   bool isTaskCompleted = false;
+  String initialTaskState = '';
+
+  @override
+  void initState() {
+    super.initState();
+    initialTaskState = widget.task.state;
+    isTaskCompleted = initialTaskState == 'completed';
+  }
 
   void _updateTaskState(bool isDone) {
     final userDoc =
         FirebaseFirestore.instance.collection('users').doc(widget.userId);
     final taskDoc = userDoc.collection('tasks').doc(widget.task.id);
+
     setState(() {
       isTaskCompleted = isDone;
     });
 
-    taskDoc.update({'state': isDone ? 'completed' : 'upcoming'});
+    taskDoc.update({'state': isDone ? 'completed' : initialTaskState});
   }
 
   @override
@@ -104,11 +113,11 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                         shrinkWrap: true,
                         itemCount: widget.task.imageUrls.length,
                         itemBuilder: (context, index) {
+                          final imageUrl = widget.task.imageUrls[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(
-                              vertical: 16.0,
-                              horizontal: 8,
-                            ).r,
+                                    vertical: 16.0, horizontal: 8)
+                                .r,
                             child: Container(
                               width: 120.w,
                               height: 150.h,
@@ -116,8 +125,9 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                                 borderRadius: BorderRadius.circular(9).r,
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      widget.task.imageUrls[index]),
+                                  image: NetworkImage(imageUrl),
+                                  onError: (_, __) => const AssetImage(
+                                      ImageConstManger.logoImage),
                                 ),
                               ),
                             ),
@@ -131,9 +141,9 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                       contentPadding: const EdgeInsets.all(16).r,
                       value: isTaskCompleted,
                       onChanged: (val) {
-                       setState(() {
-                         _updateTaskState(val ?? false);
-                       });
+                        setState(() {
+                          _updateTaskState(val ?? false);
+                        });
                       },
                       title: Text(
                         'Mark as Done',

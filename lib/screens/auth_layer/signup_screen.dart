@@ -182,14 +182,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             authCubit.signUp(
-                              emailController.text.trim().toString(),
-                              passwordController.text.trim().toString(),
-                              userNameController.text.trim().toString(),
-                              phoneController.text.trim().toString(),
+                              email: emailController.text.trim().toString(),
+                              password:
+                                  passwordController.text.trim().toString(),
+                              username:
+                                  userNameController.text.trim().toString(),
+                              phone: phoneController.text.trim().toString(),
                             );
-                            //
+
                             // AppRouter.goToAndRemove(
-                            //     screenName: NamedRouter.loginScreen);
+                            //   routeName: NamedRouter.loginScreen,
+                            // );
                           } else {
                             UtilsConfig.showSnackBarMessage(
                                 message: 'Enter valid Information',

@@ -2,14 +2,26 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+const String imagePath = 'assets/images';
+const String iconsPath = 'assets/icons';
+const String animationsPath = 'assets/animations';
+
 class ImageConstManger {
-  static const String imagePath = 'assets/images';
   static const String logoImage = '$imagePath/logo.png';
   static const String profileImage = '$imagePath/profile.png';
   static const String logoutImage = '$imagePath/logout.png';
   static const String emailImage = '$imagePath/email.png';
   static const String aboutUsImage = '$imagePath/about.png';
   static const String langImage = '$imagePath/lang.png';
+  static const String noInternet = '$animationsPath/disconnected_network.json';
+}
+
+class SvgIconsConstManger {
+  static const String phone = '$iconsPath/phone.svg';
+  static const String whatsapp = '$iconsPath/whatsapp.svg';
+  static const String email = '$iconsPath/email.svg';
+  static const String done = '$iconsPath/done.svg';
+  static const String calender = '$iconsPath/calender.svg';
 }
 
 class ColorConstManger {

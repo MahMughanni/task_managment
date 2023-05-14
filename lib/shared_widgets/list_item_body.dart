@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_mangment/utils/app_constants.dart';
+import 'package:task_mangment/utils/utils_config.dart';
 
 import 'custom_circle_image.dart';
 
@@ -12,9 +14,10 @@ class ListViewItemBody extends StatelessWidget {
     required this.startTime,
     required this.title,
     required this.url,
+    required this.status,
   }) : super(key: key);
 
-  final String userName, taskCategory, startTime, title, url;
+  final String userName, taskCategory, startTime, title, url, status;
 
   @override
   Widget build(BuildContext context) {
@@ -82,18 +85,34 @@ class ListViewItemBody extends StatelessWidget {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                        text: startTime,
-                        style: TextStyle(
-                            fontWeight: AppConstFontWeight.regular,
-                            color: Colors.deepOrange,
-                            fontSize: 11.sp),
-                        children: [
-                          WidgetSpan(
-                              child: Icon(
-                            Icons.calendar_month,
-                            size: 15.r,
-                          ))
-                        ]),
+                      text: UtilsConfig.formatDate(startTime),
+                      style: TextStyle(
+                        fontWeight: AppConstFontWeight.regular,
+                        color: Colors.deepOrange,
+                        fontSize: 11.sp,
+                      ),
+                      children: [
+                        WidgetSpan(
+                          child: status == 'completed'
+                              ? Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: SvgPicture.asset(
+                                    SvgIconsConstManger.done,
+                                    width: 15.r,
+                                    height: 15.r,
+                                  ),
+                              )
+                              :  Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: SvgPicture.asset(
+                              SvgIconsConstManger.calender,
+                              width: 15.r,
+                              height: 15.r,
+                            ),
+                          )
+                        ),
+                      ],
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),

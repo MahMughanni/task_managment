@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
+import 'package:task_mangment/core/routes/app_router.dart';
+import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
 part 'authentication_state.dart';
@@ -22,7 +24,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     final password = await storage.read(key: 'password');
 
     if (email != null && password != null) {
-      if (firebaseAuth != null) { // check if firebaseAuth is not null
+      if (firebaseAuth != null) {
+        // check if firebaseAuth is not null
         try {
           final userCredential = await firebaseAuth.signInWithEmailAndPassword(
             email: email,
@@ -36,12 +39,12 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
           emit(LoginFailure('An error occurred during auto login.'));
         }
       } else {
-        emit(LoginFailure('firebaseAuth is null.')); // handle the case where firebaseAuth is null
+        emit(LoginFailure(
+            'firebaseAuth is null.')); // handle the case where firebaseAuth is null
       }
     } else {
       emit(LoginInitial());
     }
-
   }
 
   Future<void> logIn(String email, String password) async {
@@ -74,7 +77,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   Future<void> signUp(
-      String email, String password, String username, String phone) async {
+      {required String email,
+      required String password,
+      required String username,
+      required String phone}) async {
     try {
       emit(SignUpProgress());
 
@@ -88,9 +94,14 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         'role': 'user',
         'profileImageUrl': '',
         'position': '',
+        'email': email, // add email field to the document
       });
+
       User user = userCredential.user!;
+
+      print('success');
       emit(SignUpSuccess(user));
+      AppRouter.goToAndRemove(routeName: NamedRouter.mainScreen);
     } on FirebaseAuthException catch (e) {
       emit(SignUpFailure(e.message ?? 'An unknown error occurred.'));
     } catch (e) {

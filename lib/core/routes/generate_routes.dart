@@ -7,6 +7,7 @@ import 'package:task_mangment/screens/main_layer/screens/calender_screen/calende
 import 'package:task_mangment/screens/main_layer/screens/company_tasks_screen/company_tasks.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/employee_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/profile_screen.dart';
+import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/widgets/employee_detiails.dart';
 
 import '../../screens/auth_layer/splash_screen.dart';
 import 'named_router.dart';
@@ -25,6 +26,11 @@ class OnGenerateRouter {
       case NamedRouter.companyTasks:
         page = CompanyTasksScreen();
         break;
+      case NamedRouter.employeeDetailsScreen:
+        page = EmployeeDetailsScreen(
+          userData: settings.arguments as Map<String, dynamic>,
+        );
+        break;
       case NamedRouter.splashScreen:
         page = const SplashScreen();
         break;
@@ -33,7 +39,12 @@ class OnGenerateRouter {
         break;
       case NamedRouter.calenderScreen:
         return MaterialPageRoute(builder: (BuildContext context) {
-          return CalendarScreen(userId: settings.arguments?.toString() ?? '');
+          final Map<String, dynamic>? args =
+              settings.arguments as Map<String, dynamic>?;
+          return CalendarScreen(
+            userId: args?['userId'] ?? '',
+            userName: args?['userName'] ?? '',
+          );
         });
       case NamedRouter.employeeScreen:
         page = EmployeeScreen();

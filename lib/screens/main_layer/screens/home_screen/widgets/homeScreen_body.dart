@@ -97,11 +97,7 @@ class HomeScreenBody extends StatelessWidget {
         } else if (state is UserErrorState) {
           return Text('Error: ${state.error}');
         } else {
-          // Handle other states (e.g. UserInitial)
-          return ListView.builder(
-              shrinkWrap: true,
-              itemCount: 15,
-              itemBuilder: (context, index) => const ShimmerListViewItemBody());
+          return Container();
         }
       },
     );

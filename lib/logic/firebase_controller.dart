@@ -79,8 +79,10 @@ class FireBaseRepository {
   }
 
   static Future<UserModel> getUserInfo2({String? userId}) async {
+    final id = FirebaseAuth.instance.currentUser!.uid;
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
-    final userData = await fireStore.collection('users').doc(userId).get();
+    final userData =
+        await fireStore.collection('users').doc(userId ?? id).get();
     final userName = userData.get('username');
     final role = userData.get('role');
     final phone = userData.get('phone');
@@ -106,34 +108,34 @@ class FireBaseRepository {
     return userModel;
   }
 
-  static Future<UserModel> getUserInfo() async {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
-    final FirebaseFirestore fireStore = FirebaseFirestore.instance;
-    final userData = await fireStore.collection('users').doc(userId).get();
-    final userName = userData.get('username');
-    final role = userData.get('role');
-    final phone = userData.get('phone');
-    final profileImageUrl = userData.get('profileImageUrl');
-    final position = userData.get('position');
-    final email = FirebaseAuth.instance.currentUser!.email;
-    final password =
-        FirebaseAuth.instance.currentUser!.providerData[0].providerId ==
-                'password'
-            ? '********'
-            : '';
-
-    final userModel = UserModel(
-      userName: userName,
-      uId: userId,
-      phone: phone,
-      role: role,
-      profileImageUrl: profileImageUrl,
-      position: position,
-      email: email!,
-      password: password,
-    );
-    return userModel;
-  }
+  // static Future<UserModel> getUserInfo() async {
+  //   final userId = FirebaseAuth.instance.currentUser!.uid;
+  //   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  //   final userData = await fireStore.collection('users').doc(userId).get();
+  //   final userName = userData.get('username');
+  //   final role = userData.get('role');
+  //   final phone = userData.get('phone');
+  //   final profileImageUrl = userData.get('profileImageUrl');
+  //   final position = userData.get('position');
+  //   final email = FirebaseAuth.instance.currentUser!.email;
+  //   final password =
+  //       FirebaseAuth.instance.currentUser!.providerData[0].providerId ==
+  //               'password'
+  //           ? '********'
+  //           : '';
+  //
+  //   final userModel = UserModel(
+  //     userName: userName,
+  //     uId: userId,
+  //     phone: phone,
+  //     role: role,
+  //     profileImageUrl: profileImageUrl,
+  //     position: position,
+  //     email: email!,
+  //     password: password,
+  //   );
+  //   return userModel;
+  // }
 
   static Stream<List<TaskModel>> getUserTasksByDateToCalender(
       {required String userId}) {

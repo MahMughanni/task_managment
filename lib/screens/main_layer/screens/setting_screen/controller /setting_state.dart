@@ -9,7 +9,6 @@ class EmployeeLoadingState extends SettingState {}
 
 class EmployeeLoadedState extends SettingState {
   final List<DocumentSnapshot> users;
-
   EmployeeLoadedState({required this.users});
 }
 

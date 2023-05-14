@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/utils/extentions/padding_extention.dart';
-
 import 'app_constants.dart';
 
 class UtilsConfig {
@@ -51,9 +51,31 @@ class UtilsConfig {
     );
   }
 
-  static String formatTime(data) {
-    DateTime createdDate = DateTime.parse(data);
-    String formattedDate = DateFormat.MMMMEEEEd().format(createdDate);
+  static String formatDate(String dateString) {
+    final List<String> months = [
+      '',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+
+    final List<String> parts = dateString.split(' ');
+    final String month = months
+        .indexWhere((m) => m.toLowerCase() == parts[1].toLowerCase())
+        .toString();
+    final String day = parts[2].replaceAll(',', '');
+    final String year = parts[3];
+
+    final String formattedDate = '$day.${months[int.parse(month)]}.$year';
     return formattedDate;
   }
 

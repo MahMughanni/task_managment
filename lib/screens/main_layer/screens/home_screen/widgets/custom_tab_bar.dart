@@ -88,9 +88,13 @@ class CustomTabBarViewTabs extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      AppRouter.goTo(
-                          screenName: NamedRouter.calenderScreen,
-                          arguments: userId);
+                      AppRouter.goToWithManyArguments(
+                        screenName: NamedRouter.calenderScreen,
+                        arguments: {
+                          'userId': userId,
+                          'userName': userName,
+                        },
+                      );
                     },
                     icon: Icon(
                       Icons.calendar_month_sharp,
