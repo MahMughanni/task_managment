@@ -9,7 +9,6 @@ import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/em
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/profile_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/task_details_screen/task_details_screen.dart';
 
-import '../../screens/main_layer/screens/calender_screen/calender_screen.dart';
 
 class NamedRouter {
   static const String splashScreen = '/';

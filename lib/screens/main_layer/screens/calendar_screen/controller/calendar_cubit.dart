@@ -2,11 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:task_mangment/logic/calender_controller.dart';
 import 'package:task_mangment/model/task_model.dart';
 
-part 'calender_state.dart';
+part 'calendar_state.dart';
 
 class CalenderCubit extends Cubit<CalenderState> {
   final String userId;
-  final CalenderController calenderController;
+  final CalendarController calenderController;
 
   CalenderCubit({
     required this.userId,
@@ -18,8 +18,8 @@ class CalenderCubit extends Cubit<CalenderState> {
     emit(state.copyWith(isLoading: true));
     try {
       final tasks =
-          await CalenderController.getTasksForDay(selectedDay, userId);
-      final groupedTasks = CalenderController.groupTasks(tasks);
+          await CalendarController.getTasksForDay(selectedDay, userId);
+      final groupedTasks = CalendarController.groupTasks(tasks);
       print(groupedTasks[selectedDay]);
       final selectedTasks = groupedTasks[selectedDay] ?? [];
       print(selectedTasks);

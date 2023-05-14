@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,7 +27,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
     if (email != null && password != null) {
       if (firebaseAuth != null) {
-        // check if firebaseAuth is not null
         try {
           final userCredential = await firebaseAuth.signInWithEmailAndPassword(
             email: email,
@@ -34,18 +35,55 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
           loggedInUser = userCredential.user;
 
-          emit(LoginSuccess(userCredential.user));
+          emit(LoginSuccess(userCredential.user!, isAdmin: false));
         } catch (e) {
           emit(LoginFailure('An error occurred during auto login.'));
         }
       } else {
-        emit(LoginFailure(
-            'firebaseAuth is null.')); // handle the case where firebaseAuth is null
+        emit(LoginFailure('firebaseAuth is null.'));
       }
     } else {
       emit(LoginInitial());
     }
   }
+
+  // Future<void> logIn(String email, String password) async {
+  //   try {
+  //     emit(LoginInProgress());
+  //
+  //     final UserCredential userCredential = await firebaseAuth
+  //         .signInWithEmailAndPassword(email: email, password: password);
+  //     final storage = FlutterSecureStorage();
+  //     await storage.write(key: 'email', value: email);
+  //     await storage.write(key: 'password', value: password);
+  //
+  //     final userDoc = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(userCredential.user!.uid)
+  //         .get();
+  //     final userData = userDoc.data() as Map<String, dynamic>;
+  //
+  //     // Check the user's role
+  //     final role = userData['role'];
+  //     if (role == 'admin') {
+  //       // Redirect to the admin screen
+  //       emit(LoginSuccess(userCredential.user!, isAdmin: true));
+  //     } else {
+  //       // Redirect to the home screen
+  //       emit(LoginSuccess(userCredential.user!));
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'user-not-found') {
+  //       UtilsConfig.showSnackBarMessage(
+  //           message: 'No user found for that email.', status: false);
+  //     } else if (e.code == 'wrong-password') {
+  //       UtilsConfig.showSnackBarMessage(
+  //           message: 'Wrong password provided for that user.', status: false);
+  //     }
+  //   } catch (e) {
+  //     emit(LoginFailure('An unknown error occurred.'));
+  //   }
+  // }
 
   Future<void> logIn(String email, String password) async {
     try {
@@ -54,14 +92,33 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       final UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
 
-      // Save user info to secure storage
+      final userData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+
+      final role = userData['role'];
+
+      if (role == 'user') {
+        // Navigate to the home screen
+        AppRouter.goToAndRemove(routeName: NamedRouter.mainScreen);
+      } else if (role == 'admin') {
+        // Navigate to the admin screen
+        ///TODO Start Work on Admin Screens
+        AppRouter.goToAndRemove(routeName: NamedRouter.employeeScreen);
+      } else {
+        // Unknown role, show an error message
+        UtilsConfig.showSnackBarMessage(
+            message: 'Unknown user role.', status: false);
+        return;
+      }
+
       const storage = FlutterSecureStorage();
       await storage.write(key: 'email', value: email);
       await storage.write(key: 'password', value: password);
 
       UtilsConfig.showSnackBarMessage(
           message: ' Login Success !', status: true);
-
       emit(LoginSuccess(userCredential.user!));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

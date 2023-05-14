@@ -1,4 +1,4 @@
-part of 'calender_cubit.dart';
+part of 'calendar_cubit.dart';
 
 class CalenderState {
   final bool isLoading;

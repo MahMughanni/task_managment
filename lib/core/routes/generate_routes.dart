@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-
 import 'package:task_mangment/screens/auth_layer/login_screen.dart';
 import 'package:task_mangment/screens/auth_layer/signup_screen.dart';
+import 'package:task_mangment/screens/auth_layer/splash_screen.dart';
 import 'package:task_mangment/screens/main_layer/main_screen.dart';
-import 'package:task_mangment/screens/main_layer/screens/calender_screen/calender_screen.dart';
+import 'package:task_mangment/screens/main_layer/screens/calendar_screen/calender_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/company_tasks_screen/company_tasks.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/employee_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/profile_screen.dart';
 import 'package:task_mangment/screens/main_layer/screens/setting_screen/pages/widgets/employee_detiails.dart';
 
-import '../../screens/auth_layer/splash_screen.dart';
 import 'named_router.dart';
 
 class OnGenerateRouter {
@@ -47,7 +46,7 @@ class OnGenerateRouter {
           );
         });
       case NamedRouter.employeeScreen:
-        page = EmployeeScreen();
+        page = const EmployeeScreen();
         break;
       case NamedRouter.signUpScreen:
         page = const SignUpScreen();

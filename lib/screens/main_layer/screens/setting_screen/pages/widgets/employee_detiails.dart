@@ -123,18 +123,21 @@ class EmployeeDetailsScreen extends StatelessWidget {
                                 imagePath: SvgIconsConstManger.whatsapp,
                                 onPressed: () async {
                                   final phone = userData['phone'];
-                                  final url = Uri.parse("https://wa.me/$phone");
-
-                                  if (await canLaunchUrl(url)) {
-                                    await launchUrl(url);
-                                  } else {
-                                    throw 'Could not launch $url';
-                                  }
+                                  final url =
+                                      Uri.encodeFull('https://wa.me/$phone');
+                                  await launch(url);
                                 },
                               ),
                               CustomIconsButton(
                                 imagePath: SvgIconsConstManger.email,
-                                onPressed: () {},
+                                onPressed: () async {
+                                  final recipientEmail = userData['email'];
+                                  final uri =
+                                      Uri.encodeFull('mailto:$recipientEmail');
+
+                                  final url = Uri.tryParse(uri);
+                                  await launchUrl(url!);
+                                },
                               ),
                             ],
                           ),

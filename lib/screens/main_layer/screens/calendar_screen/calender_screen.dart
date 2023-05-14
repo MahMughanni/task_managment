@@ -5,7 +5,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:task_mangment/logic/calender_controller.dart';
 import 'package:task_mangment/screens/main_layer/screens/task_details_screen/task_details_screen.dart';
 import 'package:task_mangment/shared_widgets/list_item_body.dart';
-import 'controller/calender_cubit.dart';
+import 'controller/calendar_cubit.dart';
 
 class CalendarScreen extends StatefulWidget {
   final String userId, userName;
@@ -28,7 +28,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     super.initState();
     _calenderCubit = CalenderCubit(
       userId: widget.userId,
-      calenderController: CalenderController(),
+      calenderController: CalendarController(),
     )..init();
   }
 

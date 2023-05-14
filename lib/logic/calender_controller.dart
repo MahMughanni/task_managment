@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/task_model.dart';
 
-class CalenderController {
+class CalendarController {
   static Future<List<TaskModel>> getTasksForDay(DateTime day, String userId) async {
     final startOfDay = DateTime.utc(day.year, day.month, day.day);
     final endOfDay = startOfDay
