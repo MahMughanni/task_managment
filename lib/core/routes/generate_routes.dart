@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_mangment/admin/screen/admin_home_screen.dart';
 import 'package:task_mangment/user/auth_layer/login_screen.dart';
 import 'package:task_mangment/user/auth_layer/signup_screen.dart';
 import 'package:task_mangment/user/auth_layer/splash_screen.dart';
@@ -16,7 +17,9 @@ class OnGenerateRouter {
     Widget page;
     switch (settings.name) {
       case NamedRouter.mainScreen:
-        page = const MainScreen();
+        page =  MainScreen(
+          userRole: settings.arguments as String ?? 'user',
+        );
         break;
 
       case NamedRouter.loginScreen:
@@ -50,6 +53,9 @@ class OnGenerateRouter {
         break;
       case NamedRouter.signUpScreen:
         page = const SignUpScreen();
+        break;
+      case NamedRouter.adminHomeScreen:
+        page = const AdminHomeScreen();
         break;
       default:
         page = const Scaffold(

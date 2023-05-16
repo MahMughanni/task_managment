@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_mangment/admin/screen/admin_home_screen.dart';
 import 'package:task_mangment/user/main_layer/screens/add_task_screen/addtask_screen.dart';
 import 'package:task_mangment/user/main_layer/screens/assigned_screen/assigned_screen.dart';
 import 'package:task_mangment/user/main_layer/screens/home_screen/home_screen.dart';
@@ -8,21 +10,28 @@ import 'package:task_mangment/user/main_layer/screens/notification_screen/notifi
 import 'package:task_mangment/user/main_layer/screens/setting_screen/setting_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({Key? key, this.userRole}) : super(key: key);
+  final String? userRole;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  List screen = [
-    HomeScreen(),
-    const AssignedScreen(),
-    const AddTaskScreen(),
-    const NotificationScreen(),
-    SettingScreen(),
-  ];
+  late List<Widget> screens;
   int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    screens = [
+      (widget.userRole == 'admin') ? const AdminHomeScreen() : HomeScreen(),
+      const AssignedScreen(),
+      const AddTaskScreen(),
+      const NotificationScreen(),
+      SettingScreen(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       extendBody: true,
-      body: screen[currentIndex],
+      body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
         backgroundColor: Colors.white,
@@ -41,35 +50,40 @@ class _MainScreenState extends State<MainScreen> {
         onTap: onTapNavBottom,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(
-                CupertinoIcons.home,
-                size: 20.r,
-              ),
-              label: 'Home'),
+            icon: Icon(
+              CupertinoIcons.home,
+              size: 20.0.r,
+            ),
+            label: 'Home',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(
-                CupertinoIcons.doc_checkmark,
-                size: 20.r,
-              ),
-              label: 'Assigned'),
+            icon: Icon(
+              CupertinoIcons.doc_checkmark,
+              size: 20.0.r,
+            ),
+            label: (widget.userRole == 'admin') ? 'projects' : 'Assigned',
+          ),
           const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.shopping_bag,
-                color: Colors.transparent,
-              ),
-              label: ''),
+            icon: Icon(
+              Icons.shopping_bag,
+              color: Colors.transparent,
+            ),
+            label: '',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.notifications_none_sharp,
-                size: 20.r,
-              ),
-              label: 'Notification'),
+            icon: Icon(
+              Icons.notifications_none_sharp,
+              size: 20.0.r,
+            ),
+            label: 'Notification',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(
-                CupertinoIcons.settings_solid,
-                size: 20.r,
-              ),
-              label: 'Setting'),
+            icon: Icon(
+              CupertinoIcons.settings_solid,
+              size: 20.0.r,
+            ),
+            label: 'Setting',
+          ),
         ],
       ),
       floatingActionButtonLocation:
@@ -108,7 +122,6 @@ class CustomFloatingBtn extends StatelessWidget {
         decoration: const BoxDecoration(shape: BoxShape.circle),
         child: FloatingActionButton(
           shape: const CircleBorder(),
-
           elevation: 7,
           backgroundColor: color,
           onPressed: onBtnPressed,

@@ -10,4 +10,5 @@ class NamedRouter {
   static const String employeeScreen = '/employee';
   static const String calenderScreen = '/calender';
   static const String employeeDetailsScreen = '/EmployeeDetails';
+  static const String adminHomeScreen = '/adminHomeScreen';
 }
