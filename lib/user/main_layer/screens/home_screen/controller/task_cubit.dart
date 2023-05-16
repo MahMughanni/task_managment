@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/model/task_model.dart';
 import 'package:task_mangment/model/user_model.dart';
 import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_state.dart';
@@ -21,46 +20,23 @@ class TaskCubit extends Cubit<TaskState> {
     userSubscription = userDoc?.snapshots().listen((userData) async {
       try {
         final user = UserModel.fromSnapshot(userData);
-        if (!userSubscription!.isPaused) {
+        if (!isClosed) {
           emit(UserLoadingState());
         }
-        final tasksCollection = userDoc?.collection('tasks');
-        if (tasksCollection != null) {
-          final querySnapshot = await tasksCollection
-              .orderBy('createdAt', descending: true)
-              .get();
-          final tasks = <TaskModel>[];
-          for (var doc in querySnapshot.docs) {
-            final task = TaskModel.fromSnapshot(doc);
-            tasks.add(task);
-          }
-          tasksSubscription =
-              FireBaseRepository.getUserTasksStream(userId: userId).listen(
-            (tasks) {
-              if (!tasksSubscription!.isPaused) {
-                emit(UserLoadedState(user: user, tasks: tasks));
-              }
-            },
-            onError: (error) {
-              if (!tasksSubscription!.isPaused) {
-                emit(UserErrorState(error: error.toString()));
-              }
-            },
-          );
-        }
+        await _loadUserTasks(user);
       } catch (e) {
-        if (!userSubscription!.isPaused) {
+        if (!isClosed) {
           emit(UserErrorState(error: e.toString()));
         }
       }
     });
 
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (!userSubscription!.isPaused) {
+      if (!isClosed) {
         switch (result) {
           case ConnectivityResult.wifi:
           case ConnectivityResult.mobile:
-            _loadUserTasks();
+            _loadUserTasks(null);
             emit(UserConnectedState());
             break;
           case ConnectivityResult.none:
@@ -74,26 +50,29 @@ class TaskCubit extends Cubit<TaskState> {
     });
   }
 
-  void changeTaskState(isDone) {
+  void changeTaskState(bool isDone) {
     isTaskCompleted = isDone;
-    emit(ChangeTaskState(isTaskCompleted: isTaskCompleted));
+    if (!isClosed) {
+      emit(ChangeTaskState(isTaskCompleted: isTaskCompleted));
+    }
   }
 
-  void _loadUserTasks() async {
+  Future<void> _loadUserTasks(UserModel? user) async {
     // Cancel any active task subscription
     tasksSubscription?.cancel();
 
-    // Get the user document
-    final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
-
     try {
-      final userSnapshot = await userDoc.get();
-      final user = UserModel.fromSnapshot(userSnapshot);
+      if (user == null) {
+        final userSnapshot = await userDoc!.get();
+        user = UserModel.fromSnapshot(userSnapshot);
+      }
 
-      emit(UserLoadingState());
+      if (!isClosed) {
+        emit(UserLoadingState());
+      }
 
       // Get the tasks collection
-      final tasksCollection = userDoc.collection('tasks');
+      final tasksCollection = userDoc!.collection('tasks');
 
       // Get the user's tasks from Firestore
       final querySnapshot =
@@ -108,33 +87,23 @@ class TaskCubit extends Cubit<TaskState> {
           .map((snapshot) =>
               snapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList())
           .listen((tasks) {
-        emit(UserLoadedState(user: user, tasks: tasks));
+        if (!isClosed) {
+          emit(UserLoadedState(user: user!, tasks: tasks));
+        }
       }, onError: (error) {
-        emit(UserErrorState(error: error.toString()));
+        if (!isClosed) {
+          emit(UserErrorState(error: error.toString()));
+        }
       });
 
-      emit(UserLoadedState(user: user, tasks: tasks));
-    } catch (e) {
-      emit(UserErrorState(error: e.toString()));
-    }
-  }
-
-  Stream<List<TaskModel>> getUserTasksStream({required String userId}) {
-    final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
-    final tasksCollection = userDoc.collection('tasks');
-    final snapshots =
-        tasksCollection.orderBy('createdAt', descending: true).snapshots();
-    return snapshots.map((querySnapshot) {
-      final tasks = <TaskModel>[];
-      for (var doc in querySnapshot.docs) {
-        final task = TaskModel.fromSnapshot(doc);
-        tasks.add(task);
+      if (!isClosed) {
+        emit(UserLoadedState(user: user, tasks: tasks));
       }
-      return tasks;
-    }).handleError((error) {
-      // Handle any errors that occur when listening to the stream
-      emit(UserErrorState(error: error.toString()));
-    });
+    } catch (e) {
+      if (!isClosed) {
+        emit(UserErrorState(error: e.toString()));
+      }
+    }
   }
 
   Future<void> deleteTask({required String userId, required String id}) async {
