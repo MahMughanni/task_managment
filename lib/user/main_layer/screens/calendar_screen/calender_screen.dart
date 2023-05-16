@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:task_mangment/logic/calender_controller.dart';
 import 'package:task_mangment/user/main_layer/screens/task_details_screen/task_details_screen.dart';
@@ -38,7 +39,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
     print(widget.userName);
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Calendar Screen')),
+      appBar: AppBar(
+          title: Text(
+        'Calendar Screen',
+        style: Theme.of(context).textTheme.titleLarge,
+      )),
       body: BlocBuilder<CalenderCubit, CalenderState>(
         bloc: _calenderCubit,
         builder: (context, state) {
@@ -66,11 +71,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     ),
                     calendarBuilders: CalendarBuilders(
                       selectedBuilder: (context, day, focusedDay) {
-                        bool hasTasksForSelectedDay = state.groupedTasks.containsKey(day);
+                        bool hasTasksForSelectedDay =
+                            state.groupedTasks.containsKey(day);
                         return Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: hasTasksForSelectedDay ? Colors.orangeAccent : Colors.blueAccent,
+                            color: hasTasksForSelectedDay
+                                ? Colors.orangeAccent
+                                : Colors.blueAccent,
                             shape: BoxShape.circle,
                           ),
                           child: Text(
@@ -80,17 +88,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         );
                       },
                       defaultBuilder: (context, day, focusedDay) {
-                        bool hasTasksForSelectedDay = state.groupedTasks.containsKey(day);
+                        bool hasTasksForSelectedDay =
+                            state.groupedTasks.containsKey(day);
                         return Container(
                           alignment: Alignment.center,
-                          decoration: hasTasksForSelectedDay ? BoxDecoration(
-                            color: Colors.orangeAccent.withOpacity(0.3),
-                            shape: BoxShape.circle,
-                          ) : null,
+                          decoration: hasTasksForSelectedDay
+                              ? BoxDecoration(
+                                  color: Colors.orangeAccent.withOpacity(0.3),
+                                  shape: BoxShape.circle,
+                                )
+                              : null,
                           child: Text(
                             '${day.day}',
                             style: TextStyle(
-                              color: hasTasksForSelectedDay ? Colors.orangeAccent : null,
+                              color: hasTasksForSelectedDay
+                                  ? Colors.orangeAccent
+                                  : null,
                             ),
                           ),
                         );
@@ -106,7 +119,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
-                          .copyWith(color: Colors.black, fontSize: 18),
+                          .copyWith(color: Colors.black, fontSize: 18.sp),
                     ),
                   ),
                   Expanded(
@@ -144,7 +157,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                               },
                             )
                           : const Center(
-                              child: Text('No Selected Day'),
+                              child: Text('No Selected Day, No Tasks'),
                             ),
                     ),
                   )
@@ -152,9 +165,5 @@ class _CalendarScreenState extends State<CalendarScreen> {
         },
       ),
     );
-  }
-
-  bool _isSameDay(DateTime a, DateTime b) {
-    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 }

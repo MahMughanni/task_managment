@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_mangment/model/task_model.dart';
 import 'package:task_mangment/model/user_model.dart';
-
 @immutable
 abstract class TaskState {}
 

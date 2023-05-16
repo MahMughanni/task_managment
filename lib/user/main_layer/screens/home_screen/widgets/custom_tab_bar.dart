@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
+import 'package:task_mangment/shared_widgets/custom_tabBar.dart';
 
 import '../../../../../shared_widgets/custom_circle_image.dart';
 
@@ -147,37 +148,7 @@ class CustomTabBarViewTabs extends StatelessWidget {
                   )
                 ],
               ),
-              child: TabBar(
-                  labelColor: Colors.white,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  labelStyle: TextStyle(fontSize: 14.sp, color: Colors.white),
-                  unselectedLabelColor: Colors.black,
-                  splashBorderRadius: const BorderRadius.all(
-                    Radius.circular(5),
-                  ),
-                  splashFactory: InkRipple.splashFactory,
-                  indicator: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                      color: Colors.blueAccent.withOpacity(.8),
-                      boxShadow: [
-                        BoxShadow(
-                            spreadRadius: 1,
-                            blurRadius: 10.r,
-                            color: Colors.black12)
-                      ]),
-                  tabs: const [
-                    Tab(
-                      text: 'Today',
-                    ),
-                    Tab(
-                      text: 'Upcoming',
-                    ),
-                    Tab(
-                      text: 'Completed',
-                    ),
-                  ]),
+              child: const CustomTabBar(),
             )
           ],
         ),

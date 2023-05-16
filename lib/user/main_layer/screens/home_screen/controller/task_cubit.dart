@@ -21,7 +21,9 @@ class TaskCubit extends Cubit<TaskState> {
     userSubscription = userDoc?.snapshots().listen((userData) async {
       try {
         final user = UserModel.fromSnapshot(userData);
-        emit(UserLoadingState());
+        if (!userSubscription!.isPaused) {
+          emit(UserLoadingState());
+        }
         final tasksCollection = userDoc?.collection('tasks');
         if (tasksCollection != null) {
           final querySnapshot = await tasksCollection
@@ -34,29 +36,40 @@ class TaskCubit extends Cubit<TaskState> {
           }
           tasksSubscription =
               FireBaseRepository.getUserTasksStream(userId: userId).listen(
-                  (tasks) {
-            emit(UserLoadedState(user: user, tasks: tasks));
-          }, onError: (error) {
-            emit(UserErrorState(error: error.toString()));
-          });
+            (tasks) {
+              if (!tasksSubscription!.isPaused) {
+                emit(UserLoadedState(user: user, tasks: tasks));
+              }
+            },
+            onError: (error) {
+              if (!tasksSubscription!.isPaused) {
+                emit(UserErrorState(error: error.toString()));
+              }
+            },
+          );
         }
       } catch (e) {
-        emit(UserErrorState(error: e.toString()));
+        if (!userSubscription!.isPaused) {
+          emit(UserErrorState(error: e.toString()));
+        }
       }
     });
+
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      switch (result) {
-        case ConnectivityResult.wifi:
-        case ConnectivityResult.mobile:
-          _loadUserTasks();
-          emit(UserConnectedState());
-          break;
-        case ConnectivityResult.none:
-          emit(UserDisconnectedState());
-          break;
-        default:
-          emit(UserErrorState(error: "Unknown connectivity state"));
-          break;
+      if (!userSubscription!.isPaused) {
+        switch (result) {
+          case ConnectivityResult.wifi:
+          case ConnectivityResult.mobile:
+            _loadUserTasks();
+            emit(UserConnectedState());
+            break;
+          case ConnectivityResult.none:
+            emit(UserDisconnectedState());
+            break;
+          default:
+            emit(UserErrorState(error: "Unknown connectivity state"));
+            break;
+        }
       }
     });
   }
@@ -139,8 +152,8 @@ class TaskCubit extends Cubit<TaskState> {
 
   @override
   Future<void> close() {
-    tasksSubscription?.cancel();
     userSubscription?.cancel();
+    tasksSubscription?.cancel();
     return super.close();
   }
 }
