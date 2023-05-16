@@ -9,7 +9,7 @@ import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/generate_routes.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/logic/base_cubit.dart';
-import 'package:task_mangment/screens/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
 import 'package:task_mangment/utils/app_theme/app_theme_light.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
