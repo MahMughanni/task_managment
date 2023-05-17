@@ -64,7 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         if (state is SignUpProgress) {
           UtilsConfig.showSnackBarMessage(message: 'loading', status: false);
         }
-        if (state is SignUpFailure) {
+        if (state is AuthFailure) {
           UtilsConfig.showSnackBarMessage(
               message: 'Email Or Password is Wrong', status: false);
         }

@@ -190,8 +190,9 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                                     .toString()
                                     .trim(),
                               );
+                              addTaskCubit.uploadSuccess();
+
                             }
-                            addTaskCubit.uploadSuccess();
                           },
                           title: 'Upload',
                           width: double.infinity,

@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     screens = [
-      (widget.userRole == 'admin') ? const AdminHomeScreen() : HomeScreen(),
+      (widget.userRole == 'admin') ? AdminHomeScreen() : HomeScreen(),
       const AssignedScreen(),
       const AddTaskScreen(),
       const NotificationScreen(),

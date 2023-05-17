@@ -23,22 +23,6 @@ class TaskModel {
     required this.createdAt,
   });
 
-  factory TaskModel.fromJson(Map<String, dynamic> json) {
-    final imageUrls = List<String>.from(json['imageUrls'] ?? []);
-    return TaskModel(
-      id: json['id'],
-      title: json['title'] ?? '',
-      description: json['description'] ?? '',
-      startTime: json['startTime'] ?? '',
-      endTime: json['endTime'] ?? '',
-      state: json['state'] ?? '',
-      imageUrls: imageUrls,
-      createdAt: json['createdAt'] == null
-          ? Timestamp.now()
-          : Timestamp.fromDate(DateTime.parse(json['createdAt'])),
-    );
-  }
-
   factory TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
     final imageUrls = List<String>.from(data['imageUrls'] ?? []);
@@ -52,6 +36,28 @@ class TaskModel {
       state: data['state'] ?? '',
       imageUrls: imageUrls,
       createdAt: data['createdAt'] ?? Timestamp.now(),
+    );
+  }
+
+  TaskModel copyWith({
+    String? id,
+    String? title,
+    String? description,
+    String? startTime,
+    String? endTime,
+    String? state,
+    List<String>? imageUrls,
+    Timestamp? createdAt,
+  }) {
+    return TaskModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      state: state ?? this.state,
+      imageUrls: imageUrls ?? this.imageUrls,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 

@@ -27,17 +27,17 @@ class CompanyTasksScreen extends StatelessWidget {
                 height: 120.h,
                 title: 'Company Tasks',
                 action: const [],
-                bottom: CustomTabBar(),
+                bottom: const CustomTabBar(),
               ),
               body: TabBarView(
                 children: [
-
                   CustomTaskList(
                     state: 'today',
-                    label: '',
+                    label: 'today',
                     userName: '',
                     userId: user.uid,
                     userCubit: BlocProvider.of<TaskCubit>(context),
+                    taskType: 'today',
                   ),
                   CustomTaskList(
                     state: 'upcoming',
@@ -45,6 +45,7 @@ class CompanyTasksScreen extends StatelessWidget {
                     userName: '',
                     userCubit: BlocProvider.of<TaskCubit>(context),
                     userId: user.uid,
+                    taskType: 'upcoming',
                   ),
                   CustomTaskList(
                     state: 'completed',
@@ -52,6 +53,7 @@ class CompanyTasksScreen extends StatelessWidget {
                     label: '',
                     userCubit: BlocProvider.of<TaskCubit>(context),
                     userName: '',
+                    taskType: 'completed',
                   ),
                 ],
               ),

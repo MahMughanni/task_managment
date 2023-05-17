@@ -3,42 +3,44 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_state.dart';
+import 'package:task_mangment/admin/controller/admin_cubit.dart';
+import 'package:task_mangment/shared_widgets/cutom_container.dart';
 import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
 import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
-import 'package:task_mangment/shared_widgets/cutom_container.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 
-class HomeScreenBody extends StatelessWidget {
-  const HomeScreenBody({Key? key, required this.userId}) : super(key: key);
+class AdminHomeScreenBody extends StatelessWidget {
+  const AdminHomeScreenBody({Key? key, required this.userId}) : super(key: key);
 
   final String userId;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TaskCubit, TaskState>(
+    final adminCubit = BlocProvider.of<AdminCubit>(context);
+
+    // Dispatch fetchAllTasks() to retrieve all tasks
+    adminCubit.fetchAllTasks();
+
+    return BlocBuilder<AdminCubit, AdminState>(
       builder: (context, state) {
-        if (state is UserInitial) {
+        if (state is AdminInitial) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is UserLoadingState) {
+        } else if (state is AdminLoadingState) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is UserLoadedState) {
-          final userData = state.user;
+        } else if (state is AdminTasksLoadedState) {
           final userTasks = state.tasks;
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 BuildSliverAppBar(
-                  userName: userData.userName.toString(),
+                  userName: 'Admin',
                   taskNumber: userTasks.length.toString(),
-                  itemCount: 3,
+                  itemCount: 2,
                   itemBuilder: (BuildContext context, int index) {
-                    int todayTasksCount = userTasks.length;
                     int upcomingTasksCount = userTasks
                         .where((task) => task.state == 'upcoming')
                         .length;
@@ -47,22 +49,23 @@ class HomeScreenBody extends StatelessWidget {
                         .length;
                     switch (index) {
                       case 0:
-                        return CustomContainer(
-                          color: const Color(0xffF9B5D0),
-                          title: 'Tasks',
-                          taskNumber: todayTasksCount.toString(),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: CustomContainer(
+                            color: const Color(0xffF9B5D0),
+                            title: 'Assigned',
+                            taskNumber: upcomingTasksCount.toString(),
+                            height: ScreenUtil().setHeight(90),
+                            width: ScreenUtil().setWidth(150),
+                          ),
                         );
                       case 1:
                         return CustomContainer(
-                          color: const Color(0xffC9F4AA),
-                          title: 'Assigned',
-                          taskNumber: upcomingTasksCount.toString(),
-                        );
-                      case 2:
-                        return CustomContainer(
-                          color: const Color(0xffF3CCFF),
+                          color: const Color(0xff6EB3E7),
                           title: 'Completed',
                           taskNumber: completedTasksCount.toString(),
+                          height: ScreenUtil().setHeight(90),
+                          width: ScreenUtil().setWidth(150),
                         );
                       default:
                         return Shimmer.fromColors(
@@ -73,7 +76,7 @@ class HomeScreenBody extends StatelessWidget {
                         );
                     }
                   },
-                  imageUrl: userData.profileImageUrl ?? '',
+                  imageUrl: '',
                   userId: userId,
                 )
               ];
@@ -81,36 +84,32 @@ class HomeScreenBody extends StatelessWidget {
             body: TabBarView(
               children: [
                 CustomTaskList(
-                  userName: userData.userName,
+                  userName: 'Admin',
                   state: 'today',
                   label: 'today',
                   userId: userId,
-                  userCubit: BlocProvider.of<TaskCubit>(context),
+                  adminCubit: adminCubit,
                   taskType: 'today',
                 ),
                 CustomTaskList(
-                  userName: userData.userName,
+                  userName: 'Admin',
                   state: 'upcoming',
                   label: 'Upcoming',
                   userId: userId,
-                  userCubit: BlocProvider.of<TaskCubit>(context),
+                  adminCubit: adminCubit,
                   taskType: 'upcoming',
                 ),
                 CustomTaskList(
-                  userName: userData.userName,
+                  userName: 'Admin',
                   state: 'completed',
                   label: 'Completed',
                   userId: userId,
-                  userCubit: BlocProvider.of<TaskCubit>(context),
+                  adminCubit: adminCubit,
                   taskType: 'completed',
                 ),
               ],
             ),
           );
-        } else if (state is UserConnectedState) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          ); // Show a loading indicator when the connection state is changing
         } else {
           return Center(
             child: Lottie.asset(

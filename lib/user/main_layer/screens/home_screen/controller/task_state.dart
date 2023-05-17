@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_mangment/model/task_model.dart';
 import 'package:task_mangment/model/user_model.dart';
+
 @immutable
 abstract class TaskState {}
 
@@ -35,16 +36,16 @@ class UserReconnectedState extends TaskState {}
 
 class UserDisconnectedState extends TaskState {}
 
-class TaskLoading extends TaskState {}
+class TaskLoadingState extends TaskState {}
 
-class TaskLoaded extends TaskState {
+class TaskLoadedState extends TaskState {
   final List<TaskModel> tasks;
 
-  TaskLoaded(this.tasks);
+  TaskLoadedState(this.tasks);
 }
 
-class TaskError extends TaskState {
+class TaskErrorState extends TaskState {
   final String errorMessage;
 
-  TaskError(this.errorMessage);
+  TaskErrorState(this.errorMessage);
 }

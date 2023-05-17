@@ -37,10 +37,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
           emit(LoginSuccess(userCredential.user!, isAdmin: false));
         } catch (e) {
-          emit(LoginFailure('An error occurred during auto login.'));
+          emit(AuthFailure('An error occurred during auto login.'));
         }
       } else {
-        emit(LoginFailure('firebaseAuth is null.'));
+        emit(AuthFailure('firebaseAuth is null.'));
       }
     } else {
       emit(LoginInitial());
@@ -112,7 +112,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       }
     } catch (e) {
       debugPrint(e.toString());
-      emit(LoginFailure('An unknown error occurred.'));
+      emit(AuthFailure('An unknown error occurred.'));
     }
   }
 
@@ -143,9 +143,9 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       emit(SignUpSuccess(user));
       AppRouter.goToAndRemove(routeName: NamedRouter.mainScreen);
     } on FirebaseAuthException catch (e) {
-      emit(SignUpFailure(e.message ?? 'An unknown error occurred.'));
+      emit(AuthFailure(e.message ?? 'An unknown error occurred.'));
     } catch (e) {
-      emit(SignUpFailure('An unknown error occurred.'));
+      emit(AuthFailure('An unknown error occurred.'));
     }
   }
 

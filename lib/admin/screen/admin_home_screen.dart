@@ -1,18 +1,35 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_mangment/admin/controller/admin_cubit.dart';
+import 'package:task_mangment/admin/screen/widget/admin_homeBody.dart';
+import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
 
 class AdminHomeScreen extends StatelessWidget {
-  const AdminHomeScreen({Key? key}) : super(key: key);
+  AdminHomeScreen({Key? key}) : super(key: key);
+
+  final List taskTitles = [
+    'Tasks',
+    'Assigned',
+    'Completed',
+  ];
+
+  final String? userId = FirebaseAuth.instance.currentUser?.uid;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppbar(
-        title: 'Admin',
-        action: [],
-      ),
-      body: Column(
-        children: [],
+    return BlocProvider<AdminCubit>(
+      create: (context) => AdminCubit(),
+      child: SafeArea(
+        child: Scaffold(
+          body: DefaultTabController(
+            length: taskTitles.length,
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              body: AdminHomeScreenBody(userId: userId ?? ''),
+            ),
+          ),
+        ),
       ),
     );
   }

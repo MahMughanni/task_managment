@@ -19,10 +19,10 @@ class LoginSuccess extends AuthenticationState {
   List<Object?> get props => [user, isAdmin];
 }
 
-class LoginFailure extends AuthenticationState {
+class AuthFailure extends AuthenticationState {
   final String errorMessage;
 
-  LoginFailure(this.errorMessage);
+  AuthFailure(this.errorMessage);
 }
 
 // SignUp State
@@ -37,8 +37,3 @@ class SignUpSuccess extends AuthenticationState {
   SignUpSuccess(this.user);
 }
 
-class SignUpFailure extends AuthenticationState {
-  final String errorMessage;
-
-  SignUpFailure(this.errorMessage);
-}

@@ -17,7 +17,7 @@ class OnGenerateRouter {
     Widget page;
     switch (settings.name) {
       case NamedRouter.mainScreen:
-        page =  MainScreen(
+        page = MainScreen(
           userRole: settings.arguments as String ?? 'user',
         );
         break;
@@ -55,7 +55,7 @@ class OnGenerateRouter {
         page = const SignUpScreen();
         break;
       case NamedRouter.adminHomeScreen:
-        page = const AdminHomeScreen();
+        page = AdminHomeScreen();
         break;
       default:
         page = const Scaffold(

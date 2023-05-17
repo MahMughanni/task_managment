@@ -6,7 +6,6 @@ import 'package:task_mangment/user/main_layer/screens/home_screen/controller/tas
 import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
 import 'package:task_mangment/shared_widgets/custom_appbar.dart';
 
-
 class AssignedScreen extends StatelessWidget {
   const AssignedScreen({Key? key}) : super(key: key);
 
@@ -37,6 +36,7 @@ class AssignedScreen extends StatelessWidget {
                 label: 'upcoming',
                 userName: state.user.userName.toString(),
                 userId: user!.uid,
+                taskType: 'upcoming',
               );
             } else {
               return Container();

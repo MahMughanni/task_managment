@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
             if (state is LoginInProgress) {
               UtilsConfig.showSnackBarMessage(message: 'loading', status: false);
             }
-            if (state is LoginFailure) {
+            if (state is AuthFailure) {
               debugPrint(state.errorMessage.toString());
               UtilsConfig.showSnackBarMessage(
                   message: 'Email Or Password is Wrong', status: false);
