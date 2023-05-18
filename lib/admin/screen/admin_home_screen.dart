@@ -6,7 +6,8 @@ import 'package:task_mangment/admin/screen/widget/admin_homeBody.dart';
 import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
 
 class AdminHomeScreen extends StatelessWidget {
-  AdminHomeScreen({Key? key}) : super(key: key);
+  AdminHomeScreen({Key? key, required this.userRole}) : super(key: key);
+  final String userRole;
 
   final List taskTitles = [
     'Tasks',
@@ -18,15 +19,15 @@ class AdminHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AdminCubit>(
-      create: (context) => AdminCubit(),
-      child: SafeArea(
-        child: Scaffold(
-          body: DefaultTabController(
-            length: taskTitles.length,
-            child: Scaffold(
-              backgroundColor: Colors.white,
-              body: AdminHomeScreenBody(userId: userId ?? ''),
+    return SafeArea(
+      child: Scaffold(
+        body: DefaultTabController(
+          length: taskTitles.length,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            body: AdminHomeScreenBody(
+              userId: userId ?? '',
+              userRole: userRole,
             ),
           ),
         ),

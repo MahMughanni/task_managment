@@ -193,17 +193,21 @@ class FireBaseRepository {
     final user = FirebaseAuth.instance.currentUser!;
 
     List<String> imageUrls = [];
-    for (int i = 0; i < (imageFiles?.length ?? 0); i++) {
-      final File imageFile = imageFiles![i];
-      final String fileName =
-          '$title-${const Uuid().v4()}.${imageFile.path.split('.').last}';
-      final Reference storageRef =
-          FirebaseStorage.instance.ref().child('images/${user.uid}/$fileName');
-      final UploadTask uploadTask = storageRef.putFile(imageFile);
-      await uploadTask.whenComplete(() async {
-        String imageUrl = await storageRef.getDownloadURL();
-        imageUrls.add(imageUrl);
-      });
+
+    if (imageFiles != null && imageFiles.isNotEmpty) {
+      for (int i = 0; i < imageFiles.length; i++) {
+        final File imageFile = imageFiles[i];
+        final String fileName =
+            '$title-${const Uuid().v4()}.${imageFile.path.split('.').last}';
+        final Reference storageRef = FirebaseStorage.instance
+            .ref()
+            .child('images/${user.uid}/$fileName');
+        final UploadTask uploadTask = storageRef.putFile(imageFile);
+        await uploadTask.whenComplete(() async {
+          String imageUrl = await storageRef.getDownloadURL();
+          imageUrls.add(imageUrl);
+        });
+      }
     }
 
     final task = TaskModel(

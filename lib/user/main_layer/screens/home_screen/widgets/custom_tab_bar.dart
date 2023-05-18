@@ -14,9 +14,10 @@ class CustomTabBarViewTabs extends StatelessWidget {
     required this.itemCount,
     required this.imageUrl,
     required this.userId,
+    required this.userRole,
   }) : super(key: key);
 
-  final String userName, taskNumber, userId;
+  final String userName, taskNumber, userId, userRole;
   final Widget? Function(BuildContext, int) itemBuilder;
   final int itemCount;
   final String imageUrl;
@@ -125,7 +126,9 @@ class CustomTabBarViewTabs extends StatelessWidget {
                 ),
                 TextButton(
                     onPressed: () {
-                      AppRouter.goTo(screenName: NamedRouter.companyTasks);
+                      AppRouter.goTo(
+                          screenName: NamedRouter.companyTasks,
+                          arguments: userRole.toString());
                     },
                     child: Text(
                       'see more',

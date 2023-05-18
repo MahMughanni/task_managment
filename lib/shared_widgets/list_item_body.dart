@@ -85,7 +85,7 @@ class ListViewItemBody extends StatelessWidget {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                      text: UtilsConfig.formatDate(startTime),
+                      text: startTime.toString(),
                       style: TextStyle(
                         fontWeight: AppConstFontWeight.regular,
                         color: Colors.deepOrange,
@@ -93,24 +93,25 @@ class ListViewItemBody extends StatelessWidget {
                       ),
                       children: [
                         WidgetSpan(
-                          child: status == 'completed'
-                              ? Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: SvgPicture.asset(
-                                    SvgIconsConstManger.done,
-                                    width: 15.r,
-                                    height: 15.r,
-                                  ),
-                              )
-                              :  Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: SvgPicture.asset(
-                              SvgIconsConstManger.calender,
-                              width: 15.r,
-                              height: 15.r,
-                            ),
-                          )
-                        ),
+                            child: status == 'completed'
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: SvgPicture.asset(
+                                      SvgIconsConstManger.done,
+                                      width: 15.r,
+                                      height: 15.r,
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: SvgPicture.asset(
+                                      SvgIconsConstManger.calender,
+                                      width: 15.r,
+                                      height: 15.r,
+                                    ),
+                                  )),
                       ],
                     ),
                     maxLines: 1,

@@ -21,6 +21,8 @@ class CustomTextFormField extends StatelessWidget {
     this.suffixIconConstraints,
     this.hintStyle,
     this.titleStyle,
+    this.textInputAction,
+    this.onChanged,
   }) : super(key: key);
   final String? hintText, initialValue, labelText;
   final String? Function(String?)? validator;
@@ -36,6 +38,8 @@ class CustomTextFormField extends StatelessWidget {
   final BoxConstraints? suffixIconConstraints;
   final TextStyle? hintStyle;
   final TextStyle? titleStyle;
+  final TextInputAction? textInputAction;
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +47,10 @@ class CustomTextFormField extends StatelessWidget {
       padding: padding ?? REdgeInsets.all(8),
       child: TextFormField(
         enabled: enabled,
+        onChanged: onChanged,
         maxLines: maxLine ?? 1,
         keyboardType: keyboardType,
+        textInputAction: textInputAction,
         controller: controller,
         initialValue: initialValue,
         onFieldSubmitted: focus ?? (_) => FocusScope.of(context).nearestScope,
@@ -57,7 +63,10 @@ class CustomTextFormField extends StatelessWidget {
           hintStyle: hintStyle ?? Theme.of(context).textTheme.bodySmall,
           contentPadding: contentPadding ?? REdgeInsets.all(15),
           label: Text(labelText ?? ''),
-          labelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.grey),
+          labelStyle: Theme.of(context)
+              .textTheme
+              .bodySmall!
+              .copyWith(color: Colors.grey),
           suffixIcon: suffixIcon,
           fillColor: ColorConstManger.formFieldFiledColor,
           filled: true,

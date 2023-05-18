@@ -7,6 +7,7 @@ import 'package:task_mangment/user/main_layer/screens/add_task_screen/widgets/cu
 import 'package:task_mangment/user/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
 import 'package:task_mangment/shared_widgets/custom_button.dart';
 import 'package:task_mangment/shared_widgets/custom_form_field.dart';
+import 'package:task_mangment/utils/utils_config.dart';
 
 class AddTaskScreen extends StatelessWidget {
   const AddTaskScreen({Key? key}) : super(key: key);
@@ -58,12 +59,15 @@ class _AddTaskBodyState extends State<AddTaskBody> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: [
-      Form(
-        key: _formKey,
-        child: BlocBuilder<AddTaskCubit, AddTaskState>(
-          builder: (context, state) {
-            return Padding(
+    return ListView(
+      children: [
+        Form(
+          key: _formKey,
+          child: BlocBuilder<AddTaskCubit, AddTaskState>(
+            builder: (context, state) {
+              final addTaskCubit = context.read<AddTaskCubit>();
+
+              return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Column(
                   children: [
@@ -72,7 +76,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                       focus: (_) => FocusScope.of(context).nearestScope,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'enter valid title';
+                          return 'Enter a valid title';
                         }
                         return null;
                       },
@@ -81,34 +85,94 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                       controller: addTaskCubit.titleController,
                     ),
                     4.verticalSpace,
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CustomDropDown(
-                        onChanged: (value) => addTaskCubit.updateValue(value!),
-                        dropDownValue: addTaskCubit.selectedDropdownValue,
-                        items: const [
-                          DropdownMenuItem(
-                              value: 'Upcoming', child: Text('Upcoming')),
-                          DropdownMenuItem(
-                              value: 'Today', child: Text('Today')),
-                          // DropdownMenuItem(
-                          //     value: 'Completed', child: Text('Completed') ,
-                          // ),
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        UtilsConfig.showBottomSheet(Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Status',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              Divider(
+                                thickness: 1,
+                                color: Colors.grey.shade300,
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Upcoming',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(color: Colors.black),
+                                ),
+                                onTap: () {
+                                  addTaskCubit
+                                      .updateSelectedDropdownValue('Upcoming');
+                                  addTaskCubit.selectedDropdownValueController
+                                      .text = 'Upcoming';
+
+                                  Navigator.pop(
+                                      context); // Close the bottom sheet
+                                },
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Today',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(color: Colors.black),
+                                ),
+                                onTap: () {
+                                  addTaskCubit
+                                      .updateSelectedDropdownValue('Today');
+                                  addTaskCubit.selectedDropdownValueController
+                                      .text = 'Today';
+                                  Navigator.pop(
+                                      context); // Close the bottom sheet
+                                },
+                              ),
+                            ],
+                          ),
+                        ));
+                      },
+                      child: CustomTextFormField(
+                        suffixIcon: const Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 30,
+                        ),
+                        enabled: false,
+                        labelText: 'Select Status',
+                        focus: (_) => FocusScope.of(context).nearestScope,
+                        controller:
+                            addTaskCubit.selectedDropdownValueController,
+                        hintText: 'Select Country',
+                        keyboardType: TextInputType.phone,
+                        textInputAction: TextInputAction.next,
+                        onChanged: (val) {},
+                        validator: (value) {
+                          return addTaskCubit.selectedDropdownValue == null
+                              ? ""
+                              : null;
+                        },
                       ),
                     ),
                     8.verticalSpace,
                     CreateTaskBody(
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'enter valid text';
+                          return 'Enter a valid text';
                         }
                         return null;
                       },
                       descriptionController: addTaskCubit.descriptionController,
-                      onTap: addTaskCubit.pickImages,
                       startTimeController: addTaskCubit.startTimeController,
                       endTimeController: addTaskCubit.endTimeController,
+                      onTap: () {},
                     ),
                     GestureDetector(
                       onTap: () async {
@@ -176,23 +240,17 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               addTaskCubit.uploadTask(
-                                title: addTaskCubit.titleController.text
-                                    .toString()
-                                    .trim(),
+                                title: addTaskCubit.titleController.text.trim(),
                                 description: addTaskCubit
                                     .descriptionController.text
-                                    .toString()
                                     .trim(),
                                 startTime: addTaskCubit.startTimeController.text
-                                    .toString()
                                     .trim(),
-                                endTime: addTaskCubit.endTimeController.text
-                                    .toString()
-                                    .trim(),
+                                endTime:
+                                    addTaskCubit.endTimeController.text.trim(),
                               );
-                              addTaskCubit.uploadSuccess();
-
                             }
+                            addTaskCubit.uploadSuccess();
                           },
                           title: 'Upload',
                           width: double.infinity,
@@ -210,10 +268,12 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                       ],
                     ),
                   ],
-                ));
-          },
+                ),
+              );
+            },
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }

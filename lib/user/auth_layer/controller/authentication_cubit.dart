@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,12 +11,12 @@ import 'package:task_mangment/utils/utils_config.dart';
 part 'authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
-  final FirebaseAuth firebaseAuth;
-
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  final FirebaseAuth? firebaseAuth;
+  final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   User? loggedInUser;
+  String? userRole;
 
-  AuthenticationCubit(this.firebaseAuth) : super(AuthenticationInitial());
+  AuthenticationCubit({this.firebaseAuth}) : super(LoginInitial());
 
   Future<void> autoLogin() async {
     const storage = FlutterSecureStorage();
@@ -28,7 +26,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     if (email != null && password != null) {
       if (firebaseAuth != null) {
         try {
-          final userCredential = await firebaseAuth.signInWithEmailAndPassword(
+          final userCredential = await firebaseAuth!.signInWithEmailAndPassword(
             email: email,
             password: password,
           );
@@ -50,14 +48,11 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   Future<void> checkLoginStatus() async {
     await autoLogin();
     if (loggedInUser != null) {
-      final userData = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(loggedInUser!.uid)
-          .get();
-      final role = userData['role'];
-
+      final userData =
+          await fireStore.collection('users').doc(loggedInUser!.uid).get();
+      userRole = userData['role'];
       AppRouter.goToAndRemove(
-          routeName: NamedRouter.mainScreen, arguments: role);
+          routeName: NamedRouter.mainScreen, arguments: userRole);
     } else {
       AppRouter.goToAndRemove(routeName: NamedRouter.loginScreen);
     }
@@ -67,7 +62,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       emit(LoginInProgress());
 
-      final UserCredential userCredential = await firebaseAuth
+      final UserCredential userCredential = await firebaseAuth!
           .signInWithEmailAndPassword(email: email, password: password);
 
       final userData = await FirebaseFirestore.instance
@@ -75,22 +70,18 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
           .doc(userCredential.user!.uid)
           .get();
 
-      final role = userData['role'];
+      final userRole = userData['role'];
 
-      if (role == 'user') {
-        // Navigate to the home screen
+      if (userRole == 'user') {
         AppRouter.goToAndRemove(
             routeName: NamedRouter.mainScreen,
             arguments: userData['role'].toString());
-      } else if (role == 'admin') {
+      } else if (userRole == 'admin') {
         UtilsConfig.showSnackBarMessage(message: 'Admin', status: true);
-        // Navigate to the admin screen
-        debugPrint(role.runtimeType.toString());
         AppRouter.goToAndRemove(
             routeName: NamedRouter.mainScreen,
             arguments: userData['role'].toString());
       } else {
-        debugPrint(role.runtimeType.toString());
         UtilsConfig.showSnackBarMessage(
             message: 'Unknown user role.', status: false);
       }
@@ -124,11 +115,11 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       emit(SignUpProgress());
 
-      UserCredential userCredential = await firebaseAuth
+      UserCredential userCredential = await firebaseAuth!
           .createUserWithEmailAndPassword(email: email, password: password);
       String userId = userCredential.user!.uid;
 
-      await _fireStore.collection('users').doc(userId).set({
+      await fireStore.collection('users').doc(userId).set({
         'username': username,
         'phone': phone,
         'role': 'user',
@@ -150,9 +141,9 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   Future<void> logOut() async {
-    await firebaseAuth.signOut();
+    await firebaseAuth!.signOut();
 
-    // Remove user info from secure storage
+// Remove user info from secure storage
     const storage = FlutterSecureStorage();
     await storage.delete(key: 'email');
     await storage.delete(key: 'password');

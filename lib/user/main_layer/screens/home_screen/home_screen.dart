@@ -5,7 +5,8 @@ import 'package:task_mangment/user/main_layer/screens/home_screen/controller/tas
 import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/homeScreen_body.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key, required this.userRole}) : super(key: key);
+  final String userRole;
 
   final List taskTitles = [
     'Tasks',
@@ -27,6 +28,7 @@ class HomeScreen extends StatelessWidget {
               backgroundColor: Colors.white,
               body: HomeScreenBody(
                 userId: userId!,
+                userRole: userRole,
               ),
             ),
           ),

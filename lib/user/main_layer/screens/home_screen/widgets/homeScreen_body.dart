@@ -11,9 +11,10 @@ import 'package:task_mangment/shared_widgets/cutom_container.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 
 class HomeScreenBody extends StatelessWidget {
-  const HomeScreenBody({Key? key, required this.userId}) : super(key: key);
+  const HomeScreenBody({Key? key, required this.userId, required this.userRole})
+      : super(key: key);
 
-  final String userId;
+  final String userId, userRole;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +76,7 @@ class HomeScreenBody extends StatelessWidget {
                   },
                   imageUrl: userData.profileImageUrl ?? '',
                   userId: userId,
+                  userRole: userRole,
                 )
               ];
             },

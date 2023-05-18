@@ -26,7 +26,9 @@ class OnGenerateRouter {
         page = const LoginScreen();
         break;
       case NamedRouter.companyTasks:
-        page = CompanyTasksScreen();
+        page = CompanyTasksScreen(
+          userRole: settings.arguments as String,
+        );
         break;
       case NamedRouter.employeeDetailsScreen:
         page = EmployeeDetailsScreen(
@@ -55,7 +57,9 @@ class OnGenerateRouter {
         page = const SignUpScreen();
         break;
       case NamedRouter.adminHomeScreen:
-        page = AdminHomeScreen();
+        page = AdminHomeScreen(
+          userRole: settings.arguments as String,
+        );
         break;
       default:
         page = const Scaffold(

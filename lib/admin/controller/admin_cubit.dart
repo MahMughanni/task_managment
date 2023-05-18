@@ -20,24 +20,29 @@ class AdminCubit extends Cubit<AdminState> {
       final usersCollection = FirebaseFirestore.instance.collection('users');
       final snapshots = usersCollection.snapshots();
 
-      tasksSubscription = snapshots.listen((querySnapshot) {
-        final tasks = <TaskModel>[];
+      final tasksMap = <String, List<TaskModel>>{};
 
+      tasksSubscription = snapshots.listen((querySnapshot) {
         for (var userDoc in querySnapshot.docs) {
+          final userId = userDoc.id;
           final tasksCollection = userDoc.reference.collection('tasks');
+
           tasksCollection
               .orderBy('createdAt', descending: true)
               .snapshots()
               .listen((taskSnapshot) {
+            final tasks = <TaskModel>[];
+
             for (var taskDoc in taskSnapshot.docs) {
               final task = TaskModel.fromSnapshot(taskDoc);
-              if (!tasks.any((t) => t.id == task.id)) {
-                tasks.add(task);
-              }
+              tasks.add(task);
             }
 
-            tasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-            emit(AdminTasksLoadedState(tasks));
+            tasksMap[userId] = tasks;
+            final allTasks = tasksMap.values.expand((tasks) => tasks).toList();
+            allTasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+            emit(AdminTasksLoadedState(allTasks));
           });
         }
       }, onError: (error) {
@@ -47,6 +52,9 @@ class AdminCubit extends Cubit<AdminState> {
       emit(AdminFailure(errorMessage: error.toString()));
     }
   }
+
+
+
   @override
   Future<void> close() {
     tasksSubscription?.cancel();

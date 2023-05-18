@@ -79,7 +79,7 @@ class UtilsConfig {
     return formattedDate;
   }
 
-  static showSnakBar(String content, {bool Success = false}) {
+  static showSnackBar(String content, {bool Success = false}) {
     return AppRouter.snackBarKey.currentState?.showSnackBar(SnackBar(
       content: Text(
         content,
@@ -106,7 +106,7 @@ class UtilsConfig {
       default:
         errorMessage = e.message!;
     }
-    showSnakBar(errorMessage, Success: false);
+    showSnackBar(errorMessage, Success: false);
   }
 
   static void showBottomSheet(Widget widget) {

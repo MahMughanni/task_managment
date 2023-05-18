@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'custom_tab_bar.dart';
 
-
 class BuildSliverAppBar extends StatelessWidget {
   const BuildSliverAppBar({
     Key? key,
@@ -13,9 +12,11 @@ class BuildSliverAppBar extends StatelessWidget {
     required this.itemBuilder,
     required this.imageUrl,
     required this.userId,
+    required this.userRole,
   }) : super(key: key);
 
-  final String userName, taskNumber, imageUrl, userId;
+  final String userName, taskNumber, imageUrl, userId, userRole;
+
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;
 
@@ -29,13 +30,14 @@ class BuildSliverAppBar extends StatelessWidget {
         itemCount: itemCount,
         imageUrl: imageUrl,
         userId: userId,
+        userRole: userRole,
       ),
     );
   }
 }
 
 class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
-  final String userName, taskNumber, imageUrl, userId;
+  final String userName, taskNumber, imageUrl, userId, userRole;
   final Widget? Function(BuildContext, int) itemBuilder;
   final int itemCount;
 
@@ -46,6 +48,7 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
     required this.userId,
     required this.userName,
     required this.taskNumber,
+    required this.userRole,
   });
 
   @override
@@ -58,12 +61,12 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
       itemCount: itemCount,
       imageUrl: imageUrl,
       userId: userId,
+      userRole: userRole,
     );
   }
 
   @override
-  double get maxExtent =>
-      ScreenUtil().screenHeight * 0.30 + kToolbarHeight;
+  double get maxExtent => ScreenUtil().screenHeight * 0.30 + kToolbarHeight;
 
   @override
   double get minExtent => kToolbarHeight;

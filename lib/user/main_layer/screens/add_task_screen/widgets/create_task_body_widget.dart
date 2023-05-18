@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:task_mangment/shared_widgets/custom_form_field.dart';
 
-
 class CreateTaskBody extends StatelessWidget {
   const CreateTaskBody(
       {Key? key,
@@ -23,7 +22,7 @@ class CreateTaskBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0).r,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -56,7 +55,8 @@ class CreateTaskBody extends StatelessWidget {
                   },
                   child: AbsorbPointer(
                     child: CustomTextFormField(
-                      focus: (_) => FocusScope.of(context).nearestScope,
+                      focus: (_) =>
+                          FocusScope.of(context).requestFocus(FocusNode()),
                       suffixIcon: const Icon(Icons.calendar_today),
                       labelText: 'Start',
                       hintText: '5.apr 10:00pm',
@@ -71,7 +71,7 @@ class CreateTaskBody extends StatelessWidget {
                   ),
                 ),
               ),
-              6.horizontalSpace,
+              const SizedBox(width: 6),
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
@@ -97,7 +97,8 @@ class CreateTaskBody extends StatelessWidget {
                   },
                   child: AbsorbPointer(
                     child: CustomTextFormField(
-                      focus: (_) => FocusScope.of(context).nearestScope,
+                      focus: (_) =>
+                          FocusScope.of(context).requestFocus(FocusNode()),
                       suffixIcon: const Icon(Icons.calendar_today),
                       labelText: 'End',
                       hintText: '5.apr 10:00pm',
@@ -114,19 +115,19 @@ class CreateTaskBody extends StatelessWidget {
               ),
             ],
           ),
-          12.verticalSpace,
+          const SizedBox(height: 12),
           const Text('Task Description'),
-          8.verticalSpace,
+          const SizedBox(height: 8),
           CustomTextFormField(
-            padding: const EdgeInsetsDirectional.all(0),
-            focus: (_) => FocusScope.of(context).nearestScope,
+            maxLine: 5,
+            padding: EdgeInsetsDirectional.zero,
+            focus: (_) => FocusScope.of(context).requestFocus(FocusNode()),
             validator: validator,
             controller: descriptionController,
-            maxLine: 5,
             keyboardType: TextInputType.multiline,
             hintText: '',
           ),
-          16.verticalSpace,
+          const SizedBox(height: 16),
         ],
       ),
     );

@@ -196,7 +196,6 @@ class CustomTaskList extends StatelessWidget {
                       formattedTaskDate.month == today.month &&
                       formattedTaskDate.day == today.day);
             }).toList();
-
             return stateTasks.isNotEmpty
                 ? Column(
                     children: [

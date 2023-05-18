@@ -24,10 +24,15 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    print(widget.userRole);
     screens = [
-      (widget.userRole == 'admin') ? AdminHomeScreen() : HomeScreen(),
-      const AssignedScreen(),
-      const AddTaskScreen(),
+      (widget.userRole == 'admin')
+          ? AdminHomeScreen(
+              userRole: 'admin',
+            )
+          : HomeScreen(userRole: widget.userRole ?? 'user'),
+      (widget.userRole == 'admin') ? Container() : const AssignedScreen(),
+      (widget.userRole == 'admin') ? Container() : const AddTaskScreen(),
       const NotificationScreen(),
       SettingScreen(),
     ];

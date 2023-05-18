@@ -10,15 +10,16 @@ import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom
 import 'package:task_mangment/utils/app_constants.dart';
 
 class AdminHomeScreenBody extends StatelessWidget {
-  const AdminHomeScreenBody({Key? key, required this.userId}) : super(key: key);
+  const AdminHomeScreenBody(
+      {Key? key, required this.userId, required this.userRole})
+      : super(key: key);
 
-  final String userId;
+  final String userId, userRole;
 
   @override
   Widget build(BuildContext context) {
     final adminCubit = BlocProvider.of<AdminCubit>(context);
 
-    // Dispatch fetchAllTasks() to retrieve all tasks
     adminCubit.fetchAllTasks();
 
     return BlocBuilder<AdminCubit, AdminState>(
@@ -78,6 +79,7 @@ class AdminHomeScreenBody extends StatelessWidget {
                   },
                   imageUrl: '',
                   userId: userId,
+                  userRole: userRole,
                 )
               ];
             },

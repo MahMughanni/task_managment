@@ -15,6 +15,7 @@ import 'add_task_state.dart';
 class AddTaskCubit extends Cubit<AddTaskState> {
   AddTaskCubit() : super(AddTaskInitial());
 
+  List statusList = ['today', 'upcoming'];
   List<File> imageFiles = [];
   bool isUploading = false;
 
@@ -22,12 +23,14 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   late TextEditingController descriptionController;
   late TextEditingController startTimeController;
   late TextEditingController endTimeController;
+  late TextEditingController selectedDropdownValueController;
 
   init() {
     titleController = TextEditingController();
     descriptionController = TextEditingController();
     startTimeController = TextEditingController();
     endTimeController = TextEditingController();
+    selectedDropdownValueController = TextEditingController();
   }
 
   dispose() {
@@ -37,7 +40,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     endTimeController.dispose();
   }
 
-  String selectedDropdownValue = 'Today';
+  String? selectedDropdownValue;
 
   void uploadSuccess() {
     isUploading = !isUploading;
@@ -46,7 +49,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
 
   void updateValue(String value) {
     selectedDropdownValue = value;
-    final newState = AddTaskDropdownValueUpdated(selectedDropdownValue);
+    final newState = AddTaskDropdownValueUpdated(selectedDropdownValue!);
     emit(newState);
   }
 
@@ -63,8 +66,27 @@ class AddTaskCubit extends Cubit<AddTaskState> {
         imageFiles = result.paths.map((path) => File(path!)).toList();
 
         emit(AddTaskImageUpdated());
+
+        // Check if all the required fields are filled
+        if (titleController.text.isNotEmpty &&
+            descriptionController.text.isNotEmpty &&
+            startTimeController.text.isNotEmpty &&
+            endTimeController.text.isNotEmpty) {
+          // Call the uploadTask method with valid non-null values
+          uploadTask(
+            title: titleController.text,
+            description: descriptionController.text,
+            startTime: startTimeController.text,
+            endTime: endTimeController.text,
+          );
+        } else {
+          // Handle the case where any of the required fields is empty
+          throw Exception("All fields are required.");
+        }
       }
-    } else {}
+    } else {
+      // Handle the case where storage permission is not granted
+    }
   }
 
   void removeImage(File imageFile) {
@@ -80,24 +102,37 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   }) async {
     emit(AddTaskUploading());
     try {
+      if (title.isEmpty ||
+          description.isEmpty ||
+          startTime.isEmpty ||
+          endTime.isEmpty) {
+        throw Exception("All fields are required.");
+      }
+
+      final dropdownValue = selectedDropdownValue ?? '';
+
       await FireBaseRepository.addTask(
         title: title,
         description: description,
         startTime: startTime,
         endTime: endTime,
-        state: selectedDropdownValue.toLowerCase(),
+        state: dropdownValue.toLowerCase(),
         imageFiles: imageFiles,
       );
+
       UtilsConfig.showSnackBarMessage(message: 'Add Success', status: true);
       titleController.clear();
       descriptionController.clear();
       startTimeController.clear();
+      selectedDropdownValueController.clear();
       endTimeController.clear();
       imageFiles.clear();
       emit(AddTaskUploadSuccess());
-      AppRouter.goToAndRemove(routeName: NamedRouter.mainScreen);
+      AppRouter.goToAndRemove(
+          routeName: NamedRouter.mainScreen, arguments: 'user');
     } on FirebaseException catch (e) {
       UtilsConfig.showFirebaseException(e);
+      emit(AddTaskUploadFailed());
     } catch (e) {
       UtilsConfig.showSnackBarMessage(message: e.toString(), status: false);
       emit(AddTaskUploadFailed());
@@ -106,7 +141,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
 
   Future<void> updateSelectedDropdownValue(String value) async {
     selectedDropdownValue = value;
-    emit(AddTaskDropdownValueUpdated(selectedDropdownValue));
+    emit(AddTaskDropdownValueUpdated(selectedDropdownValue!));
   }
 
   Future<void> requestPermissions() async {

@@ -74,18 +74,18 @@ class TaskCubit extends Cubit<TaskState> {
       // Get the tasks collection
       final tasksCollection = userDoc!.collection('tasks');
 
-      // Get the user's tasks from Firestore
+      // Get the user's tasks from Firestore and order them by createdAt field
       final querySnapshot =
-          await tasksCollection.orderBy('createdAt', descending: true).get();
+      await tasksCollection.orderBy('createdAt', descending: true).get();
 
       final tasks =
-          querySnapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList();
+      querySnapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList();
 
       // Subscribe to changes in the user's tasks
       tasksSubscription = tasksCollection
           .snapshots()
           .map((snapshot) =>
-              snapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList())
+          snapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList())
           .listen((tasks) {
         if (!isClosed) {
           emit(UserLoadedState(user: user!, tasks: tasks));
@@ -95,6 +95,9 @@ class TaskCubit extends Cubit<TaskState> {
           emit(UserErrorState(error: error.toString()));
         }
       });
+
+      // Sort the tasks in descending order (newest to oldest)
+      tasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
       if (!isClosed) {
         emit(UserLoadedState(user: user, tasks: tasks));

@@ -7,9 +7,12 @@ class CustomContainer extends StatelessWidget {
     this.color = Colors.grey,
     required this.title,
     required this.taskNumber,
+    this.height,
+    this.width,
   }) : super(key: key);
   final Color? color;
   final String title, taskNumber;
+  final double? height, width;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +23,8 @@ class CustomContainer extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(15).r,
       ),
-      height: ScreenUtil().setHeight(90),
-      width: ScreenUtil().setWidth(105),
+      height: height ?? ScreenUtil().setHeight(90),
+      width: width ?? ScreenUtil().setWidth(105),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -31,11 +34,15 @@ class CustomContainer extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
-                .copyWith(fontSize: 14.sp),
+                .copyWith(fontSize: 14.sp, color: Colors.black),
           ),
-          Text(taskNumber, style: TextStyle(
-            fontSize:  16.sp ,
-          ), ),
+          Text(
+            taskNumber,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(fontSize: 14.sp, color: Colors.black),
+          ),
         ],
       ),
     );
