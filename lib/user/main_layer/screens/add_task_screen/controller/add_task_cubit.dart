@@ -42,6 +42,56 @@ class AddTaskCubit extends Cubit<AddTaskState> {
 
   String? selectedDropdownValue;
 
+  void uploadTask({
+    required String title,
+    required String description,
+    required String startTime,
+    required String endTime,
+  }) async {
+    emit(AddTaskUploading());
+    try {
+
+      if (title.isEmpty ||
+          description.isEmpty ||
+          startTime.isEmpty ||
+          endTime.isEmpty) {
+        throw Exception("All fields are required.");
+      }
+      uploadSuccess();
+
+      final dropdownValue = selectedDropdownValue ?? '';
+
+      // Clear the imageFiles list before adding new images
+      imageFiles.clear();
+
+      await FireBaseRepository.addTask(
+        title: title,
+        description: description,
+        startTime: startTime,
+        endTime: endTime,
+        state: dropdownValue.toLowerCase(),
+        imageFiles: imageFiles,
+      );
+      UtilsConfig.showSnackBarMessage(message: 'Add Success', status: true);
+      titleController.clear();
+      descriptionController.clear();
+      startTimeController.clear();
+      selectedDropdownValueController.clear();
+      endTimeController.clear();
+      emit(AddTaskUploadSuccess());
+      AppRouter.goToAndRemove(
+        routeName: NamedRouter.mainScreen,
+        arguments: 'user',
+      );
+    } on FirebaseException catch (e) {
+      UtilsConfig.showFirebaseException(e);
+      emit(AddTaskUploadFailed());
+    } catch (e) {
+      UtilsConfig.showSnackBarMessage(message: e.toString(), status: false);
+      emit(AddTaskUploadFailed());
+    }
+  }
+
   void uploadSuccess() {
     isUploading = !isUploading;
     emit(UploadSuccess(isSuccess: isUploading));
@@ -66,7 +116,6 @@ class AddTaskCubit extends Cubit<AddTaskState> {
         imageFiles = result.paths.map((path) => File(path!)).toList();
 
         emit(AddTaskImageUpdated());
-
         // Check if all the required fields are filled
         if (titleController.text.isNotEmpty &&
             descriptionController.text.isNotEmpty &&
@@ -92,51 +141,6 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   void removeImage(File imageFile) {
     imageFiles.remove(imageFile);
     emit(RemoveTaskImageUpdated(imageFiles));
-  }
-
-  void uploadTask({
-    required String title,
-    required String description,
-    required String startTime,
-    required String endTime,
-  }) async {
-    emit(AddTaskUploading());
-    try {
-      if (title.isEmpty ||
-          description.isEmpty ||
-          startTime.isEmpty ||
-          endTime.isEmpty) {
-        throw Exception("All fields are required.");
-      }
-
-      final dropdownValue = selectedDropdownValue ?? '';
-
-      await FireBaseRepository.addTask(
-        title: title,
-        description: description,
-        startTime: startTime,
-        endTime: endTime,
-        state: dropdownValue.toLowerCase(),
-        imageFiles: imageFiles,
-      );
-
-      UtilsConfig.showSnackBarMessage(message: 'Add Success', status: true);
-      titleController.clear();
-      descriptionController.clear();
-      startTimeController.clear();
-      selectedDropdownValueController.clear();
-      endTimeController.clear();
-      imageFiles.clear();
-      emit(AddTaskUploadSuccess());
-      AppRouter.goToAndRemove(
-          routeName: NamedRouter.mainScreen, arguments: 'user');
-    } on FirebaseException catch (e) {
-      UtilsConfig.showFirebaseException(e);
-      emit(AddTaskUploadFailed());
-    } catch (e) {
-      UtilsConfig.showSnackBarMessage(message: e.toString(), status: false);
-      emit(AddTaskUploadFailed());
-    }
   }
 
   Future<void> updateSelectedDropdownValue(String value) async {

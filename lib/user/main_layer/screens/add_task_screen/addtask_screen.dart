@@ -250,7 +250,6 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                                     addTaskCubit.endTimeController.text.trim(),
                               );
                             }
-                            addTaskCubit.uploadSuccess();
                           },
                           title: 'Upload',
                           width: double.infinity,
