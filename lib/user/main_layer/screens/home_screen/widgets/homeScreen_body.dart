@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:task_mangment/core/routes/app_router.dart';
+import 'package:task_mangment/core/routes/named_router.dart';
 import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
 import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_state.dart';
 import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
@@ -52,18 +54,42 @@ class HomeScreenBody extends StatelessWidget {
                           color: const Color(0xffF9B5D0),
                           title: 'Tasks',
                           taskNumber: todayTasksCount.toString(),
+                          onTap: () {
+                            AppRouter.goTo(
+                              screenName: NamedRouter.userDetailsStatusTasks,
+                              arguments: {'status': 'today', 'userId': userId},
+                            );
+                          },
                         );
                       case 1:
                         return CustomContainer(
                           color: const Color(0xffC9F4AA),
                           title: 'Assigned',
                           taskNumber: upcomingTasksCount.toString(),
+                          onTap: () {
+                            AppRouter.goTo(
+                              screenName: NamedRouter.userDetailsStatusTasks,
+                              arguments: {
+                                'status': 'upcoming',
+                                'userId': userId
+                              },
+                            );
+                          },
                         );
                       case 2:
                         return CustomContainer(
                           color: const Color(0xffF3CCFF),
                           title: 'Completed',
                           taskNumber: completedTasksCount.toString(),
+                          onTap: () {
+                            AppRouter.goTo(
+                              screenName: NamedRouter.userDetailsStatusTasks,
+                              arguments: {
+                                'status': 'completed',
+                                'userId': userId
+                              },
+                            );
+                          },
                         );
                       default:
                         return Shimmer.fromColors(

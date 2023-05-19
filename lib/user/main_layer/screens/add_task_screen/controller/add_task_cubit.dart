@@ -1,29 +1,36 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:task_mangment/admin/controller/admin_cubit.dart';
+import 'package:task_mangment/core/logic/firebase_controller.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/logic/firebase_controller.dart';
+import 'package:task_mangment/model/user_model.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
 import 'add_task_state.dart';
 
 class AddTaskCubit extends Cubit<AddTaskState> {
   AddTaskCubit() : super(AddTaskInitial());
+  FireBaseRepository repository = FireBaseRepository();
 
-  List statusList = ['today', 'upcoming'];
   List<File> imageFiles = [];
   bool isUploading = false;
+  List tasksStatus = ['today', 'upcoming'];
+  AdminCubit adminCubit = AdminCubit();
 
   late TextEditingController titleController;
   late TextEditingController descriptionController;
   late TextEditingController startTimeController;
   late TextEditingController endTimeController;
   late TextEditingController selectedDropdownValueController;
+  late TextEditingController selectUserValueController;
 
   init() {
     titleController = TextEditingController();
@@ -31,16 +38,32 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     startTimeController = TextEditingController();
     endTimeController = TextEditingController();
     selectedDropdownValueController = TextEditingController();
+    selectUserValueController = TextEditingController();
   }
 
   dispose() {
     titleController.dispose();
     descriptionController.dispose();
     startTimeController.dispose();
+    selectUserValueController.dispose();
     endTimeController.dispose();
+    selectedDropdownValueController.dispose();
   }
 
   String? selectedDropdownValue;
+  String? selectUserDropdownValue;
+
+  List<UserModel> users = []; // Define the users list
+
+  Future<void> getAllUsers() async {
+    try {
+      final users = await repository.getAllUsers();
+      emit(UsersLoadedState(users: users));
+      this.users = users; // Update the users list
+    } catch (e) {
+      emit(UsersFailure(errorMessage: e.toString()));
+    }
+  }
 
   void uploadTask({
     required String title,
@@ -50,7 +73,6 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   }) async {
     emit(AddTaskUploading());
     try {
-
       if (title.isEmpty ||
           description.isEmpty ||
           startTime.isEmpty ||
@@ -63,14 +85,17 @@ class AddTaskCubit extends Cubit<AddTaskState> {
 
       // Clear the imageFiles list before adding new images
       imageFiles.clear();
+      User? user = FirebaseAuth.instance.currentUser;
 
-      await FireBaseRepository.addTask(
+      // print(user.displayName);
+      await repository.addTask(
         title: title,
         description: description,
         startTime: startTime,
         endTime: endTime,
         state: dropdownValue.toLowerCase(),
         imageFiles: imageFiles,
+        userName: user?.displayName ?? '',
       );
       UtilsConfig.showSnackBarMessage(message: 'Add Success', status: true);
       titleController.clear();
@@ -85,10 +110,44 @@ class AddTaskCubit extends Cubit<AddTaskState> {
       );
     } on FirebaseException catch (e) {
       UtilsConfig.showFirebaseException(e);
-      emit(AddTaskUploadFailed());
+      emit(AddTaskFailure(errorMessage: e.toString()));
     } catch (e) {
       UtilsConfig.showSnackBarMessage(message: e.toString(), status: false);
-      emit(AddTaskUploadFailed());
+      emit(AddTaskFailure(errorMessage: e.toString()));
+    }
+  }
+
+  void addTaskToUser({
+    required String userId,
+    required String userName,
+    required String title,
+    required String description,
+    required String startTime,
+    required String endTime,
+  }) async {
+    try {
+      emit(AddTaskUploading());
+      final dropdownValue = selectedDropdownValue ?? '';
+      await repository.addTaskForUser(
+        userId: userId,
+        title: title,
+        description: description,
+        startTime: startTime,
+        endTime: endTime,
+        state: dropdownValue.toLowerCase(),
+        imageFiles: imageFiles,
+        userName: userName, // Use the selected user's name
+      );
+      emit(AddTaskUploadSuccess());
+
+      print('Added successfully');
+
+      AppRouter.goTo(screenName: NamedRouter.mainScreen, arguments: 'admin');
+      imageFiles.clear();
+      // Fetch all tasks again to reflect the updated tasks list
+      adminCubit.fetchAllTasks();
+    } catch (error) {
+      emit(AddTaskFailure(errorMessage: error.toString()));
     }
   }
 
@@ -143,9 +202,14 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     emit(RemoveTaskImageUpdated(imageFiles));
   }
 
-  Future<void> updateSelectedDropdownValue(String value) async {
+  Future<void> updateStatusDropdownValue(String value) async {
     selectedDropdownValue = value;
     emit(AddTaskDropdownValueUpdated(selectedDropdownValue!));
+  }
+
+  Future<void> updateUserDropdownValue(String value) async {
+    selectUserDropdownValue = value;
+    emit(AddTaskUserDropdownValueUpdated(selectUserDropdownValue!));
   }
 
   Future<void> requestPermissions() async {

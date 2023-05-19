@@ -45,10 +45,10 @@ class EmployeeListBody extends StatelessWidget {
           return ListView.builder(
             itemCount: users.length,
             itemBuilder: (BuildContext context, int index) {
-              final userData = users[index].data()! as Map<String, dynamic>;
-              final userName = userData['username'] as String;
-              final userPosition = userData['position'] ?? '';
-              final userImage = userData['profileImageUrl'] ?? '';
+              final userData = users[index];
+              final userName = userData.userName;
+              final userPosition = userData.position;
+              final userImage = userData.profileImageUrl;
               return GestureDetector(
                 onTap: () {
                   AppRouter.goTo(
@@ -93,12 +93,12 @@ class EmployeeListBody extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(userName,
+                              Text(userName ?? '',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium!
                                       .copyWith(color: Colors.black)),
-                              Text(userPosition,
+                              Text(userPosition ?? '',
                                   style: Theme.of(context).textTheme.bodySmall),
                             ],
                           )

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_mangment/admin/screen/admin_add_task_screen.dart';
 import 'package:task_mangment/admin/screen/admin_home_screen.dart';
 import 'package:task_mangment/user/main_layer/screens/add_task_screen/addtask_screen.dart';
 import 'package:task_mangment/user/main_layer/screens/assigned_screen/assigned_screen.dart';
@@ -32,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
             )
           : HomeScreen(userRole: widget.userRole ?? 'user'),
       (widget.userRole == 'admin') ? Container() : const AssignedScreen(),
-      (widget.userRole == 'admin') ? Container() : const AddTaskScreen(),
+      (widget.userRole == 'admin') ? const AdminAddTaskScreen() : const AddTaskScreen(),
       const NotificationScreen(),
       SettingScreen(),
     ];

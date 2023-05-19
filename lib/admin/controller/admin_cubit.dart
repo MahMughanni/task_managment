@@ -4,7 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
+import 'package:task_mangment/core/logic/firebase_controller.dart';
 import 'package:task_mangment/model/task_model.dart';
+import 'package:task_mangment/model/user_model.dart';
 
 part 'admin_state.dart';
 
@@ -12,6 +14,7 @@ class AdminCubit extends Cubit<AdminState> {
   AdminCubit() : super(AdminInitial());
 
   StreamSubscription<QuerySnapshot>? tasksSubscription;
+  StreamSubscription<DocumentSnapshot>? userSubscription;
 
   Future<void> fetchAllTasks() async {
     try {
@@ -53,24 +56,26 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
+  void getTasksForUser(String userId) async {
+    emit(AdminLoadingState());
+
+    try {
+      // Call your task repository or API to fetch tasks for the user
+      final tasks = await FireBaseRepository().getTasksForUser(userId, 'user');
+
+      // Emit the tasks loaded state with the fetched tasks
+      emit(AdminTasksLoadedState(tasks));
+    } catch (error) {
+      // Handle any error that occurred during the fetching process
+      emit(AdminFailure(errorMessage: error.toString()));
+    }
+  }
 
 
   @override
   Future<void> close() {
     tasksSubscription?.cancel();
+    userSubscription?.cancel();
     return super.close();
-  }
-
-  Future<void> deleteTask({required String userId, required String id}) async {
-    try {
-      final taskDoc = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('tasks')
-          .doc(id);
-      await taskDoc.delete();
-    } catch (e) {
-      emit(AdminFailure(errorMessage: e.toString()));
-    }
   }
 }

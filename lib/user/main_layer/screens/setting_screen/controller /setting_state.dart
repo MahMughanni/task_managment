@@ -8,7 +8,8 @@ class SettingInitial extends SettingState {}
 class EmployeeLoadingState extends SettingState {}
 
 class EmployeeLoadedState extends SettingState {
-  final List<DocumentSnapshot> users;
+  final List<UserModel> users;
+
   EmployeeLoadedState({required this.users});
 }
 
@@ -17,4 +18,3 @@ class EmployeeErrorState extends SettingState {
 
   EmployeeErrorState({required this.error});
 }
-

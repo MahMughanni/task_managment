@@ -2,9 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_mangment/core/logic/base_cubit.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/logic/base_cubit.dart';
 import 'package:task_mangment/shared_widgets/custom_button.dart';
 import 'package:task_mangment/shared_widgets/custom_form_field.dart';
 import 'package:task_mangment/utils/app_constants.dart';
@@ -29,8 +29,7 @@ class LoginScreenBodyWidget extends StatefulWidget {
 }
 
 class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
-  String? _email;
-  String? _password;
+
 
   @override
   void initState() {

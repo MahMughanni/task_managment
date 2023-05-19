@@ -9,8 +9,9 @@ import 'package:task_mangment/admin/controller/admin_cubit.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/generate_routes.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/logic/base_cubit.dart';
+import 'package:task_mangment/core/logic/base_cubit.dart';
 import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
 import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
 import 'package:task_mangment/utils/app_theme/app_theme_light.dart';
 import 'package:task_mangment/utils/utils_config.dart';
@@ -61,6 +62,9 @@ class TaskManagementApp extends StatelessWidget {
             BlocProvider<AuthenticationCubit>(
               create: (BuildContext context) =>
                   AuthenticationCubit(firebaseAuth: userAUTH),
+            ),
+            BlocProvider<AddTaskCubit>(
+              create: (BuildContext context) => AddTaskCubit(),
             ),
             BlocProvider<AdminCubit>(
                 create: (BuildContext context) => AdminCubit()),

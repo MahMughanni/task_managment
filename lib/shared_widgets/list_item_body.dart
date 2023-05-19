@@ -9,15 +9,16 @@ import 'custom_circle_image.dart';
 class ListViewItemBody extends StatelessWidget {
   const ListViewItemBody({
     Key? key,
-    required this.userName,
+    required this.taskTitle,
     required this.taskCategory,
     required this.startTime,
     required this.title,
     required this.url,
     required this.status,
+    required this.userName,
   }) : super(key: key);
 
-  final String userName, taskCategory, startTime, title, url, status;
+  final String taskTitle, taskCategory, startTime, title, url, status, userName;
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +58,10 @@ class ListViewItemBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                4.verticalSpace,
                 Text(
                   taskCategory,
                   style: TextStyle(
@@ -67,66 +69,78 @@ class ListViewItemBody extends StatelessWidget {
                     fontWeight: AppConstFontWeight.medium,
                   ),
                 ),
-                Expanded(
-                  child: RichText(
-                    text: TextSpan(
-                      text: userName,
-                      style: TextStyle(
-                        color: Colors.black,
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 14.sp,
-                        fontWeight: AppConstFontWeight.regular,
-                      ),
+                RichText(
+                  text: TextSpan(
+                    text: taskTitle,
+                    style: TextStyle(
+                      color: Colors.black,
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 14.sp,
+                      fontWeight: AppConstFontWeight.regular,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.clip,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.clip,
                 ),
-                Expanded(
-                  child: RichText(
-                    text: TextSpan(
-                      text: startTime.toString(),
-                      style: TextStyle(
-                        fontWeight: AppConstFontWeight.regular,
-                        color: Colors.deepOrange,
-                        fontSize: 11.sp,
-                      ),
-                      children: [
-                        WidgetSpan(
-                            child: status == 'completed'
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: SvgPicture.asset(
-                                      SvgIconsConstManger.done,
-                                      width: 15.r,
-                                      height: 15.r,
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: SvgPicture.asset(
-                                      SvgIconsConstManger.calender,
-                                      width: 15.r,
-                                      height: 15.r,
-                                    ),
-                                  )),
-                      ],
+                RichText(
+                  text: TextSpan(
+                    text: UtilsConfig.formatDate(startTime.toString()),
+                    style: TextStyle(
+                      fontWeight: AppConstFontWeight.regular,
+                      color: Colors.deepOrange,
+                      fontSize: 11.sp,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.clip,
+                    children: [
+                      WidgetSpan(
+                          child: status == 'completed'
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: SvgPicture.asset(
+                                    SvgIconsConstManger.done,
+                                    width: 15.r,
+                                    height: 15.r,
+                                  ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: SvgPicture.asset(
+                                    SvgIconsConstManger.calender,
+                                    width: 15.r,
+                                    height: 15.r,
+                                  ),
+                                )),
+                    ],
                   ),
-                ),
-                Text(
-                  shortString,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.blueAccent,
-                    fontWeight: AppConstFontWeight.regular,
+                  overflow: TextOverflow.clip,
+                ),
+                RichText(
+                  text: TextSpan(
+                    text: status == 'completed'
+                        ? 'completed by '
+                        : 'Assigned employee',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.blueAccent, fontSize: 13.sp),
+                    children: [
+                      TextSpan(
+                        text: status == 'completed'
+                            ? userName.isEmpty
+                                ? '- - - - '
+                                : userName
+                            : '',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: const Color(0xff3AAF3C)),
+                      )
+                    ],
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.clip,
                 ),
                 4.verticalSpace,
               ],

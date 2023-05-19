@@ -15,7 +15,6 @@ class LoginSuccess extends AuthenticationState {
 
   LoginSuccess(this.user, {this.isAdmin = false});
 
-  @override
   List<Object?> get props => [user, isAdmin];
 }
 
@@ -25,15 +24,11 @@ class AuthFailure extends AuthenticationState {
   AuthFailure(this.errorMessage);
 }
 
-// SignUp State
-
 class SignUpInitial extends AuthenticationState {}
 
 class SignUpProgress extends AuthenticationState {}
 
 class SignUpSuccess extends AuthenticationState {
   final User user;
-
   SignUpSuccess(this.user);
 }
-

@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:task_mangment/logic/calender_controller.dart';
+import 'package:task_mangment/core/logic/calender_controller.dart';
 import 'package:task_mangment/model/task_model.dart';
 
 part 'calendar_state.dart';

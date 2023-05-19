@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:task_mangment/model/user_model.dart';
+
 abstract class AddTaskState {}
 
 class AddTaskInitial extends AddTaskState {}
@@ -14,6 +16,12 @@ class AddTaskDropdownValueUpdated extends AddTaskState {
   final String selectedValue;
 
   AddTaskDropdownValueUpdated(this.selectedValue);
+}
+
+class AddTaskUserDropdownValueUpdated extends AddTaskState {
+  final String selectedValue;
+
+  AddTaskUserDropdownValueUpdated(this.selectedValue);
 }
 
 class AddTaskImageUpdated extends AddTaskState {}
@@ -44,4 +52,14 @@ class AddTaskUploading extends AddTaskState {}
 
 class AddTaskUploadSuccess extends AddTaskState {}
 
-class AddTaskUploadFailed extends AddTaskState {}
+class UsersLoadedState extends AddTaskState {
+  final List<UserModel> users;
+
+  UsersLoadedState({required this.users});
+}
+
+class UsersFailure extends AddTaskState {
+  final String errorMessage;
+
+  UsersFailure({required this.errorMessage});
+}

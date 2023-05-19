@@ -13,10 +13,10 @@ class AdminFailure extends AdminState {
 
 class AdminLoadingState extends AdminState {}
 
+class AdminTaskAddedState extends AdminState {}
+
 class AdminTasksLoadedState extends AdminState {
   final List<TaskModel> tasks;
 
   AdminTasksLoadedState(this.tasks);
 }
-
-

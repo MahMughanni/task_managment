@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
 import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_state.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/widgets/custom_drop_down.dart';
 import 'package:task_mangment/user/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
 import 'package:task_mangment/shared_widgets/custom_button.dart';
 import 'package:task_mangment/shared_widgets/custom_form_field.dart';
@@ -101,40 +100,34 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                                 thickness: 1,
                                 color: Colors.grey.shade300,
                               ),
-                              ListTile(
-                                title: Text(
-                                  'Upcoming',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(color: Colors.black),
-                                ),
-                                onTap: () {
-                                  addTaskCubit
-                                      .updateSelectedDropdownValue('Upcoming');
-                                  addTaskCubit.selectedDropdownValueController
-                                      .text = 'Upcoming';
+                              SizedBox(
+                                height: 150.h,
+                                child: ListView.builder(
+                                  itemCount: addTaskCubit.tasksStatus.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return ListTile(
+                                      title: Text(
+                                        addTaskCubit.tasksStatus[index]
+                                            .toString()
+                                            .toUpperCase(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .copyWith(color: Colors.black),
+                                      ),
+                                      onTap: () {
+                                        var task = addTaskCubit.selectedDropdownValueController.text = addTaskCubit.tasksStatus[index];
+                                        addTaskCubit
+                                            .updateStatusDropdownValue(
+                                            task.toString());
 
-                                  Navigator.pop(
-                                      context); // Close the bottom sheet
-                                },
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'Today',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(color: Colors.black),
+                                        Navigator.pop(
+                                            context); // Close the bottom sheet
+                                      },
+                                    );
+                                  },
                                 ),
-                                onTap: () {
-                                  addTaskCubit
-                                      .updateSelectedDropdownValue('Today');
-                                  addTaskCubit.selectedDropdownValueController
-                                      .text = 'Today';
-                                  Navigator.pop(
-                                      context); // Close the bottom sheet
-                                },
                               ),
                             ],
                           ),
@@ -149,8 +142,8 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                         labelText: 'Select Status',
                         focus: (_) => FocusScope.of(context).nearestScope,
                         controller:
-                            addTaskCubit.selectedDropdownValueController,
-                        hintText: 'Select Country',
+                        addTaskCubit.selectedDropdownValueController,
+                        hintText: 'Select Status',
                         keyboardType: TextInputType.phone,
                         textInputAction: TextInputAction.next,
                         onChanged: (val) {},
@@ -196,7 +189,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                         clipBehavior: Clip.antiAlias,
                         children: [
                           ...addTaskCubit.imageFiles.map(
-                            (imageFile) => Stack(
+                                (imageFile) => Stack(
                               children: [
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(16.0).r,
@@ -247,7 +240,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                                 startTime: addTaskCubit.startTimeController.text
                                     .trim(),
                                 endTime:
-                                    addTaskCubit.endTimeController.text.trim(),
+                                addTaskCubit.endTimeController.text.trim(),
                               );
                             }
                           },

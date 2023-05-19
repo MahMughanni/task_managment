@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:task_mangment/core/logic/firebase_controller.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/logic/firebase_controller.dart';
 import 'package:task_mangment/user/main_layer/screens/setting_screen/pages/widgets/profile_body.dart';
 import 'package:task_mangment/shared_widgets/custom_appbar.dart';
 import 'package:task_mangment/shared_widgets/custom_button.dart';

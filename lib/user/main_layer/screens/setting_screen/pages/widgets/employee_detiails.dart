@@ -2,13 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:task_mangment/model/user_model.dart';
 import 'package:task_mangment/shared_widgets/custom_circle_image.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EmployeeDetailsScreen extends StatelessWidget {
-  const EmployeeDetailsScreen({Key? key, this.userData}) : super(key: key);
-  final userData;
+  const EmployeeDetailsScreen({Key? key, required this.userData}) : super(key: key);
+  final UserModel userData;
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +59,11 @@ class EmployeeDetailsScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                userData['username'],
+                                userData.userName ?? '',
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
                               Text(
-                                userData['position'],
+                                userData.position ?? '',
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall!
@@ -83,20 +84,22 @@ class EmployeeDetailsScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                         Text(
-                          userData['email'] ?? ' ',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                color: const Color(0xff4B4B4B),
-                              ),
+                          userData.email ?? ' ',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    color: const Color(0xff4B4B4B),
+                                  ),
                         ),
                         Text(
                           'Phone number :',
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                         Text(
-                          userData['phone'] ?? '',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                color: const Color(0xff4B4B4B),
-                              ),
+                          userData.phone ?? '',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    color: const Color(0xff4B4B4B),
+                                  ),
                         ),
                         32.verticalSpace,
                         Expanded(
@@ -106,7 +109,7 @@ class EmployeeDetailsScreen extends StatelessWidget {
                               CustomIconsButton(
                                 imagePath: SvgIconsConstManger.phone,
                                 onPressed: () async {
-                                  final phone = userData['phone'];
+                                  final phone = userData.phone ?? '';
                                   final url = Uri.parse('tel:$phone');
                                   if (await canLaunchUrl(url)) {
                                     await launchUrl(url);
@@ -118,7 +121,7 @@ class EmployeeDetailsScreen extends StatelessWidget {
                               CustomIconsButton(
                                 imagePath: SvgIconsConstManger.whatsapp,
                                 onPressed: () async {
-                                  final phone = userData['phone'];
+                                  final phone = userData.phone ?? '';
                                   final url =
                                       Uri.encodeFull('https://wa.me/$phone');
                                   await launch(url);
@@ -127,7 +130,7 @@ class EmployeeDetailsScreen extends StatelessWidget {
                               CustomIconsButton(
                                 imagePath: SvgIconsConstManger.email,
                                 onPressed: () async {
-                                  final recipientEmail = userData['email'];
+                                  final recipientEmail = userData ?? '';
                                   final uri =
                                       Uri.encodeFull('mailto:$recipientEmail');
 
@@ -146,7 +149,7 @@ class EmployeeDetailsScreen extends StatelessWidget {
               FractionalTranslation(
                 translation: Offset(0.0, -1.50),
                 child: CustomCircleImage(
-                  image: userData['profileImageUrl'],
+                  image: userData.profileImageUrl ?? '',
                   width: 120.r,
                   height: 120.r,
                 ),

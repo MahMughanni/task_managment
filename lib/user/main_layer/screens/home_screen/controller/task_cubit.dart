@@ -14,6 +14,7 @@ class TaskCubit extends Cubit<TaskState> {
   DocumentReference? userDoc;
 
   bool isTaskCompleted = false;
+  UserModel? user;
 
   TaskCubit({required this.userId}) : super(UserInitial()) {
     userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
@@ -57,7 +58,58 @@ class TaskCubit extends Cubit<TaskState> {
     }
   }
 
-  Future<void> _loadUserTasks(UserModel? user) async {
+  Future<void> loadUserTasks(String userId) async {
+    // Cancel any active task subscription
+    tasksSubscription?.cancel();
+
+    try {
+      // Get the user document reference
+      final userDoc =
+          FirebaseFirestore.instance.collection('users').doc(userId);
+
+      if (!isClosed) {
+        emit(UserLoadingState());
+      }
+
+      // Get the tasks collection for the user
+      final tasksCollection = userDoc.collection('tasks');
+
+      // Get the user's tasks from Firestore and order them by createdAt field
+      final querySnapshot =
+          await tasksCollection.orderBy('createdAt', descending: true).get();
+
+      final tasks =
+          querySnapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList();
+
+      // Subscribe to changes in the user's tasks
+      tasksSubscription = tasksCollection
+          .snapshots()
+          .map((snapshot) =>
+              snapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList())
+          .listen((tasks) {
+        if (!isClosed) {
+          emit(UserLoadedState(user: user!, tasks: tasks));
+        }
+      }, onError: (error) {
+        if (!isClosed) {
+          emit(UserErrorState(error: error.toString()));
+        }
+      });
+
+      // Sort the tasks in descending order (newest to oldest)
+      tasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+      if (!isClosed) {
+        emit(UserLoadedState(user: user!, tasks: tasks));
+      }
+    } catch (e) {
+      if (!isClosed) {
+        emit(UserErrorState(error: e.toString()));
+      }
+    }
+  }
+
+  Future<void> _loadUserTasks(user) async {
     // Cancel any active task subscription
     tasksSubscription?.cancel();
 
@@ -76,16 +128,16 @@ class TaskCubit extends Cubit<TaskState> {
 
       // Get the user's tasks from Firestore and order them by createdAt field
       final querySnapshot =
-      await tasksCollection.orderBy('createdAt', descending: true).get();
+          await tasksCollection.orderBy('createdAt', descending: true).get();
 
       final tasks =
-      querySnapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList();
+          querySnapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList();
 
       // Subscribe to changes in the user's tasks
       tasksSubscription = tasksCollection
           .snapshots()
           .map((snapshot) =>
-          snapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList())
+              snapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList())
           .listen((tasks) {
         if (!isClosed) {
           emit(UserLoadedState(user: user!, tasks: tasks));

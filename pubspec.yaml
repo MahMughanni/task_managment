@@ -33,6 +33,8 @@ dependencies:
   lottie: ^2.3.2
   equatable: ^2.0.5
   flutter_launcher_icons: ^0.13.1
+  flutter_hooks: ^0.18.6
+
 
 
 flutter_launcher_icons:

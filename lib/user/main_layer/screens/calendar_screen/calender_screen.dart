@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:task_mangment/logic/calender_controller.dart';
+import 'package:task_mangment/core/logic/calender_controller.dart';
 import 'package:task_mangment/user/main_layer/screens/task_details_screen/task_details_screen.dart';
 import 'package:task_mangment/shared_widgets/list_item_body.dart';
 import 'controller/calendar_cubit.dart';
@@ -144,7 +144,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     );
                                   },
                                   child: ListViewItemBody(
-                                    userName: task.title,
+                                    taskTitle: task.title,
                                     taskCategory: task.state,
                                     startTime: task.startTime.toString(),
                                     title: task.description,
@@ -152,6 +152,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                         ? task.imageUrls.first
                                         : '',
                                     status: task.state,
+                                    userName: task.userName,
                                   ),
                                 );
                               },

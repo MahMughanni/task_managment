@@ -11,12 +11,12 @@ import 'package:task_mangment/utils/utils_config.dart';
 part 'authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
-  final FirebaseAuth? firebaseAuth;
+  final FirebaseAuth firebaseAuth;
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   User? loggedInUser;
   String? userRole;
 
-  AuthenticationCubit({this.firebaseAuth}) : super(LoginInitial());
+  AuthenticationCubit({required this.firebaseAuth}) : super(LoginInitial());
 
   Future<void> autoLogin() async {
     const storage = FlutterSecureStorage();
@@ -26,13 +26,12 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     if (email != null && password != null) {
       if (firebaseAuth != null) {
         try {
-          final userCredential = await firebaseAuth!.signInWithEmailAndPassword(
+          final userCredential = await firebaseAuth.signInWithEmailAndPassword(
             email: email,
             password: password,
           );
 
           loggedInUser = userCredential.user;
-
           emit(LoginSuccess(userCredential.user!, isAdmin: false));
         } catch (e) {
           emit(AuthFailure('An error occurred during auto login.'));
@@ -51,18 +50,28 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       final userData =
           await fireStore.collection('users').doc(loggedInUser!.uid).get();
       userRole = userData['role'];
-      AppRouter.goToAndRemove(
-          routeName: NamedRouter.mainScreen, arguments: userRole);
+      if (userRole == 'user' || userRole == 'admin') {
+        AppRouter.goToAndRemove(
+          routeName: NamedRouter.mainScreen,
+          arguments: userRole,
+        );
+      } else {
+        AppRouter.goToAndRemove(routeName: NamedRouter.loginScreen);
+      }
     } else {
       AppRouter.goToAndRemove(routeName: NamedRouter.loginScreen);
     }
+  }
+
+  String? getUserRole() {
+    return userRole;
   }
 
   Future<void> logIn(String email, String password) async {
     try {
       emit(LoginInProgress());
 
-      final UserCredential userCredential = await firebaseAuth!
+      final UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
 
       final userData = await FirebaseFirestore.instance
@@ -77,7 +86,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
             routeName: NamedRouter.mainScreen,
             arguments: userData['role'].toString());
       } else if (userRole == 'admin') {
-        UtilsConfig.showSnackBarMessage(message: 'Admin', status: true);
         AppRouter.goToAndRemove(
             routeName: NamedRouter.mainScreen,
             arguments: userData['role'].toString());
@@ -90,8 +98,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       await storage.write(key: 'email', value: email);
       await storage.write(key: 'password', value: password);
 
-      UtilsConfig.showSnackBarMessage(
-          message: ' Login Success !', status: true);
+      UtilsConfig.showSnackBarMessage(message: ' Login Success!', status: true);
       emit(LoginSuccess(userCredential.user!));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -107,16 +114,21 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     }
   }
 
-  Future<void> signUp(
-      {required String email,
-      required String password,
-      required String username,
-      required String phone}) async {
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String username,
+    required String phone,
+  }) async {
     try {
       emit(SignUpProgress());
 
-      UserCredential userCredential = await firebaseAuth!
-          .createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
       String userId = userCredential.user!.uid;
 
       await fireStore.collection('users').doc(userId).set({
@@ -128,20 +140,32 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         'email': email, // add email field to the document
       });
 
-      User user = userCredential.user!;
+      loggedInUser = userCredential.user!;
+      await loggedInUser!.updateDisplayName(username);
 
-      print('success');
-      emit(SignUpSuccess(user));
-      AppRouter.goToAndRemove(routeName: NamedRouter.mainScreen);
+      AppRouter.goToAndRemove(
+          routeName: NamedRouter.mainScreen, arguments: 'user');
+      emit(SignUpSuccess(loggedInUser!));
     } on FirebaseAuthException catch (e) {
-      emit(AuthFailure(e.message ?? 'An unknown error occurred.'));
+      if (e.code == 'email-already-in-use') {
+        UtilsConfig.showSnackBarMessage(
+            message: 'email already used', status: false);
+        emit(AuthFailure('The email address is already in use.'));
+      } else if (e.code == 'phone-number-already-exists') {
+        UtilsConfig.showSnackBarMessage(
+            message: 'phone already used', status: false);
+
+        emit(AuthFailure('The phone number is already in use.'));
+      } else {
+        emit(AuthFailure(e.message ?? 'An unknown error occurred.'));
+      }
     } catch (e) {
       emit(AuthFailure('An unknown error occurred.'));
     }
   }
 
   Future<void> logOut() async {
-    await firebaseAuth!.signOut();
+    await firebaseAuth.signOut();
 
 // Remove user info from secure storage
     const storage = FlutterSecureStorage();

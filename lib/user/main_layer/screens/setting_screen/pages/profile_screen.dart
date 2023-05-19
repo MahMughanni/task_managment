@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_mangment/logic/firebase_controller.dart';
+import 'package:task_mangment/core/logic/firebase_controller.dart';
 import 'package:task_mangment/user/main_layer/screens/setting_screen/pages/edit_profile.dart';
 import 'package:task_mangment/user/main_layer/screens/setting_screen/pages/widgets/profile_body.dart';
 import 'package:task_mangment/shared_widgets/custom_appbar.dart';

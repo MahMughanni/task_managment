@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskModel {
@@ -11,6 +9,7 @@ class TaskModel {
   String state;
   final List<String> imageUrls;
   final Timestamp createdAt;
+  String userName; // New property to store the username
 
   TaskModel({
     this.id,
@@ -21,6 +20,7 @@ class TaskModel {
     required this.state,
     required this.imageUrls,
     required this.createdAt,
+    required this.userName, // Include the username in the constructor
   });
 
   factory TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -36,6 +36,7 @@ class TaskModel {
       state: data['state'] ?? '',
       imageUrls: imageUrls,
       createdAt: data['createdAt'] ?? Timestamp.now(),
+      userName: data['username'] ?? '', // Initialize the username as an empty string
     );
   }
 
@@ -48,6 +49,7 @@ class TaskModel {
     String? state,
     List<String>? imageUrls,
     Timestamp? createdAt,
+    String? userName,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -58,6 +60,7 @@ class TaskModel {
       state: state ?? this.state,
       imageUrls: imageUrls ?? this.imageUrls,
       createdAt: createdAt ?? this.createdAt,
+      userName: userName ?? this.userName,
     );
   }
 
@@ -71,11 +74,12 @@ class TaskModel {
       'state': state,
       'imageUrls': imageUrls,
       'createdAt': createdAt,
+      'username': userName,
     };
   }
 
   @override
   String toString() {
-    return 'TaskModel{ Id: $id, title: $title, description: $description, startTime: $startTime, endTime: $endTime, state: $state, imageUrls: $imageUrls}';
+    return 'TaskModel{ Id: $id, title: $title, description: $description, startTime: $startTime, endTime: $endTime, state: $state, imageUrls: $imageUrls, userName: $userName}';
   }
 }
