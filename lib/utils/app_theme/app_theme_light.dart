@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/utils/app_constants.dart';
 
 ThemeData getAppTheme() => ThemeData(
+      scaffoldBackgroundColor: Colors.white,
+      appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
       fontFamily: 'Cairo',
       useMaterial3: true,
       iconTheme: const IconThemeData(color: Colors.black),
@@ -34,8 +36,6 @@ TextTheme getTextTheme() => TextTheme(
         fontWeight: AppConstFontWeight.medium,
         color: ColorConstManger.primaryColor,
       ),
-
-
       displayMedium: TextStyle(
         fontSize: 16.sp,
         fontWeight: AppConstFontWeight.regular,

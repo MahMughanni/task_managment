@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:task_mangment/admin/controller/admin_cubit.dart';
@@ -187,20 +188,144 @@ class AddTaskCubit extends Cubit<AddTaskState> {
         endTime: endTime,
         state: dropdownValue.toLowerCase(),
         imageFiles: imageFiles,
-        userName: userName, // Use the selected user's name
+        userName: userName,
       );
       emit(AddTaskUploadSuccess());
+
+      // Retrieve user's FCM token from the user database
+      final userToken = await getUserFCMToken(userId);
+
+      // Send notification to the user using FCM
+      await sendNotificationToUser(
+          userToken, 'New Task', 'You have a new task added by the admin.');
 
       print('Added successfully');
 
       AppRouter.goTo(screenName: NamedRouter.mainScreen, arguments: 'admin');
       imageFiles.clear();
-      // Fetch all tasks again to reflect the updated tasks list
       adminCubit.fetchAllTasks();
     } catch (error) {
       emit(AddTaskFailure(errorMessage: error.toString()));
     }
   }
+
+  Future<String> getUserFCMToken(String userId) async {
+    try {
+      final userDocument = FirebaseFirestore.instance.collection('users').doc(userId);
+
+      // Retrieve the FCM token field from the user document
+      final userData = await userDocument.get();
+      final fcmToken = userData.get('fcmToken') as String;
+
+      return fcmToken;
+    } catch (error) {
+      print('Error retrieving FCM token: $error');
+      // Handle the error
+      return '';
+    }
+  }
+
+  Future<void> sendNotificationToUser(String userToken, String title, String body) async {
+    try {
+      // Set up the Dio client
+      final dio = Dio();
+
+      // Set the request headers
+      dio.options.headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'AAAAjvYbOdU:APA91bGtSsmPqBONIbhHZosII6W00FZy3hi-aRVNQBVK9jhs2ZQ0EsN3Ozz63KQzYmMUcUY5OXnQ1VAimp6I50yisI5uOImHFJ6B7FmUoDgADRvVq3IfvYfywNthh_tgeoa7BFPJ403-',
+      };
+
+      // Configure the notification
+      final notification = <String, dynamic>{
+        'title': title,
+        'body': body,
+      };
+
+      // Create the request body
+      final Map<String, dynamic> requestBody = {
+        'notification': notification,
+        'to': userToken,
+      };
+
+      // Send the notification using FCM
+      final response = await dio.post(
+        'https://fcm.googleapis.com/fcm/send',
+        data: requestBody,
+      );
+
+      if (response.statusCode == 200) {
+        print('Notification sent successfully');
+      } else {
+        print('Failed to send notification. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error sending notification: $error');
+      // Handle the error
+    }
+  }
+
+
+
+  // Future<void> sendNotificationToUser(
+  //     String userToken, String title, String body) async {
+  //   try {
+  //     // Initialize Firebase Messaging instance
+  //     final FirebaseMessaging messaging = FirebaseMessaging.instance;
+  //
+  //     // Configure the notification
+  //     final notification = <String, String>{
+  //       'title': title,
+  //       'body': body,
+  //     };
+  //     // Send the notification using FCM
+  //     // await messaging.sendMessage(
+  //     //   to: userToken ,
+  //     //   data: notification,
+  //     // );
+  //     await messaging.sendMulticast(messages: messages);
+  //
+  //
+  //
+  //   } catch (error) {
+  //     print('Error sending notification: $error');
+  //     // Handle the error
+  //   }
+  // }
+
+  // void addTaskToUser({
+  //   required String userId,
+  //   required String userName,
+  //   required String title,
+  //   required String description,
+  //   required String startTime,
+  //   required String endTime,
+  // }) async {
+  //   try {
+  //     emit(AddTaskUploading());
+  //     final dropdownValue = selectedDropdownTaskValue ?? '';
+  //     await repository.addTaskForUser(
+  //       userId: userId,
+  //       title: title,
+  //       description: description,
+  //       startTime: startTime,
+  //       endTime: endTime,
+  //       state: dropdownValue.toLowerCase(),
+  //       imageFiles: imageFiles,
+  //       userName: userName, // Use the selected user's name
+  //     );
+  //     emit(AddTaskUploadSuccess());
+  //
+  //     print('Added successfully');
+  //
+  //     AppRouter.goTo(screenName: NamedRouter.mainScreen, arguments: 'admin');
+  //     imageFiles.clear();
+  //     // Fetch all tasks again to reflect the updated tasks list
+  //     adminCubit.fetchAllTasks();
+  //   } catch (error) {
+  //     emit(AddTaskFailure(errorMessage: error.toString()));
+  //   }
+  // }
 
   void uploadSuccess() {
     isUploading = !isUploading;

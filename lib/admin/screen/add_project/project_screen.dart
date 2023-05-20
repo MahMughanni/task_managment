@@ -27,6 +27,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: const CustomAppbar(
         title: ('Projects'),
         action: [],
@@ -46,12 +47,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
             ),
             BlocBuilder<ProjectCubit, ProjectState>(
               builder: (context, state) {
-                print('state $state');
                 if (state is ProjectsLoadingState) {
                   return const CircularProgressIndicator();
                 } else if (state is ProjectLoadedState) {
                   final projects = state.projects;
-                  print("project length ${projects.length}");
+
                   return Expanded(
                     child: ListView.builder(
                       itemCount: projects.length,
@@ -59,6 +59,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                         final project = projects[index];
                         return ProjectListBodyItem(
                           projectTitle: project.title,
+                          state: project.state,
                         );
                       },
                     ),
@@ -106,19 +107,22 @@ class _ProjectScreenState extends State<ProjectScreen> {
 }
 
 class ProjectListBodyItem extends StatelessWidget {
-  const ProjectListBodyItem({Key? key, required this.projectTitle})
+  const ProjectListBodyItem(
+      {Key? key, required this.projectTitle, required this.state})
       : super(key: key);
 
-  final String projectTitle;
+  final String projectTitle, state;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(16),
-      height: 50,
+      height: 50.h,
       decoration: BoxDecoration(
-        color: const Color(0xffF2F2F2),
+        color: state == 'completed'
+            ? const Color(0xff3AAF3C).withBlue(10)
+            : const Color(0xffF2F2F2),
         borderRadius: BorderRadius.circular(9),
       ),
       child: Row(
@@ -126,9 +130,18 @@ class ProjectListBodyItem extends StatelessWidget {
         children: [
           Text(
             projectTitle,
-            style: Theme.of(context).textTheme.bodyText2,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: state == 'completed' ? Colors.white : Colors.black,
+                ),
           ),
-          const Icon(Icons.done),
+          state == 'completed'
+              ? SvgPicture.asset(
+                  SvgIconsConstManger.done,
+                  width: 15.r,
+                  height: 15.r,
+            color: Colors.white,
+                )
+              : const SizedBox(),
         ],
       ),
     );
