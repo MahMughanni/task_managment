@@ -74,7 +74,6 @@ class TaskCubit extends Cubit<TaskState> {
       // Get the tasks collection for the user
       final tasksCollection = userDoc.collection('tasks');
 
-      // Get the user's tasks from Firestore and order them by createdAt field
       final querySnapshot =
           await tasksCollection.orderBy('createdAt', descending: true).get();
 

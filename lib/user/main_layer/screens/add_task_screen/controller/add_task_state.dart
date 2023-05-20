@@ -23,6 +23,11 @@ class AddTaskUserDropdownValueUpdated extends AddTaskState {
 
   AddTaskUserDropdownValueUpdated(this.selectedValue);
 }
+class AddProjectDropdownValueUpdated extends AddTaskState {
+  final String selectedValue;
+
+  AddProjectDropdownValueUpdated(this.selectedValue);
+}
 
 class AddTaskImageUpdated extends AddTaskState {}
 

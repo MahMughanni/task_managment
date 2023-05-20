@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/admin/screen/admin_add_task_screen.dart';
 import 'package:task_mangment/admin/screen/admin_home_screen.dart';
+import 'package:task_mangment/admin/screen/add_project/project_screen.dart';
 import 'package:task_mangment/user/main_layer/screens/add_task_screen/addtask_screen.dart';
 import 'package:task_mangment/user/main_layer/screens/assigned_screen/assigned_screen.dart';
 import 'package:task_mangment/user/main_layer/screens/home_screen/home_screen.dart';
@@ -25,15 +26,19 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.userRole);
+    debugPrint(widget.userRole);
     screens = [
       (widget.userRole == 'admin')
           ? AdminHomeScreen(
               userRole: 'admin',
             )
           : HomeScreen(userRole: widget.userRole ?? 'user'),
-      (widget.userRole == 'admin') ? Container() : const AssignedScreen(),
-      (widget.userRole == 'admin') ? const AdminAddTaskScreen() : const AddTaskScreen(),
+      (widget.userRole == 'admin')
+          ? const ProjectScreen()
+          : const AssignedScreen(),
+      (widget.userRole == 'admin')
+          ? const AdminAddTaskScreen()
+          : const AddTaskScreen(),
       const NotificationScreen(),
       SettingScreen(),
     ];

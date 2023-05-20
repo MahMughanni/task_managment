@@ -13,4 +13,6 @@ class NamedRouter {
   static const String adminHomeScreen = '/adminHomeScreen';
   static const String adminDetailsStatusTasks = '/AdminDetailsStatusTasks';
   static const String userDetailsStatusTasks = '/UserDetailsStatusTasks';
+  static const String projectScreen = '/ProjectScreen';
+  static const String addProjectScreen = '/AddProjectScreen';
 }

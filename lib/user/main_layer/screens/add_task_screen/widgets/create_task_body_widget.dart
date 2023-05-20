@@ -6,16 +6,16 @@ import 'package:task_mangment/shared_widgets/custom_form_field.dart';
 class CreateTaskBody extends StatelessWidget {
   const CreateTaskBody(
       {Key? key,
-      required this.onTap,
       required this.descriptionController,
       this.validator,
       required this.startTimeController,
-      required this.endTimeController})
+      required this.endTimeController,
+      required this.descriptionTitle})
       : super(key: key);
-  final Function()? onTap;
   final TextEditingController descriptionController;
   final String? Function(String?)? validator;
   final TextEditingController startTimeController;
+  final String descriptionTitle;
 
   final TextEditingController endTimeController;
 
@@ -116,7 +116,7 @@ class CreateTaskBody extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          const Text('Task Description'),
+          Text(descriptionTitle),
           const SizedBox(height: 8),
           CustomTextFormField(
             maxLine: 5,

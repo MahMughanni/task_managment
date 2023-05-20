@@ -13,7 +13,6 @@ class UserLoadingState extends TaskState {}
 class UserLoadedState extends TaskState {
   final UserModel user;
   final List<TaskModel> tasks;
-
   UserLoadedState({required this.user, required this.tasks});
 }
 

@@ -23,6 +23,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   List<File> imageFiles = [];
   bool isUploading = false;
   List tasksStatus = ['today', 'upcoming'];
+  List projectStatus = ['working', 'completed'];
   AdminCubit adminCubit = AdminCubit();
 
   late TextEditingController titleController;
@@ -50,7 +51,8 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     selectedDropdownValueController.dispose();
   }
 
-  String? selectedDropdownValue;
+  String? selectedDropdownTaskValue;
+  String? selectedDropdownProjectValue;
   String? selectUserDropdownValue;
 
   List<UserModel> users = []; // Define the users list
@@ -81,7 +83,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
       }
       uploadSuccess();
 
-      final dropdownValue = selectedDropdownValue ?? '';
+      final dropdownValue = selectedDropdownTaskValue ?? '';
 
       // Clear the imageFiles list before adding new images
       imageFiles.clear();
@@ -117,6 +119,55 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     }
   }
 
+  void createProject({
+    required String title,
+    required String description,
+    required String startTime,
+    required String endTime,
+  }) async {
+    emit(AddTaskUploading());
+    try {
+      if (title.isEmpty ||
+          description.isEmpty ||
+          startTime.isEmpty ||
+          endTime.isEmpty) {
+        throw Exception("All fields are required.");
+      }
+      uploadSuccess();
+
+      final dropdownValueForProjects = selectedDropdownProjectValue ?? '';
+
+      // Clear the imageFiles list before adding new images
+      imageFiles.clear();
+      await repository.createProject(
+        title: title,
+        description: description,
+        startTime: startTime,
+        endTime: endTime,
+        state: dropdownValueForProjects.toLowerCase(),
+        imageFiles: imageFiles,
+      );
+
+      UtilsConfig.showSnackBarMessage(message: 'Add Success', status: true);
+      titleController.clear();
+      descriptionController.clear();
+      startTimeController.clear();
+      selectedDropdownValueController.clear();
+      endTimeController.clear();
+      emit(AddTaskUploadSuccess());
+      AppRouter.goToAndRemove(
+        routeName: NamedRouter.mainScreen,
+        arguments: 'admin',
+      );
+    } on FirebaseException catch (e) {
+      UtilsConfig.showFirebaseException(e);
+      emit(AddTaskFailure(errorMessage: e.toString()));
+    } catch (e) {
+      UtilsConfig.showSnackBarMessage(message: e.toString(), status: false);
+      emit(AddTaskFailure(errorMessage: e.toString()));
+    }
+  }
+
   void addTaskToUser({
     required String userId,
     required String userName,
@@ -127,7 +178,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   }) async {
     try {
       emit(AddTaskUploading());
-      final dropdownValue = selectedDropdownValue ?? '';
+      final dropdownValue = selectedDropdownTaskValue ?? '';
       await repository.addTaskForUser(
         userId: userId,
         title: title,
@@ -157,8 +208,8 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   }
 
   void updateValue(String value) {
-    selectedDropdownValue = value;
-    final newState = AddTaskDropdownValueUpdated(selectedDropdownValue!);
+    selectedDropdownTaskValue = value;
+    final newState = AddTaskDropdownValueUpdated(selectedDropdownTaskValue!);
     emit(newState);
   }
 
@@ -203,13 +254,18 @@ class AddTaskCubit extends Cubit<AddTaskState> {
   }
 
   Future<void> updateStatusDropdownValue(String value) async {
-    selectedDropdownValue = value;
-    emit(AddTaskDropdownValueUpdated(selectedDropdownValue!));
+    selectedDropdownTaskValue = value;
+    emit(AddTaskDropdownValueUpdated(selectedDropdownTaskValue!));
   }
 
   Future<void> updateUserDropdownValue(String value) async {
     selectUserDropdownValue = value;
     emit(AddTaskUserDropdownValueUpdated(selectUserDropdownValue!));
+  }
+
+  Future<void> updateAdminProjectDropdownValue(String value) async {
+    selectedDropdownProjectValue = value;
+    emit(AddProjectDropdownValueUpdated(selectedDropdownProjectValue!));
   }
 
   Future<void> requestPermissions() async {

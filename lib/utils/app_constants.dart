@@ -22,6 +22,11 @@ class SvgIconsConstManger {
   static const String email = '$iconsPath/email.svg';
   static const String done = '$iconsPath/done.svg';
   static const String calender = '$iconsPath/calender.svg';
+  static const String profileImage = '$iconsPath/profile.svg';
+  static const String logoutImage = '$iconsPath/logout.svg';
+  static const String employeeImage = '$iconsPath/employee.svg';
+  static const String aboutUsImage = '$iconsPath/about.svg';
+  static const String langImage = '$iconsPath/lang.svg';
 }
 
 class ColorConstManger {

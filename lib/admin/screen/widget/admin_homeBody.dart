@@ -24,12 +24,10 @@ class AdminHomeScreenBody extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final adminCubit = BlocProvider.of<AdminCubit>(context);
-
-    // Fetch tasks when the widget is built
     useEffect(() {
       adminCubit.fetchAllTasks();
       return () {
-        // Cleanup function if needed
+        //clean if needed
       };
     }, []);
 
@@ -50,7 +48,7 @@ class AdminHomeScreenBody extends HookWidget {
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 BuildSliverAppBar(
-                  userName: '',
+                  userName: 'Admin',
                   taskNumber: userTasks.length.toString(),
                   itemCount: 2,
                   itemBuilder: (BuildContext context, int index) {

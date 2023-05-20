@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:task_mangment/admin/screen/add_project/add_project_screen.dart';
 import 'package:task_mangment/admin/screen/admin_home_screen.dart';
 import 'package:task_mangment/admin/screen/details_status_tasks_screen.dart';
+import 'package:task_mangment/admin/screen/add_project/project_screen.dart';
 import 'package:task_mangment/model/user_model.dart';
 import 'package:task_mangment/user/auth_layer/login_screen.dart';
 import 'package:task_mangment/user/auth_layer/signup_screen.dart';
@@ -27,6 +29,12 @@ class OnGenerateRouter {
 
       case NamedRouter.loginScreen:
         page = const LoginScreen();
+        break;
+      case NamedRouter.projectScreen:
+        page = const ProjectScreen();
+        break;
+      case NamedRouter.addProjectScreen:
+        page = const AddProjectScreen();
         break;
       case NamedRouter.companyTasks:
         page = CompanyTasksScreen(

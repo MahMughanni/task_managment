@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_mangment/shared_widgets/custom_button.dart';
+import 'package:task_mangment/shared_widgets/custom_form_field.dart';
 import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
 import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_state.dart';
 import 'package:task_mangment/user/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
-import 'package:task_mangment/shared_widgets/custom_button.dart';
-import 'package:task_mangment/shared_widgets/custom_form_field.dart';
 import 'package:task_mangment/utils/utils_config.dart';
 
-class AddTaskScreen extends StatelessWidget {
-  const AddTaskScreen({Key? key}) : super(key: key);
+class AddProjectScreen extends StatelessWidget {
+  const AddProjectScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,24 +22,24 @@ class AddTaskScreen extends StatelessWidget {
           elevation: 0,
           automaticallyImplyLeading: true,
           title: Text(
-            'Create Task',
+            'Create project',
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
-        body: AddTaskBody(),
+        body: const AddProjectScreenBody(),
       ),
     );
   }
 }
 
-class AddTaskBody extends StatefulWidget {
-  AddTaskBody({Key? key}) : super(key: key);
+class AddProjectScreenBody extends StatefulWidget {
+  const AddProjectScreenBody({Key? key}) : super(key: key);
 
   @override
-  State<AddTaskBody> createState() => _AddTaskBodyState();
+  State<AddProjectScreenBody> createState() => _AddProjectScreenState();
 }
 
-class _AddTaskBodyState extends State<AddTaskBody> {
+class _AddProjectScreenState extends State<AddProjectScreenBody> {
   late AddTaskCubit addTaskCubit;
   final _formKey = GlobalKey<FormState>();
 
@@ -79,11 +79,11 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                         }
                         return null;
                       },
-                      labelText: 'Task Title',
+                      labelText: 'Project Title',
                       hintText: '',
                       controller: addTaskCubit.titleController,
                     ),
-                    4.verticalSpace,
+                    8.verticalSpace,
                     GestureDetector(
                       onTap: () {
                         UtilsConfig.showBottomSheet(Padding(
@@ -103,12 +103,12 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                               SizedBox(
                                 height: 150.h,
                                 child: ListView.builder(
-                                  itemCount: addTaskCubit.tasksStatus.length,
+                                  itemCount: addTaskCubit.projectStatus.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return ListTile(
                                       title: Text(
-                                        addTaskCubit.tasksStatus[index]
+                                        addTaskCubit.projectStatus[index]
                                             .toString()
                                             .toUpperCase(),
                                         style: Theme.of(context)
@@ -117,13 +117,13 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                                             .copyWith(color: Colors.black),
                                       ),
                                       onTap: () {
-                                        var task = addTaskCubit
+                                        var project = addTaskCubit
                                                 .selectedDropdownValueController
                                                 .text =
-                                            addTaskCubit.tasksStatus[index];
-                                        addTaskCubit.updateStatusDropdownValue(
-                                            task.toString());
-
+                                            addTaskCubit.projectStatus[index];
+                                        addTaskCubit
+                                            .updateAdminProjectDropdownValue(
+                                                project.toString());
                                         Navigator.pop(
                                             context); // Close the bottom sheet
                                       },
@@ -150,7 +150,8 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                         textInputAction: TextInputAction.next,
                         onChanged: (val) {},
                         validator: (value) {
-                          return addTaskCubit.selectedDropdownTaskValue == null
+                          return addTaskCubit.selectedDropdownProjectValue ==
+                                  null
                               ? ""
                               : null;
                         },
@@ -167,7 +168,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                       descriptionController: addTaskCubit.descriptionController,
                       startTimeController: addTaskCubit.startTimeController,
                       endTimeController: addTaskCubit.endTimeController,
-                      descriptionTitle: 'Task Description',
+                      descriptionTitle: 'Project Description',
                     ),
                     GestureDetector(
                       onTap: () async {
@@ -234,7 +235,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                         CustomButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              addTaskCubit.uploadTask(
+                              addTaskCubit.createProject(
                                 title: addTaskCubit.titleController.text.trim(),
                                 description: addTaskCubit
                                     .descriptionController.text
@@ -246,7 +247,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                               );
                             }
                           },
-                          title: 'Upload',
+                          title: 'Create project',
                           width: double.infinity,
                           height: 42.h,
                         ),

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_mangment/admin/controller/admin_cubit.dart';
+import 'package:task_mangment/admin/screen/add_project/controller/project_cubit.dart';
 import 'package:task_mangment/core/routes/app_router.dart';
 import 'package:task_mangment/core/routes/generate_routes.dart';
 import 'package:task_mangment/core/routes/named_router.dart';
@@ -59,6 +60,9 @@ class TaskManagementApp extends StatelessWidget {
                 create: (BuildContext context) {
                   return BaseCubit();
                 }),
+            BlocProvider<ProjectCubit>(create: (BuildContext context) {
+              return ProjectCubit();
+            }),
             BlocProvider<AuthenticationCubit>(
               create: (BuildContext context) =>
                   AuthenticationCubit(firebaseAuth: userAUTH),

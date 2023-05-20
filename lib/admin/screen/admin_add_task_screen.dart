@@ -140,7 +140,7 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                           textInputAction: TextInputAction.next,
                           onChanged: (val) {},
                           validator: (value) {
-                            return addTaskCubit.selectedDropdownValue == null
+                            return addTaskCubit.selectedDropdownTaskValue == null
                                 ? ""
                                 : null;
                           },
@@ -214,7 +214,7 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                           textInputAction: TextInputAction.next,
                           onChanged: (val) {},
                           validator: (value) {
-                            return addTaskCubit.selectedDropdownValue == null
+                            return addTaskCubit.selectedDropdownTaskValue == null
                                 ? ""
                                 : null;
                           },
@@ -232,7 +232,7 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                             addTaskCubit.descriptionController,
                         startTimeController: addTaskCubit.startTimeController,
                         endTimeController: addTaskCubit.endTimeController,
-                        onTap: () {},
+                        descriptionTitle: 'Task Description',
                       ),
                       GestureDetector(
                         onTap: () async {
@@ -313,10 +313,11 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                                   endTime: addTaskCubit.endTimeController.text
                                       .trim(),
                                   userId: userId!,
-                                  userName: addTaskCubit
-                                      .selectUserValueController.text,
+                                  userName: addTaskCubit.selectUserValueController.text,
                                 );
                               }
+
+                              addTaskCubit.uploadSuccess();
                             },
                             title: 'Upload',
                             width: double.infinity,
