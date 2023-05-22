@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/model/task_model.dart';
-import 'package:task_mangment/user/main_layer/screens/task_details_screen/widgets/custom_rich_text.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
-import 'package:task_mangment/shared_widgets/custom_form_field.dart';
-import 'package:task_mangment/utils/app_constants.dart';
+import 'package:task_management/model/task_model.dart';
+import 'package:task_management/user/main_layer/screens/task_details_screen/widgets/custom_rich_text.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
+import 'package:task_management/shared_widgets/custom_form_field.dart';
+import 'package:task_management/utils/app_constants.dart';
 
 class TaskDetailsScreen extends StatefulWidget {
   const TaskDetailsScreen({

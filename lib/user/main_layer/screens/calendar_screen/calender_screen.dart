@@ -1,11 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:task_mangment/core/logic/calender_controller.dart';
-import 'package:task_mangment/user/main_layer/screens/task_details_screen/task_details_screen.dart';
-import 'package:task_mangment/shared_widgets/list_item_body.dart';
+import 'package:task_management/core/logic/calender_controller.dart';
+import 'package:task_management/user/main_layer/screens/task_details_screen/task_details_screen.dart';
+import 'package:task_management/shared_widgets/list_item_body.dart';
 import 'controller/calendar_cubit.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -35,8 +34,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.userId);
-    print(widget.userName);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -137,8 +135,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                       MaterialPageRoute(
                                         builder: (context) => TaskDetailsScreen(
                                           task: task,
-                                          userName: widget.userName ?? '',
-                                          userId: widget.userId ?? '',
+                                          userName: widget.userName,
+                                          userId: widget.userId,
                                         ),
                                       ),
                                     );

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,37 +8,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/admin/controller/admin_cubit.dart';
-import 'package:task_mangment/admin/screen/add_project/controller/project_cubit.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/generate_routes.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/core/logic/base_cubit.dart';
-import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
-import 'package:task_mangment/utils/app_theme/app_theme_light.dart';
-import 'package:task_mangment/utils/utils_config.dart';
+import 'package:task_management/admin/controller/admin_cubit.dart';
+import 'package:task_management/admin/screen/add_project/controller/project_cubit.dart';
+import 'package:task_management/core/logic/base_cubit.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/generate_routes.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/user/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_management/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_management/utils/app_theme/app_theme_light.dart';
+import 'package:task_management/utils/utils_config.dart';
+import 'user/main_layer/screens/notification_screen/controller/notification_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
   final userAUTH = FirebaseAuth.instance;
   final user = userAUTH.currentUser;
-
   final ConnectivityResult connectivityResult =
       await Connectivity().checkConnectivity();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
@@ -68,14 +58,21 @@ class TaskManagementApp extends StatelessWidget {
       builder: (BuildContext context, Widget? child) {
         return MultiBlocProvider(
           providers: [
+            // BlocProvider(
+            //   create: (context) =>
+            //       NotificationCubit()..loadNotifications(),
+            // ),
             BlocProvider<BaseCubit>(
-                lazy: false,
-                create: (BuildContext context) {
-                  return BaseCubit();
-                }),
-            BlocProvider<ProjectCubit>(create: (BuildContext context) {
-              return ProjectCubit();
-            }),
+              lazy: false,
+              create: (BuildContext context) {
+                return BaseCubit();
+              },
+            ),
+            BlocProvider<ProjectCubit>(
+              create: (BuildContext context) {
+                return ProjectCubit();
+              },
+            ),
             BlocProvider<AuthenticationCubit>(
               create: (BuildContext context) =>
                   AuthenticationCubit(firebaseAuth: userAUTH),
@@ -84,7 +81,8 @@ class TaskManagementApp extends StatelessWidget {
               create: (BuildContext context) => AddTaskCubit(),
             ),
             BlocProvider<AdminCubit>(
-                create: (BuildContext context) => AdminCubit()),
+              create: (BuildContext context) => AdminCubit(),
+            ),
             BlocProvider<TaskCubit>(
               create: (BuildContext context) =>
                   TaskCubit(userId: userAUTH.currentUser?.uid ?? ''),

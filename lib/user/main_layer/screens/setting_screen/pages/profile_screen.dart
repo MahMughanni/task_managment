@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:task_mangment/core/logic/firebase_controller.dart';
-import 'package:task_mangment/user/main_layer/screens/setting_screen/pages/edit_profile.dart';
-import 'package:task_mangment/user/main_layer/screens/setting_screen/pages/widgets/profile_body.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
+import 'package:task_management/core/logic/firebase_controller.dart';
+import 'package:task_management/user/main_layer/screens/setting_screen/pages/edit_profile.dart';
+import 'package:task_management/user/main_layer/screens/setting_screen/pages/widgets/profile_body.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);

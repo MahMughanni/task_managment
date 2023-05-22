@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:task_mangment/model/user_model.dart';
-import 'package:task_mangment/shared_widgets/custom_circle_image.dart';
-import 'package:task_mangment/utils/app_constants.dart';
+import 'package:task_management/model/user_model.dart';
+import 'package:task_management/shared_widgets/custom_circle_image.dart';
+import 'package:task_management/utils/app_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EmployeeDetailsScreen extends StatelessWidget {
@@ -130,7 +129,7 @@ class EmployeeDetailsScreen extends StatelessWidget {
                               CustomIconsButton(
                                 imagePath: SvgIconsConstManger.email,
                                 onPressed: () async {
-                                  final recipientEmail = userData ?? '';
+                                  final recipientEmail = userData ;
                                   final uri =
                                       Uri.encodeFull('mailto:$recipientEmail');
 
@@ -147,7 +146,7 @@ class EmployeeDetailsScreen extends StatelessWidget {
                 ),
               ),
               FractionalTranslation(
-                translation: Offset(0.0, -1.50),
+                translation: const Offset(0.0, -1.50),
                 child: CustomCircleImage(
                   image: userData.profileImageUrl ?? '',
                   width: 120.r,

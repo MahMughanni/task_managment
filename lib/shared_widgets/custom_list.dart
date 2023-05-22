@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:task_mangment/core/logic/base_cubit.dart';
-import 'package:task_mangment/model/task_model.dart';
-import 'package:task_mangment/shared_widgets/list_item_body.dart';
-import 'package:task_mangment/user/main_layer/screens/task_details_screen/task_details_screen.dart';
+import 'package:task_management/core/logic/base_cubit.dart';
+import 'package:task_management/model/task_model.dart';
+import 'package:task_management/shared_widgets/list_item_body.dart';
+import 'package:task_management/user/main_layer/screens/task_details_screen/task_details_screen.dart';
 
 class CustomListViewBuilder extends StatelessWidget {
   CustomListViewBuilder({
@@ -28,10 +28,6 @@ class CustomListViewBuilder extends StatelessWidget {
           return Container();
         }
         final task = stateTasks[index];
-
-        print('Task UserName${task.userName}');
-
-
         return GestureDetector(
           onLongPress: () {
             showDialog(

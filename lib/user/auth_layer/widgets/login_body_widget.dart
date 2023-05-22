@@ -2,13 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/core/logic/base_cubit.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/shared_widgets/custom_button.dart';
-import 'package:task_mangment/shared_widgets/custom_form_field.dart';
-import 'package:task_mangment/utils/app_constants.dart';
-import 'package:task_mangment/utils/extentions/string_validate_extention.dart';
+import 'package:task_management/core/logic/base_cubit.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/shared_widgets/custom_button.dart';
+import 'package:task_management/shared_widgets/custom_form_field.dart';
+import 'package:task_management/utils/app_constants.dart';
+import 'package:task_management/utils/extentions/string_validate_extention.dart';
 
 import 'custom_rich_text.dart';
 

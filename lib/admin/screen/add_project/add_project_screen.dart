@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/shared_widgets/custom_button.dart';
-import 'package:task_mangment/shared_widgets/custom_form_field.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_state.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
-import 'package:task_mangment/utils/utils_config.dart';
+import 'package:task_management/shared_widgets/custom_button.dart';
+import 'package:task_management/shared_widgets/custom_form_field.dart';
+import 'package:task_management/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
+import 'package:task_management/user/main_layer/screens/add_task_screen/controller/add_task_state.dart';
+import 'package:task_management/user/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
+import 'package:task_management/utils/utils_config.dart';
 
 class AddProjectScreen extends StatelessWidget {
   const AddProjectScreen({Key? key}) : super(key: key);

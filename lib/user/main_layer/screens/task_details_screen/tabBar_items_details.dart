@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
-import 'package:task_mangment/shared_widgets/custom_list.dart';
-import 'package:task_mangment/shared_widgets/custom_shimmer.dart';
-import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_state.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
+import 'package:task_management/shared_widgets/custom_list.dart';
+import 'package:task_management/shared_widgets/custom_shimmer.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/controller/task_state.dart';
 
 class UserDetailsStatusTasks extends StatelessWidget {
   const UserDetailsStatusTasks(
@@ -15,7 +14,6 @@ class UserDetailsStatusTasks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userRole = BlocProvider.of<AuthenticationCubit>(context).userRole;
 
     return BlocBuilder<TaskCubit, TaskState>(
       builder: (context, state) {

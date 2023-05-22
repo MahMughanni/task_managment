@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/admin/controller/admin_cubit.dart';
-import 'package:task_mangment/shared_widgets/custom_tabBar.dart';
-import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
+import 'package:task_management/admin/controller/admin_cubit.dart';
+import 'package:task_management/shared_widgets/custom_tabBar.dart';
+import 'package:task_management/user/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
 
 class CompanyTasksScreen extends StatelessWidget {
   const CompanyTasksScreen({Key? key, required this.userRole})
@@ -15,9 +15,8 @@ class CompanyTasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = BlocProvider.of<AuthenticationCubit>(context)
-        .firebaseAuth!
-        .currentUser!;
+    final user =
+        BlocProvider.of<AuthenticationCubit>(context).firebaseAuth.currentUser!;
 
     final adminCubit = BlocProvider.of<AdminCubit>(context);
 

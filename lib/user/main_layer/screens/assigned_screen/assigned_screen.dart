@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_state.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
+import 'package:task_management/user/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/controller/task_state.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
 
 class AssignedScreen extends StatelessWidget {
   const AssignedScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final user = BlocProvider.of<AuthenticationCubit>(context).firebaseAuth!.currentUser!;
+    final user = BlocProvider.of<AuthenticationCubit>(context).firebaseAuth.currentUser!;
     return BlocProvider<TaskCubit>(
       create: (context) => TaskCubit(userId: user.uid),
       child: Scaffold(

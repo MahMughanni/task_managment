@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_state.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
-import 'package:task_mangment/shared_widgets/cutom_container.dart';
-import 'package:task_mangment/utils/app_constants.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/controller/task_state.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
+import 'package:task_management/shared_widgets/cutom_container.dart';
+import 'package:task_management/utils/app_constants.dart';
 
 class HomeScreenBody extends StatelessWidget {
   const HomeScreenBody({Key? key, required this.userId, required this.userRole})

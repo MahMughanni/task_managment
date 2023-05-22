@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:task_mangment/admin/screen/add_project/add_project_screen.dart';
-import 'package:task_mangment/admin/screen/admin_home_screen.dart';
-import 'package:task_mangment/admin/screen/details_status_tasks_screen.dart';
-import 'package:task_mangment/admin/screen/add_project/project_screen.dart';
-import 'package:task_mangment/model/user_model.dart';
-import 'package:task_mangment/user/auth_layer/login_screen.dart';
-import 'package:task_mangment/user/auth_layer/signup_screen.dart';
-import 'package:task_mangment/user/auth_layer/splash_screen.dart';
-import 'package:task_mangment/user/main_layer/main_screen.dart';
-import 'package:task_mangment/user/main_layer/screens/calendar_screen/calender_screen.dart';
-import 'package:task_mangment/user/main_layer/screens/company_tasks_screen/company_tasks.dart';
-import 'package:task_mangment/user/main_layer/screens/setting_screen/pages/employee_screen.dart';
-import 'package:task_mangment/user/main_layer/screens/setting_screen/pages/profile_screen.dart';
-import 'package:task_mangment/user/main_layer/screens/setting_screen/pages/widgets/employee_detiails.dart';
-import 'package:task_mangment/user/main_layer/screens/task_details_screen/tabBar_items_details.dart';
+import 'package:task_management/admin/screen/add_project/add_project_screen.dart';
+import 'package:task_management/admin/screen/admin_home_screen.dart';
+import 'package:task_management/admin/screen/details_status_tasks_screen.dart';
+import 'package:task_management/admin/screen/add_project/project_screen.dart';
+import 'package:task_management/model/user_model.dart';
+import 'package:task_management/user/auth_layer/login_screen.dart';
+import 'package:task_management/user/auth_layer/signup_screen.dart';
+import 'package:task_management/user/auth_layer/splash_screen.dart';
+import 'package:task_management/user/main_layer/main_screen.dart';
+import 'package:task_management/user/main_layer/screens/calendar_screen/calender_screen.dart';
+import 'package:task_management/user/main_layer/screens/company_tasks_screen/company_tasks.dart';
+import 'package:task_management/user/main_layer/screens/setting_screen/pages/employee_screen.dart';
+import 'package:task_management/user/main_layer/screens/setting_screen/pages/profile_screen.dart';
+import 'package:task_management/user/main_layer/screens/setting_screen/pages/widgets/employee_detiails.dart';
+import 'package:task_management/user/main_layer/screens/task_details_screen/tabBar_items_details.dart';
 
 import 'named_router.dart';
 
@@ -23,7 +23,7 @@ class OnGenerateRouter {
     switch (settings.name) {
       case NamedRouter.mainScreen:
         page = MainScreen(
-          userRole: settings.arguments as String ?? 'user',
+          userRole: settings.arguments as String,
         );
         break;
 

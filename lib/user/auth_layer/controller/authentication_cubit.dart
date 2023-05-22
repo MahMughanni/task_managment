@@ -1,12 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/utils/utils_config.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/utils/utils_config.dart';
 
 part 'authentication_state.dart';
 
@@ -49,14 +50,25 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     if (loggedInUser != null) {
       final userData =
           await fireStore.collection('users').doc(loggedInUser!.uid).get();
-      userRole = userData['role'];
-      if (userRole == 'user' || userRole == 'admin') {
-        AppRouter.goToAndRemove(
-          routeName: NamedRouter.mainScreen,
-          arguments: userRole,
-        );
+
+      if (userData.exists) {
+        final userRole = userData['role'];
+
+        if (userRole == 'user' || userRole == 'admin') {
+          AppRouter.goToAndRemove(
+            routeName: NamedRouter.mainScreen,
+            arguments: userRole,
+          );
+        } else {
+          AppRouter.goToAndRemove(routeName: NamedRouter.loginScreen);
+        }
       } else {
         AppRouter.goToAndRemove(routeName: NamedRouter.loginScreen);
+        UtilsConfig.showSnackBarMessage(
+          message: 'User data not found.',
+          status: false,
+        );
+        emit(AuthFailure('User data not found.'));
       }
     } else {
       AppRouter.goToAndRemove(routeName: NamedRouter.loginScreen);
@@ -123,13 +135,23 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       emit(SignUpProgress());
 
-      UserCredential userCredential =
-          await firebaseAuth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       String userId = userCredential.user!.uid;
+
+      // Get the FCM token for the user
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      await messaging.requestPermission();
+      String? fcmToken = await messaging.getToken();
+
+      // Listen for token refresh events and update the token accordingly
+      messaging.onTokenRefresh.listen((newToken) async {
+        fcmToken = newToken;
+        await updateFCMToken(userId, fcmToken);
+      });
 
       await fireStore.collection('users').doc(userId).set({
         'username': username,
@@ -137,32 +159,38 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         'role': 'user',
         'profileImageUrl': '',
         'position': '',
-        'email': email, // add email field to the document
+        'email': email,
+        'fcmToken': fcmToken,
       });
 
       loggedInUser = userCredential.user!;
       await loggedInUser!.updateDisplayName(username);
 
       AppRouter.goToAndRemove(
-          routeName: NamedRouter.mainScreen, arguments: 'user');
+        routeName: NamedRouter.mainScreen,
+        arguments: 'user',
+      );
       emit(SignUpSuccess(loggedInUser!));
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        UtilsConfig.showSnackBarMessage(
-            message: 'email already used', status: false);
-        emit(AuthFailure('The email address is already in use.'));
-      } else if (e.code == 'phone-number-already-exists') {
-        UtilsConfig.showSnackBarMessage(
-            message: 'phone already used', status: false);
-
-        emit(AuthFailure('The phone number is already in use.'));
-      } else {
-        emit(AuthFailure(e.message ?? 'An unknown error occurred.'));
-      }
+      // Handle FirebaseAuthException
+      print('FirebaseAuthException: ${e.message}');
     } catch (e) {
-      emit(AuthFailure('An unknown error occurred.'));
+      // Handle other exceptions
+      print('Error during sign-up: $e');
     }
   }
+
+  Future<void> updateFCMToken(String userId, String? fcmToken) async {
+    try {
+      await fireStore.collection('users').doc(userId).update({
+        'fcmToken': fcmToken,
+      });
+    } catch (e) {
+      // Handle Firestore update error
+      print('Error updating FCM token: $e');
+    }
+  }
+
 
   Future<void> logOut() async {
     await firebaseAuth.signOut();

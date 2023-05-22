@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:task_mangment/model/user_model.dart';
+import 'package:task_management/model/user_model.dart';
 
 abstract class AddTaskState {}
 

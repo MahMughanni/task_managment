@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/user/auth_layer/widgets/header_widget.dart';
-import 'package:task_mangment/user/auth_layer/widgets/login_body_widget.dart';
-import 'package:task_mangment/utils/extentions/padding_extention.dart';
-import 'package:task_mangment/utils/utils_config.dart';
+import 'package:task_management/user/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_management/user/auth_layer/widgets/header_widget.dart';
+import 'package:task_management/user/auth_layer/widgets/login_body_widget.dart';
+import 'package:task_management/utils/utils_config.dart';
 import '../main_layer/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {

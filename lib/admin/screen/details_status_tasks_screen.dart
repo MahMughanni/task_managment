@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_mangment/admin/controller/admin_cubit.dart';
+import 'package:task_management/admin/controller/admin_cubit.dart';
 
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
-import 'package:task_mangment/shared_widgets/custom_list.dart';
-import 'package:task_mangment/shared_widgets/custom_shimmer.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
+import 'package:task_management/shared_widgets/custom_list.dart';
+import 'package:task_management/shared_widgets/custom_shimmer.dart';
 
 class AdminDetailsStatusTasks extends StatelessWidget {
   const AdminDetailsStatusTasks({Key? key, required this.status})

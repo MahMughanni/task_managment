@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:task_mangment/utils/app_constants.dart';
-import 'package:task_mangment/utils/utils_config.dart';
+import 'package:task_management/utils/app_constants.dart';
+import 'package:task_management/utils/utils_config.dart';
 
 import 'custom_circle_image.dart';
 
