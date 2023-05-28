@@ -53,6 +53,7 @@ class OnGenerateRouter {
         page = UserDetailsStatusTasks(
           status: (settings.arguments as Map)['status'] as String,
           userId: (settings.arguments as Map)['userId'] as String,
+          role: (settings.arguments as Map)['role'] as String,
         );
         break;
 

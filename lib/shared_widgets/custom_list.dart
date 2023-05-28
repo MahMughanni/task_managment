@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_management/admin/controller/admin_cubit.dart';
 import 'package:task_management/core/logic/base_cubit.dart';
 import 'package:task_management/model/task_model.dart';
 import 'package:task_management/shared_widgets/list_item_body.dart';
@@ -10,13 +11,14 @@ class CustomListViewBuilder extends StatelessWidget {
     required this.length,
     required this.stateTasks,
     required this.userId,
+    required this.role,
   }) : super(key: key);
+  final AdminCubit adminCubit = AdminCubit();
+  final BaseCubit baseCubit = BaseCubit();
 
   final int length;
   final List<TaskModel> stateTasks;
-  final String userId;
-
-  final BaseCubit baseCubit = BaseCubit();
+  final String userId, role;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,13 @@ class CustomListViewBuilder extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        baseCubit.deleteTask(userId: userId, id: task.id!);
+                        String? taskId = task.id;
+                        print('taskid $taskId');
+
+                        role == 'admin'
+                            ? adminCubit.deleteTask(taskId: taskId ?? '')
+                            : baseCubit.deleteTask(
+                                userId: userId, id: taskId ?? '');
                         Navigator.of(context).pop();
                       },
                       child: Text(
@@ -86,6 +94,7 @@ class CustomListViewBuilder extends StatelessWidget {
             url: task.imageUrls.isNotEmpty ? task.imageUrls.first : '',
             status: task.state,
             userName: task.userName,
+            assignedTo: task.assignedTo,
           ),
         );
       },

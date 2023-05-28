@@ -32,13 +32,13 @@ class AdminDetailsStatusTasks extends StatelessWidget {
                   ? CustomListViewBuilder(
                       length: upcomingTasks.length,
                       stateTasks: upcomingTasks,
-                      userId: '',
+                      userId: '', role: 'admin',
                     )
                   : status == 'completed'
                       ? CustomListViewBuilder(
                           length: completedTasks.length,
                           stateTasks: completedTasks,
-                          userId: '',
+                          userId: '', role: 'admin',
                         )
                       : ListView.builder(
                           shrinkWrap: true,

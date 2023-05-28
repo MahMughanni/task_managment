@@ -34,9 +34,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   }
 
   void _updateTaskState(bool isDone) {
-    final userDoc =
-        FirebaseFirestore.instance.collection('users').doc(widget.userId);
-    final taskDoc = userDoc.collection('tasks').doc(widget.task.id);
+    final userDoc = FirebaseFirestore.instance.collection('users').doc();
+    final taskDoc = userDoc.collection('tasks').doc();
 
     setState(() {
       isTaskCompleted = isDone;

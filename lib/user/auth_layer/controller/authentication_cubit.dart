@@ -135,7 +135,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       emit(SignUpProgress());
 
-      UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -190,7 +191,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       print('Error updating FCM token: $e');
     }
   }
-
 
   Future<void> logOut() async {
     await firebaseAuth.signOut();

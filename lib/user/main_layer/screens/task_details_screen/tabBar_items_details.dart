@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_management/admin/controller/admin_cubit.dart';
 import 'package:task_management/shared_widgets/custom_appbar.dart';
 import 'package:task_management/shared_widgets/custom_list.dart';
 import 'package:task_management/shared_widgets/custom_shimmer.dart';
@@ -8,16 +9,18 @@ import 'package:task_management/user/main_layer/screens/home_screen/controller/t
 
 class UserDetailsStatusTasks extends StatelessWidget {
   const UserDetailsStatusTasks(
-      {Key? key, required this.status, required this.userId})
+      {Key? key,
+      required this.status,
+      required this.userId,
+      required this.role})
       : super(key: key);
-  final String status, userId;
+  final String status, userId, role;
 
   @override
   Widget build(BuildContext context) {
-
-    return BlocBuilder<TaskCubit, TaskState>(
+    return BlocBuilder<AdminCubit, AdminState>(
       builder: (context, state) {
-        if (state is UserLoadedState) {
+        if (state is AdminTasksLoadedState) {
           final user = state.user;
           final tasks = state.tasks;
           var upcomingTasks =
@@ -37,18 +40,21 @@ class UserDetailsStatusTasks extends StatelessWidget {
                 ? CustomListViewBuilder(
                     length: upcomingTasks.length,
                     stateTasks: upcomingTasks,
-                    userId: user.uId ?? '',
+                    userId: user?.uId ?? '',
+                    role: role,
                   )
                 : status == 'completed'
                     ? CustomListViewBuilder(
                         length: completedTasks.length,
                         stateTasks: completedTasks,
-                        userId: user.uId ?? '',
+                        userId: user?.uId ?? '',
+                        role: role,
                       )
                     : CustomListViewBuilder(
                         length: tasks.length,
                         stateTasks: tasks,
-                        userId: user.uId ?? '',
+                        userId: user?.uId ?? '',
+                        role: role,
                       ),
           );
         } else {

@@ -196,7 +196,8 @@ class FireBaseRepository {
     required String endTime,
     required String state,
     List<File>? imageFiles,
-    required String userName, // Add userName parameter
+    required String userName,
+    String? assignedTo,
   }) async {
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser!;
@@ -229,6 +230,7 @@ class FireBaseRepository {
       imageUrls: imageUrls,
       createdAt: Timestamp.now(),
       userName: userName,
+      assignedTo: assignedTo ?? '',
     );
 
     final DocumentReference docRef = await fireStore
@@ -250,7 +252,8 @@ class FireBaseRepository {
     required String endTime,
     required String state,
     List<File>? imageFiles,
-    required String userName, // Add userName parameter
+    required String userName,
+    required String assignedTo,
   }) async {
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser!;
@@ -283,11 +286,12 @@ class FireBaseRepository {
       imageUrls: imageUrls,
       createdAt: Timestamp.now(),
       userName: userName,
+      assignedTo: assignedTo,
     );
 
     final DocumentReference docRef = await fireStore
         .collection('users')
-        .doc(userId) // Use userId parameter
+        .doc(userId)
         .collection('tasks')
         .add(task.toMap());
 

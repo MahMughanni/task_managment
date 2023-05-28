@@ -16,17 +16,20 @@ class ListViewItemBody extends StatelessWidget {
     required this.url,
     required this.status,
     required this.userName,
+    required this.assignedTo,
   }) : super(key: key);
 
-  final String taskTitle, taskCategory, startTime, title, url, status, userName;
+  final String? taskTitle,
+      taskCategory,
+      startTime,
+      title,
+      url,
+      status,
+      userName,
+      assignedTo;
 
   @override
   Widget build(BuildContext context) {
-    int maxLength = 20;
-
-    String shortString = title.length > maxLength
-        ? "${title.substring(0, maxLength)}..."
-        : title;
     return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8).r,
@@ -63,7 +66,7 @@ class ListViewItemBody extends StatelessWidget {
               children: [
                 4.verticalSpace,
                 Text(
-                  taskCategory,
+                  taskCategory!,
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: AppConstFontWeight.medium,
@@ -120,7 +123,9 @@ class ListViewItemBody extends StatelessWidget {
                   text: TextSpan(
                     text: status == 'completed'
                         ? 'completed by '
-                        : 'Assigned employee',
+                        : assignedTo?.length == 0
+                            ? 'Assigned Employee'
+                            : 'Assigned To ${assignedTo}',
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!
@@ -128,7 +133,7 @@ class ListViewItemBody extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: status == 'completed'
-                            ? userName.isEmpty
+                            ? userName!.isEmpty
                                 ? '- - - - '
                                 : userName
                             : '',

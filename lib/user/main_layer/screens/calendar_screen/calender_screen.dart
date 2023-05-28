@@ -34,7 +34,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -151,6 +150,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                         : '',
                                     status: task.state,
                                     userName: task.userName,
+                                    assignedTo: '',
                                   ),
                                 );
                               },

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,31 +20,42 @@ import 'package:task_management/user/main_layer/screens/add_task_screen/controll
 import 'package:task_management/user/main_layer/screens/home_screen/controller/task_cubit.dart';
 import 'package:task_management/utils/app_theme/app_theme_light.dart';
 import 'package:task_management/utils/utils_config.dart';
-import 'user/main_layer/screens/notification_screen/controller/notification_cubit.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   final userAUTH = FirebaseAuth.instance;
   final user = userAUTH.currentUser;
+
+
+  // AwesomeNotifications().initialize(
+  //   // Define the 'basic_channel'
+  //   'basic_channel',
+  //   // Define the default icon for the channel
+  //   defaultIcon: 'app_icon',
+  //   // Define other channel properties
+  //   channelDescription: 'Basic Channel',
+  //   channelName: 'Basic Notifications',
+  // );
+
   final ConnectivityResult connectivityResult =
-      await Connectivity().checkConnectivity();
+  await Connectivity().checkConnectivity();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(TaskManagementApp(
-      userAUTH: userAUTH,
-      user: user,
-      connectivityResult: connectivityResult,
-    )),
+        (value) =>
+        runApp(TaskManagementApp(
+          userAUTH: userAUTH,
+          user: user,
+          connectivityResult: connectivityResult,
+        )),
   );
 }
 
 class TaskManagementApp extends StatelessWidget {
-  const TaskManagementApp(
-      {Key? key,
-      required this.userAUTH,
-      this.user,
-      required this.connectivityResult})
+  const TaskManagementApp({Key? key,
+    required this.userAUTH,
+    this.user,
+    required this.connectivityResult})
       : super(key: key);
   final FirebaseAuth userAUTH;
   final User? user;
@@ -83,10 +95,10 @@ class TaskManagementApp extends StatelessWidget {
             BlocProvider<AdminCubit>(
               create: (BuildContext context) => AdminCubit(),
             ),
-            BlocProvider<TaskCubit>(
-              create: (BuildContext context) =>
-                  TaskCubit(userId: userAUTH.currentUser?.uid ?? ''),
-            ),
+            // BlocProvider<TaskCubit>(
+            //   create: (BuildContext context) =>
+            //       TaskCubit(userId: userAUTH.currentUser?.uid ?? ''),
+            // ),
           ],
           child: MaterialApp(
             onGenerateRoute: OnGenerateRouter.onGenerateRoute,

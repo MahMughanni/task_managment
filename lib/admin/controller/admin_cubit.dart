@@ -15,6 +15,7 @@ class AdminCubit extends Cubit<AdminState> {
 
   StreamSubscription<QuerySnapshot>? tasksSubscription;
   StreamSubscription<DocumentSnapshot>? userSubscription;
+  UserModel? user;
 
   Future<void> fetchAllTasks() async {
     try {
@@ -45,7 +46,7 @@ class AdminCubit extends Cubit<AdminState> {
             final allTasks = tasksMap.values.expand((tasks) => tasks).toList();
             allTasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-            emit(AdminTasksLoadedState(allTasks));
+            emit(AdminTasksLoadedState(allTasks, user));
           });
         }
       }, onError: (error) {
@@ -56,21 +57,27 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
-  void getTasksForUser(String userId) async {
-    emit(AdminLoadingState());
 
+  Future<void> deleteTask({required String taskId}) async {
     try {
-      // Call your task repository or API to fetch tasks for the user
-      final tasks = await FireBaseRepository().getTasksForUser(userId, 'user');
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .get();
 
-      // Emit the tasks loaded state with the fetched tasks
-      emit(AdminTasksLoadedState(tasks));
-    } catch (error) {
-      // Handle any error that occurred during the fetching process
-      emit(AdminFailure(errorMessage: error.toString()));
+      for (final QueryDocumentSnapshot userSnapshot in querySnapshot.docs) {
+        final tasksCollection = userSnapshot.reference.collection('tasks');
+        final taskQuerySnapshot = await tasksCollection
+            .where('id', isEqualTo: taskId)
+            .get();
+
+        for (final QueryDocumentSnapshot taskSnapshot in taskQuerySnapshot.docs) {
+          await taskSnapshot.reference.delete();
+        }
+      }
+    } catch (e) {
+      emit(AdminFailure(errorMessage: e.toString()));
     }
   }
-
 
   @override
   Future<void> close() {

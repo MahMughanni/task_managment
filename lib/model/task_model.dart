@@ -9,7 +9,8 @@ class TaskModel {
   String state;
   final List<String> imageUrls;
   final Timestamp createdAt;
-  String userName; // New property to store the username
+  String userName;
+  String? assignedTo;
 
   TaskModel({
     this.id,
@@ -20,7 +21,8 @@ class TaskModel {
     required this.state,
     required this.imageUrls,
     required this.createdAt,
-    required this.userName, // Include the username in the constructor
+    required this.userName,
+    required this.assignedTo,
   });
 
   factory TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -36,7 +38,9 @@ class TaskModel {
       state: data['state'] ?? '',
       imageUrls: imageUrls,
       createdAt: data['createdAt'] ?? Timestamp.now(),
-      userName: data['username'] ?? '', // Initialize the username as an empty string
+      userName: data['username'] ?? '',
+      assignedTo: data['assignedTo'] ??
+          ' ', // Initialize the username as an empty string
     );
   }
 
@@ -50,6 +54,7 @@ class TaskModel {
     List<String>? imageUrls,
     Timestamp? createdAt,
     String? userName,
+    String? assignedTo,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -61,6 +66,7 @@ class TaskModel {
       imageUrls: imageUrls ?? this.imageUrls,
       createdAt: createdAt ?? this.createdAt,
       userName: userName ?? this.userName,
+      assignedTo: assignedTo ?? this.assignedTo,
     );
   }
 
@@ -75,6 +81,7 @@ class TaskModel {
       'imageUrls': imageUrls,
       'createdAt': createdAt,
       'username': userName,
+      'assignedTo': assignedTo,
     };
   }
 
