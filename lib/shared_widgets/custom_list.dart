@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:task_management/admin/controller/admin_cubit.dart';
 import 'package:task_management/core/logic/base_cubit.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
 import 'package:task_management/model/task_model.dart';
 import 'package:task_management/shared_widgets/list_item_body.dart';
 import 'package:task_management/user/main_layer/screens/task_details_screen/task_details_screen.dart';
@@ -12,13 +14,14 @@ class CustomListViewBuilder extends StatelessWidget {
     required this.stateTasks,
     required this.userId,
     required this.role,
+    required this.userName,
   }) : super(key: key);
   final AdminCubit adminCubit = AdminCubit();
   final BaseCubit baseCubit = BaseCubit();
 
   final int length;
   final List<TaskModel> stateTasks;
-  final String userId, role;
+  final String userId, role, userName;
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +56,6 @@ class CustomListViewBuilder extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         String? taskId = task.id;
-                        print('taskid $taskId');
-
                         role == 'admin'
                             ? adminCubit.deleteTask(taskId: taskId ?? '')
                             : baseCubit.deleteTask(
@@ -75,26 +76,17 @@ class CustomListViewBuilder extends StatelessWidget {
             );
           },
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TaskDetailsScreen(
-                  task: task,
-                  userName: task.userName,
-                  userId: userId,
-                ),
-              ),
-            );
+            AppRouter.goTo(
+                screenName: NamedRouter.taskDetailsScreen,
+                arguments: {
+                  'task': task,
+                  "username": task.userName,
+                  'userId': userId,
+                  'completedBy': userName,
+                });
           },
           child: ListViewItemBody(
-            title: task.description,
-            startTime: task.startTime,
-            taskTitle: task.title,
-            taskCategory: task.state,
-            url: task.imageUrls.isNotEmpty ? task.imageUrls.first : '',
-            status: task.state,
-            userName: task.userName,
-            assignedTo: task.assignedTo,
+            taskModel: task,
           ),
         );
       },

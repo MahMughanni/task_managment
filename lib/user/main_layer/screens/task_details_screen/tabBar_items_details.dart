@@ -4,17 +4,16 @@ import 'package:task_management/admin/controller/admin_cubit.dart';
 import 'package:task_management/shared_widgets/custom_appbar.dart';
 import 'package:task_management/shared_widgets/custom_list.dart';
 import 'package:task_management/shared_widgets/custom_shimmer.dart';
-import 'package:task_management/user/main_layer/screens/home_screen/controller/task_cubit.dart';
-import 'package:task_management/user/main_layer/screens/home_screen/controller/task_state.dart';
 
 class UserDetailsStatusTasks extends StatelessWidget {
-  const UserDetailsStatusTasks(
-      {Key? key,
-      required this.status,
-      required this.userId,
-      required this.role})
-      : super(key: key);
-  final String status, userId, role;
+  const UserDetailsStatusTasks({
+    Key? key,
+    required this.status,
+    required this.userId,
+    required this.role,
+    required this.userName,
+  }) : super(key: key);
+  final String status, userId, role, userName;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +41,7 @@ class UserDetailsStatusTasks extends StatelessWidget {
                     stateTasks: upcomingTasks,
                     userId: user?.uId ?? '',
                     role: role,
+                    userName: userName,
                   )
                 : status == 'completed'
                     ? CustomListViewBuilder(
@@ -49,12 +49,14 @@ class UserDetailsStatusTasks extends StatelessWidget {
                         stateTasks: completedTasks,
                         userId: user?.uId ?? '',
                         role: role,
+                        userName: userName,
                       )
                     : CustomListViewBuilder(
                         length: tasks.length,
                         stateTasks: tasks,
                         userId: user?.uId ?? '',
                         role: role,
+                        userName: userName,
                       ),
           );
         } else {

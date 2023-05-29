@@ -5,6 +5,7 @@ import 'package:task_management/model/user_model.dart';
 
 @immutable
 abstract class TaskState {}
+
 class UserInitial extends TaskState {}
 
 class UserLoadingState extends TaskState {}
@@ -17,12 +18,6 @@ class UserLoadedState extends TaskState {
 }
 
 class UserUpdatingState extends TaskState {}
-
-class UserErrorState extends TaskState {
-  final String error;
-
-  UserErrorState({required this.error});
-}
 
 class UserConnectedState extends TaskState {}
 
@@ -39,14 +34,14 @@ class UserDisconnectedState extends TaskState {}
 class TaskLoadingState extends TaskState {}
 
 class TaskLoadedState extends TaskState {
-  final UserModel user;
+  final User user;
   final List<TaskModel> tasks;
 
   TaskLoadedState({required this.user, required this.tasks});
 }
 
-class TaskErrorState extends TaskState {
+class Failure extends TaskState {
   final String errorMessage;
 
-  TaskErrorState(this.errorMessage);
+  Failure({required this.errorMessage});
 }

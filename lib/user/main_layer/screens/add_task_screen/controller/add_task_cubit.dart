@@ -101,14 +101,13 @@ class AddTaskCubit extends Cubit<AddTaskState> {
         endTime: endTime,
         state: dropdownValue.toLowerCase(),
         imageFiles: imageFiles,
-        userName: userName,
+        userName: 'Admin',
         assignedTo: userName,
       );
       emit(AddTaskUploadSuccess());
-      print('Added successfully');
 
-      // AppRouter.goTo(screenName: NamedRouter.mainScreen, arguments: 'admin');
-      // clear();
+      AppRouter.goTo(screenName: NamedRouter.mainScreen, arguments: 'admin');
+      clear();
       adminCubit.fetchAllTasks();
     } catch (error) {
       emit(AddTaskFailure(errorMessage: error.toString()));

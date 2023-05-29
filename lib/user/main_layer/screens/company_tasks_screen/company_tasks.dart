@@ -14,7 +14,8 @@ class CompanyTasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = BlocProvider.of<AuthenticationCubit>(context).firebaseAuth.currentUser!;
+    final user =
+        BlocProvider.of<AuthenticationCubit>(context).firebaseAuth.currentUser!;
 
     final adminCubit = BlocProvider.of<AdminCubit>(context);
 
@@ -43,6 +44,7 @@ class CompanyTasksScreen extends StatelessWidget {
                         userId: user.uid,
                         adminCubit: BlocProvider.of<AdminCubit>(context),
                         taskType: 'today',
+                        role: userRole,
                       ),
                       CustomTaskList(
                         state: 'upcoming',
@@ -51,6 +53,7 @@ class CompanyTasksScreen extends StatelessWidget {
                         adminCubit: BlocProvider.of<AdminCubit>(context),
                         userId: user.uid,
                         taskType: 'upcoming',
+                        role: userRole,
                       ),
                       CustomTaskList(
                         state: 'completed',
@@ -59,6 +62,7 @@ class CompanyTasksScreen extends StatelessWidget {
                         adminCubit: BlocProvider.of<AdminCubit>(context),
                         userName: user.displayName,
                         taskType: 'completed',
+                        role: userRole,
                       ),
                     ],
                   ),
@@ -83,22 +87,25 @@ class CompanyTasksScreen extends StatelessWidget {
                         userId: user.uid,
                         adminCubit: BlocProvider.of<AdminCubit>(context),
                         taskType: 'today',
+                        role: userRole,
                       ),
                       CustomTaskList(
                         state: 'upcoming',
                         label: '',
-                        userName: ' ajsdsajdj',
+                        userName: user.displayName,
                         adminCubit: BlocProvider.of<AdminCubit>(context),
                         userId: user.uid,
                         taskType: 'upcoming',
+                        role: userRole,
                       ),
                       CustomTaskList(
                         state: 'completed',
                         userId: user.uid,
                         label: '',
                         adminCubit: BlocProvider.of<AdminCubit>(context),
-                        userName: 'asdjhash',
+                        userName: user.displayName,
                         taskType: 'completed',
+                        role: userRole,
                       ),
                     ],
                   ),

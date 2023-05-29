@@ -18,6 +18,7 @@ class AdminDetailsStatusTasks extends StatelessWidget {
       builder: (context, state) {
         if (state is AdminTasksLoadedState) {
           var tasks = state.tasks;
+          var user = state.user;
           var upcomingTasks =
               tasks.where((task) => task.state == 'upcoming').toList();
           var completedTasks =
@@ -32,13 +33,17 @@ class AdminDetailsStatusTasks extends StatelessWidget {
                   ? CustomListViewBuilder(
                       length: upcomingTasks.length,
                       stateTasks: upcomingTasks,
-                      userId: '', role: 'admin',
+                      userId: '',
+                      role: 'admin',
+                      userName: '',
                     )
                   : status == 'completed'
                       ? CustomListViewBuilder(
                           length: completedTasks.length,
                           stateTasks: completedTasks,
-                          userId: '', role: 'admin',
+                          userId: '',
+                          role: 'admin',
+                          userName: '',
                         )
                       : ListView.builder(
                           shrinkWrap: true,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_management/model/task_model.dart';
@@ -11,11 +12,12 @@ class TaskDetailsScreen extends StatefulWidget {
   const TaskDetailsScreen({
     Key? key,
     required this.task,
-    required this.userName,
     required this.userId,
+    required this.completedBy,
   }) : super(key: key);
 
-  final String userName, userId;
+  final String userId, completedBy;
+
   final TaskModel task;
 
   @override
@@ -29,19 +31,40 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    print(' this is UserName ${widget.task.userName}');
     initialTaskState = widget.task.state;
     isTaskCompleted = initialTaskState == 'completed';
   }
 
   void _updateTaskState(bool isDone) {
-    final userDoc = FirebaseFirestore.instance.collection('users').doc();
-    final taskDoc = userDoc.collection('tasks').doc();
+    final taskCollection = FirebaseFirestore.instance.collection('users');
 
     setState(() {
       isTaskCompleted = isDone;
     });
 
-    taskDoc.update({'state': isDone ? 'completed' : initialTaskState});
+    String? currentUser = FirebaseAuth.instance.currentUser?.displayName;
+
+    taskCollection.get().then((querySnapshot) {
+      for (var userDoc in querySnapshot.docs) {
+        userDoc.reference
+            .collection('tasks')
+            .doc(widget.task.id) // Assuming you have a unique ID for each task
+            .update({
+          'state': isDone ? 'completed' : initialTaskState,
+          'completedBy': currentUser,
+        }).then((value) {
+          print('Task state updated for user: ${userDoc.id}');
+        }).catchError((error) {
+          // Error occurred while updating task state
+          print(
+              'Failed to update task state for user: ${userDoc.id}, Error: $error');
+        });
+      }
+    }).catchError((error) {
+      // Error occurred while fetching user documents
+      print('Failed to fetch user documents: $error');
+    });
   }
 
   @override
@@ -76,7 +99,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                     .textTheme
                     .bodyLarge!
                     .copyWith(color: Colors.black),
-                subTitle: widget.userName,
+                subTitle: widget.task.userName,
               ),
               CustomDetailsRichText(
                 title: 'Uploaded on  ',

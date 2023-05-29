@@ -14,6 +14,7 @@ import 'package:task_management/user/main_layer/screens/setting_screen/pages/emp
 import 'package:task_management/user/main_layer/screens/setting_screen/pages/profile_screen.dart';
 import 'package:task_management/user/main_layer/screens/setting_screen/pages/widgets/employee_detiails.dart';
 import 'package:task_management/user/main_layer/screens/task_details_screen/tabBar_items_details.dart';
+import 'package:task_management/user/main_layer/screens/task_details_screen/task_details_screen.dart';
 
 import 'named_router.dart';
 
@@ -54,6 +55,15 @@ class OnGenerateRouter {
           status: (settings.arguments as Map)['status'] as String,
           userId: (settings.arguments as Map)['userId'] as String,
           role: (settings.arguments as Map)['role'] as String,
+          userName: (settings.arguments as Map)['userName'] as String,
+        );
+
+        break;
+      case NamedRouter.taskDetailsScreen:
+        page = TaskDetailsScreen(
+          task: (settings.arguments as Map)['task'],
+          userId: (settings.arguments as Map)['userId'] as String,
+          completedBy: (settings.arguments as Map)['completedBy'] as String,
         );
         break;
 

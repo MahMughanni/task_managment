@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:task_management/core/logic/firebase_controller.dart';
@@ -46,7 +48,7 @@ class AdminCubit extends Cubit<AdminState> {
             final allTasks = tasksMap.values.expand((tasks) => tasks).toList();
             allTasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-            emit(AdminTasksLoadedState(allTasks, user));
+            emit(AdminTasksLoadedState(tasks: allTasks, user: user));
           });
         }
       }, onError: (error) {
@@ -57,20 +59,18 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
-
   Future<void> deleteTask({required String taskId}) async {
     try {
-      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .get();
+      final QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('users').get();
 
       for (final QueryDocumentSnapshot userSnapshot in querySnapshot.docs) {
         final tasksCollection = userSnapshot.reference.collection('tasks');
-        final taskQuerySnapshot = await tasksCollection
-            .where('id', isEqualTo: taskId)
-            .get();
+        final taskQuerySnapshot =
+            await tasksCollection.where('id', isEqualTo: taskId).get();
 
-        for (final QueryDocumentSnapshot taskSnapshot in taskQuerySnapshot.docs) {
+        for (final QueryDocumentSnapshot taskSnapshot
+            in taskQuerySnapshot.docs) {
           await taskSnapshot.reference.delete();
         }
       }

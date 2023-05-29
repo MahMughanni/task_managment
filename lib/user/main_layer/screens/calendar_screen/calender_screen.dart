@@ -134,23 +134,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                       MaterialPageRoute(
                                         builder: (context) => TaskDetailsScreen(
                                           task: task,
-                                          userName: widget.userName,
                                           userId: widget.userId,
+                                          completedBy: widget.userName,
                                         ),
                                       ),
                                     );
                                   },
                                   child: ListViewItemBody(
-                                    taskTitle: task.title,
-                                    taskCategory: task.state,
-                                    startTime: task.startTime.toString(),
-                                    title: task.description,
-                                    url: task.imageUrls.isNotEmpty
-                                        ? task.imageUrls.first
-                                        : '',
-                                    status: task.state,
-                                    userName: task.userName,
-                                    assignedTo: '',
+                                    taskModel: task,
                                   ),
                                 );
                               },

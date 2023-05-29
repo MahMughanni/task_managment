@@ -7,57 +7,55 @@ import 'package:shimmer/shimmer.dart';
 import 'package:task_management/admin/controller/admin_cubit.dart';
 import 'package:task_management/core/routes/app_router.dart';
 import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/shared_widgets/cutom_container.dart';
 import 'package:task_management/user/main_layer/screens/home_screen/controller/task_cubit.dart';
 import 'package:task_management/user/main_layer/screens/home_screen/controller/task_state.dart';
 import 'package:task_management/user/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
 import 'package:task_management/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
-import 'package:task_management/shared_widgets/cutom_container.dart';
 import 'package:task_management/utils/app_constants.dart';
 
 class HomeScreenBody extends HookWidget {
   const HomeScreenBody({
     Key? key,
-    required this.userId,
     required this.userRole,
-    required this.userName,
   }) : super(key: key);
 
-  final String userId, userRole, userName;
+  final String userRole;
 
   @override
   Widget build(BuildContext context) {
     final adminCubit = BlocProvider.of<AdminCubit>(context);
     useEffect(() {
       adminCubit.fetchAllTasks();
-      return () {
-        //clean if needed
-      };
+      return () {};
     }, []);
 
-    return BlocBuilder<AdminCubit, AdminState>(
+    return BlocBuilder<TaskCubit, TaskState>(
       builder: (context, state) {
         if (state is AdminInitial || state is AdminLoadingState) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is AdminTasksLoadedState) {
+        } else if (state is UserLoadedState) {
           final userTasks = state.tasks;
-          final upcomingTasksCount =
-              userTasks.where((task) => task.state == 'upcoming').length;
-          final completedTasksCount =
-              userTasks.where((task) => task.state == 'completed').length;
+          final user = state.user;
 
+          print('Home Body Name ${user.userName}');
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 BuildSliverAppBar(
-                  userName: userName,
+                  userName: user.userName ?? '',
                   taskNumber: userTasks.length.toString(),
                   itemCount: 3,
                   itemBuilder: (BuildContext context, int index) {
                     int todayTasksCount = userTasks.length;
-                    // int upcomingTasksCount = userTasks.where((task) => task.state == 'upcoming').length;
-                    // int completedTasksCount = userTasks.where((task) => task.state == 'completed').length;
+                    int upcomingTasksCount = userTasks
+                        .where((task) => task.state == 'upcoming')
+                        .length;
+                    int completedTasksCount = userTasks
+                        .where((task) => task.state == 'completed')
+                        .length;
                     switch (index) {
                       case 0:
                         return CustomContainer(
@@ -69,8 +67,9 @@ class HomeScreenBody extends HookWidget {
                               screenName: NamedRouter.userDetailsStatusTasks,
                               arguments: {
                                 'status': 'today',
-                                'userId': userId,
+                                'userId': user.uId,
                                 'role': userRole,
+                                'userName': user.userName
                               },
                             );
                           },
@@ -85,8 +84,9 @@ class HomeScreenBody extends HookWidget {
                               screenName: NamedRouter.userDetailsStatusTasks,
                               arguments: {
                                 'status': 'upcoming',
-                                'userId': userId,
+                                'userId': user.uId,
                                 'role': userRole,
+                                'userName': user.userName
                               },
                             );
                           },
@@ -101,20 +101,21 @@ class HomeScreenBody extends HookWidget {
                               screenName: NamedRouter.userDetailsStatusTasks,
                               arguments: {
                                 'status': 'completed',
-                                'userId': userId,
+                                'userId': user.uId,
                                 'role': userRole,
+                                'userName': user.userName
                               },
                             );
                           },
                         );
                       default:
                         return const Center(
-                          child: Text('No Tasks'),
+                          child: Text(''),
                         );
                     }
                   },
-                  imageUrl: '',
-                  userId: userId,
+                  imageUrl: user.profileImageUrl ?? '',
+                  userId: user.uId ?? '',
                   userRole: userRole,
                 )
               ];
@@ -125,25 +126,28 @@ class HomeScreenBody extends HookWidget {
                   userName: '',
                   state: 'today',
                   label: 'today',
-                  userId: userId,
+                  userId: user.uId ?? '',
                   adminCubit: adminCubit,
                   taskType: 'today',
+                  role: userRole,
                 ),
                 CustomTaskList(
                   userName: 'Admin',
                   state: 'upcoming',
                   label: 'Upcoming',
-                  userId: userId,
+                  userId: user.uId ?? '',
                   adminCubit: adminCubit,
                   taskType: 'upcoming',
+                  role: userRole,
                 ),
                 CustomTaskList(
                   userName: 'Admin',
                   state: 'completed',
                   label: 'Completed',
-                  userId: userId,
+                  userId: user.uId ?? '',
                   adminCubit: adminCubit,
                   taskType: 'completed',
+                  role: userRole,
                 ),
               ],
             ),

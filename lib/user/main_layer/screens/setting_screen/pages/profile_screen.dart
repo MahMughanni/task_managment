@@ -38,6 +38,7 @@ class ProfileScreen extends StatelessWidget {
                           builder: (BuildContext context) {
                             return EditProfileScreen(
                               path: userData.profileImageUrl,
+                              userRole: userData.role,
                             );
                           },
                         ),

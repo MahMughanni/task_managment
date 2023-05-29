@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management/admin/controller/admin_cubit.dart';
+import 'package:task_management/shared_widgets/custom_shimmer.dart';
 import 'package:task_management/user/auth_layer/controller/authentication_cubit.dart';
 import 'package:task_management/user/main_layer/screens/home_screen/controller/task_cubit.dart';
 import 'package:task_management/user/main_layer/screens/home_screen/controller/task_state.dart';
@@ -14,34 +15,35 @@ class AssignedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final user =
         BlocProvider.of<AuthenticationCubit>(context).firebaseAuth.currentUser!;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CustomAppbar(
-        title: 'Assigned Tasks',
-        action: [],
-      ),
-      body: BlocBuilder<AdminCubit, AdminState>(
-        builder: (context, state) {
-          if (state is AdminLoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is AdminFailure) {
-            return const Center(
-              child: Text('Something Went Wrong'),
-            );
-          } else if (state is AdminTasksLoadedState) {
-            var user = state.user;
-            return CustomTaskList(
-              userName: user?.userName ?? '',
-              state: 'upcoming',
-              label: 'Upcoming',
-              userId: user?.uId ?? '',
-              adminCubit: BlocProvider.of<AdminCubit>(context),
-              taskType: 'upcoming',
-            );
-          } else {
-            return Container();
-          }
-        },
+    return BlocProvider<TaskCubit>(
+      create: (context) => TaskCubit(userId: user.uid),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: const CustomAppbar(
+          title: 'Assigned Tasks',
+          action: [],
+        ),
+        body: BlocBuilder<TaskCubit, TaskState>(
+          builder: (context, state) {
+            if (state is UserLoadingState) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is Failure) {
+              return const ShimmerListViewItemBody();
+            } else if (state is UserLoadedState) {
+              return CustomTaskList(
+                userName: user.displayName,
+                state: 'upcoming',
+                label: 'Upcoming',
+                userId: user.uid,
+                userCubit: BlocProvider.of<TaskCubit>(context),
+                taskType: 'upcoming',
+                role: '',
+              );
+            } else {
+              return Container();
+            }
+          },
+        ),
       ),
     );
   }

@@ -234,6 +234,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                         CustomButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
+                              addTaskCubit.uploadSuccess();
                               addTaskCubit.uploadTask(
                                 title: addTaskCubit.titleController.text.trim(),
                                 description: addTaskCubit

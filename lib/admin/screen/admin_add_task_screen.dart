@@ -140,7 +140,8 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                           textInputAction: TextInputAction.next,
                           onChanged: (val) {},
                           validator: (value) {
-                            return addTaskCubit.selectedDropdownTaskValue == null
+                            return addTaskCubit.selectedDropdownTaskValue ==
+                                    null
                                 ? ""
                                 : null;
                           },
@@ -213,7 +214,8 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                           textInputAction: TextInputAction.next,
                           onChanged: (val) {},
                           validator: (value) {
-                            return addTaskCubit.selectedDropdownTaskValue == null
+                            return addTaskCubit.selectedDropdownTaskValue ==
+                                    null
                                 ? ""
                                 : null;
                           },
@@ -300,6 +302,7 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                               String? userId =
                                   addTaskCubit.selectUserDropdownValue;
                               if (_formKey.currentState!.validate()) {
+                                addTaskCubit.uploadSuccess();
                                 addTaskCubit.addTaskToUser(
                                   title:
                                       addTaskCubit.titleController.text.trim(),
@@ -312,7 +315,8 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                                   endTime: addTaskCubit.endTimeController.text
                                       .trim(),
                                   userId: userId!,
-                                  userName: addTaskCubit.selectUserValueController.text,
+                                  userName: addTaskCubit
+                                      .selectUserValueController.text,
                                 );
                               }
 

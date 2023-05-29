@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:task_management/model/task_model.dart';
 import 'package:task_management/utils/app_constants.dart';
 import 'package:task_management/utils/utils_config.dart';
 
@@ -9,24 +10,9 @@ import 'custom_circle_image.dart';
 class ListViewItemBody extends StatelessWidget {
   const ListViewItemBody({
     Key? key,
-    required this.taskTitle,
-    required this.taskCategory,
-    required this.startTime,
-    required this.title,
-    required this.url,
-    required this.status,
-    required this.userName,
-    required this.assignedTo,
+    required this.taskModel,
   }) : super(key: key);
-
-  final String? taskTitle,
-      taskCategory,
-      startTime,
-      title,
-      url,
-      status,
-      userName,
-      assignedTo;
+  final TaskModel taskModel;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +52,7 @@ class ListViewItemBody extends StatelessWidget {
               children: [
                 4.verticalSpace,
                 Text(
-                  taskCategory!,
+                  taskModel.title,
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: AppConstFontWeight.medium,
@@ -74,7 +60,7 @@ class ListViewItemBody extends StatelessWidget {
                 ),
                 RichText(
                   text: TextSpan(
-                    text: taskTitle,
+                    text: taskModel.title,
                     style: TextStyle(
                       color: Colors.black,
                       overflow: TextOverflow.ellipsis,
@@ -87,7 +73,8 @@ class ListViewItemBody extends StatelessWidget {
                 ),
                 RichText(
                   text: TextSpan(
-                    text: UtilsConfig.formatDate(startTime.toString()),
+                    text:
+                        UtilsConfig.formatDate(taskModel.startTime.toString()),
                     style: TextStyle(
                       fontWeight: AppConstFontWeight.regular,
                       color: Colors.deepOrange,
@@ -95,7 +82,7 @@ class ListViewItemBody extends StatelessWidget {
                     ),
                     children: [
                       WidgetSpan(
-                          child: status == 'completed'
+                          child: taskModel.state == 'completed'
                               ? Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
@@ -121,31 +108,32 @@ class ListViewItemBody extends StatelessWidget {
                 ),
                 RichText(
                   text: TextSpan(
-                    text: status == 'completed'
+                    text: taskModel.state == 'completed'
                         ? 'completed by '
-                        : assignedTo?.length == 0
+                        : taskModel.assignedTo?.length == 0
                             ? 'Assigned Employee'
-                            : 'Assigned To ${assignedTo}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.blueAccent, fontSize: 13.sp),
+                            : 'Assigned To ${taskModel.assignedTo}',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Colors.blueAccent,
+                          fontSize: 13.sp,
+                          overflow: TextOverflow.clip,
+                        ),
                     children: [
                       TextSpan(
-                        text: status == 'completed'
-                            ? userName!.isEmpty
+                        text: taskModel.state == 'completed'
+                            ? taskModel.completedBy!.isEmpty
                                 ? '- - - - '
-                                : userName
+                                : taskModel.completedBy
                             : '',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(color: const Color(0xff3AAF3C)),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: const Color(0xff3AAF3C),
+                              overflow: TextOverflow.clip,
+                            ),
                       )
                     ],
                   ),
                   maxLines: 1,
-                  overflow: TextOverflow.clip,
+                  overflow: TextOverflow.fade,
                 ),
                 4.verticalSpace,
               ],
@@ -153,7 +141,9 @@ class ListViewItemBody extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0).r,
               child: CustomCircleImage(
-                image: url,
+                image: taskModel.imageUrls.isEmpty
+                    ? ''
+                    : taskModel.imageUrls.first,
                 width: 40.r,
                 height: 40.r,
               ),

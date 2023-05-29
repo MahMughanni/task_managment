@@ -10,8 +10,10 @@ import 'package:task_management/shared_widgets/custom_button.dart';
 import 'package:task_management/utils/extentions/padding_extention.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key, required this.path}) : super(key: key);
-  final String path;
+  const EditProfileScreen(
+      {Key? key, required this.path, required this.userRole})
+      : super(key: key);
+  final String path, userRole;
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -98,7 +100,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       try {
                         await FireBaseRepository.editProfileImage(_newImage);
                         AppRouter.goToAndRemove(
-                            routeName: NamedRouter.mainScreen);
+                          routeName: NamedRouter.mainScreen,
+                          arguments: widget.userRole,
+                        );
                         debugPrint(_newImage?.path.toString() ?? '');
                       } catch (error) {
                         debugPrint(error.toString());
@@ -109,13 +113,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             userName: userNameController.text.trim(),
                             phone: phoneController.text.trim(),
                             position: positionController.text.trim(),
-                            newImage: _newImage
-                            // ^ Use the new image if it's not null, otherwise use the old image
-                            );
+                            newImage: _newImage);
 
                         debugPrint('Edit Success');
                         AppRouter.goToAndRemove(
-                            routeName: NamedRouter.mainScreen);
+                          routeName: NamedRouter.mainScreen,
+                          arguments: widget.userRole,
+                        );
                       } catch (error) {
                         debugPrint("Edit error $error");
                         // handle error

@@ -11,6 +11,7 @@ class TaskModel {
   final Timestamp createdAt;
   String userName;
   String? assignedTo;
+  String? completedBy;
 
   TaskModel({
     this.id,
@@ -23,6 +24,7 @@ class TaskModel {
     required this.createdAt,
     required this.userName,
     required this.assignedTo,
+    required this.completedBy,
   });
 
   factory TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -39,8 +41,9 @@ class TaskModel {
       imageUrls: imageUrls,
       createdAt: data['createdAt'] ?? Timestamp.now(),
       userName: data['username'] ?? '',
-      assignedTo: data['assignedTo'] ??
-          ' ', // Initialize the username as an empty string
+      assignedTo: data['assignedTo'] ?? ' ',
+      completedBy: data['completedBy'] ??
+          '', // Initialize the username as an empty string
     );
   }
 
@@ -55,6 +58,7 @@ class TaskModel {
     Timestamp? createdAt,
     String? userName,
     String? assignedTo,
+    String? completedBy,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -67,6 +71,7 @@ class TaskModel {
       createdAt: createdAt ?? this.createdAt,
       userName: userName ?? this.userName,
       assignedTo: assignedTo ?? this.assignedTo,
+      completedBy: completedBy ?? this.completedBy,
     );
   }
 
@@ -82,6 +87,7 @@ class TaskModel {
       'createdAt': createdAt,
       'username': userName,
       'assignedTo': assignedTo,
+      'completedBy': completedBy,
     };
   }
 

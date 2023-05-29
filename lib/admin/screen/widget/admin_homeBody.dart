@@ -39,6 +39,7 @@ class AdminHomeScreenBody extends HookWidget {
           );
         } else if (state is AdminTasksLoadedState) {
           final userTasks = state.tasks;
+          // final user = state.user;
           final upcomingTasksCount =
               userTasks.where((task) => task.state == 'upcoming').length;
           final completedTasksCount =
@@ -107,6 +108,7 @@ class AdminHomeScreenBody extends HookWidget {
                   userId: userId,
                   adminCubit: adminCubit,
                   taskType: 'today',
+                  role: userRole,
                 ),
                 CustomTaskList(
                   userName: 'Admin',
@@ -115,6 +117,7 @@ class AdminHomeScreenBody extends HookWidget {
                   userId: userId,
                   adminCubit: adminCubit,
                   taskType: 'upcoming',
+                  role: userRole,
                 ),
                 CustomTaskList(
                   userName: 'Admin',
@@ -123,6 +126,7 @@ class AdminHomeScreenBody extends HookWidget {
                   userId: userId,
                   adminCubit: adminCubit,
                   taskType: 'completed',
+                  role: userRole,
                 ),
               ],
             ),

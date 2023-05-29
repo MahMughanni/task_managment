@@ -16,17 +16,19 @@ class CustomTaskList extends StatelessWidget {
     required this.label,
     required this.userName,
     required this.userId,
+    required this.role,
     this.adminCubit,
+    this.userCubit,
     required this.taskType,
   }) : super(key: key);
 
   final String state;
-  final String taskType; // Add this parameter
+  final String taskType;
   final String label;
   final String? userName;
-  final String userId;
+  final String userId, role;
 
-  // final TaskCubit? userCubit;
+  final TaskCubit? userCubit;
   final AdminCubit? adminCubit;
 
   @override
@@ -36,7 +38,7 @@ class CustomTaskList extends StatelessWidget {
         if (state is AdminLoadingState) {
           return ListView.builder(
             shrinkWrap: true,
-            itemCount: 10,
+            itemCount: 5,
             itemBuilder: (context, index) => const ShimmerListViewItemBody(),
           );
         }
@@ -75,7 +77,8 @@ class CustomTaskList extends StatelessWidget {
                         length: stateTasks.length,
                         userId: userId,
                         stateTasks: stateTasks,
-                        role: 'user',
+                        role: role,
+                        userName: userName ?? ' ',
                       ),
                     ),
                   ],

@@ -231,6 +231,7 @@ class FireBaseRepository {
       createdAt: Timestamp.now(),
       userName: userName,
       assignedTo: assignedTo ?? '',
+      completedBy: '',
     );
 
     final DocumentReference docRef = await fireStore
@@ -287,6 +288,7 @@ class FireBaseRepository {
       createdAt: Timestamp.now(),
       userName: userName,
       assignedTo: assignedTo,
+      completedBy: '',
     );
 
     final DocumentReference docRef = await fireStore
