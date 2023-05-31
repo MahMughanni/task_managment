@@ -7,6 +7,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:task_management/core/routes/app_router.dart';
 import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/model/countries.dart';
+import 'package:task_management/model/user_model.dart';
 import 'package:task_management/utils/utils_config.dart';
 
 part 'authentication_state.dart';
@@ -16,8 +18,55 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   User? loggedInUser;
   String? userRole;
+  TextEditingController countryFlagController = TextEditingController();
+  Country? selectedCountryCode = countries[0];
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
+  FocusNode phoneNumberFocusNode = FocusNode();
 
-  AuthenticationCubit({required this.firebaseAuth}) : super(LoginInitial());
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
+  bool isLoading = false;
+
+  AuthenticationCubit({required this.firebaseAuth}) : super(LoginInitial()) {
+    phoneNumberFocusNode.addListener(() {
+      if (!phoneNumberFocusNode.hasFocus) {
+        emit(ChangePhoneNumber());
+      }
+    });
+  }
+
+  Country? selectedCountry = countries[0];
+
+  void clearControllers() {
+    emailController.clear();
+    passwordController.clear();
+    userNameController.clear();
+    phoneController.clear();
+    countryController.clear();
+  }
+
+  void authSuccess() {
+    isLoading = !isLoading;
+    emit(IsLoadingState(isLoading: isLoading));
+  }
+
+  void selectCountryCode(countryCode) {
+    selectedCountryCode = countryCode;
+    countryFlagController.text = countryCode.flag;
+    phoneController.text = '';
+
+    emit(ChangeCountryCode(countryCode: countryCode, phone: ''));
+  }
+
+  void phoneNumberFocusChangeListener() {
+    phoneNumberFocusNode.addListener(() {
+      if (!phoneNumberFocusNode.hasFocus) {
+        emit(ChangePhoneNumber());
+      }
+    });
+  }
 
   Future<void> autoLogin() async {
     const storage = FlutterSecureStorage();
@@ -166,7 +215,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
       loggedInUser = userCredential.user!;
       await loggedInUser!.updateDisplayName(username);
-
+      clearControllers();
       AppRouter.goToAndRemove(
         routeName: NamedRouter.mainScreen,
         arguments: 'user',
@@ -176,8 +225,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       // Handle FirebaseAuthException
       print('FirebaseAuthException: ${e.message}');
     } catch (e) {
-      // Handle other exceptions
-      print('Error during sign-up: $e');
+      emit(AuthFailure('Error during sign-up: $e'));
     }
   }
 
@@ -187,15 +235,14 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         'fcmToken': fcmToken,
       });
     } catch (e) {
-      // Handle Firestore update error
-      print('Error updating FCM token: $e');
+      emit(AuthFailure('Error updating FCM token.'));
     }
   }
 
   Future<void> logOut() async {
     await firebaseAuth.signOut();
 
-// Remove user info from secure storage
+    // Remove user info from secure storage
     const storage = FlutterSecureStorage();
     await storage.delete(key: 'email');
     await storage.delete(key: 'password');

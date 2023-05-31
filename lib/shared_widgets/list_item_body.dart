@@ -52,7 +52,7 @@ class ListViewItemBody extends StatelessWidget {
               children: [
                 4.verticalSpace,
                 Text(
-                  taskModel.title,
+                  UtilsConfig.capitalizeFirstLetter(taskModel.state),
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: AppConstFontWeight.medium,
@@ -60,7 +60,7 @@ class ListViewItemBody extends StatelessWidget {
                 ),
                 RichText(
                   text: TextSpan(
-                    text: taskModel.title,
+                    text: UtilsConfig.capitalizeFirstLetter(taskModel.title),
                     style: TextStyle(
                       color: Colors.black,
                       overflow: TextOverflow.ellipsis,

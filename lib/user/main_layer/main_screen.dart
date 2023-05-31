@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
       (widget.userRole == 'admin')
           ? const AdminAddTaskScreen()
           : const AddTaskScreen(),
-       NotificationsScreen(),
+      NotificationsScreen(),
       SettingScreen(),
     ];
   }

@@ -33,6 +33,9 @@ class ColorConstManger {
   static const int backGroundBottomSheet = 0xFF505050;
   static const int backGroundContainer = 0xffFFF9F0;
   static const int borderContainer = 0xffF3F3F3;
+  static const Color lightGrey = Color(0xFF707070);
+  static const Color borderBlue = Color(0xFF90AEFF);
+  static const Color borderWhite = Color(0xFFE2E2E2);
   static const Color white = Colors.white;
   static const Color black = Colors.black;
   static const int backGroundSnackBarFalse = 0xFFFCF3E4;

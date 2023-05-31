@@ -169,22 +169,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  date_picker_timeline:
-    dependency: "direct main"
-    description:
-      name: date_picker_timeline
-      sha256: d92956ddd6eb3070f5637b1514201342e739b6ed1ad830c365d64f9349f4f682
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.3"
-  date_time_picker:
-    dependency: "direct main"
-    description:
-      name: date_time_picker
-      sha256: "6923c568bcb67a66ab7e083708d0adbcae8214b41bb84d49febc17e89e06fc4a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   dbus:
     dependency: transitive
     description:
@@ -513,7 +497,7 @@ packages:
     source: hosted
     version: "2.6.3"
   intl:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: intl
       sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
@@ -620,10 +604,10 @@ packages:
     dependency: transitive
     description:
       name: permission_handler_android
-      sha256: "8028362b40c4a45298f1cbfccd227c8dd6caf0e27088a69f2ba2ab15464159e2"
+      sha256: d8cc6a62ded6d0f49c6eac337e080b066ee3bce4d405bd9439a61e1f1927bfe8
       url: "https://pub.dev"
     source: hosted
-    version: "10.2.0"
+    version: "10.2.1"
   permission_handler_apple:
     dependency: transitive
     description:

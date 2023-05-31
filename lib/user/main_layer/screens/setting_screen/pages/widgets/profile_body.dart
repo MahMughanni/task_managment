@@ -1,9 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:task_management/utils/extentions/padding_extention.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_management/utils/extentions/string_validate_extention.dart';
-
 import '../../../../../../shared_widgets/custom_circle_image.dart';
 import '../../../../../../shared_widgets/custom_form_field.dart';
 
@@ -47,8 +46,8 @@ class ProfileBodyScreen extends StatelessWidget {
           children: [
             CustomCircleImage(
               image: imageUrl ?? newImage,
-              width: 200,
-              height: 200,
+              width: 200.r,
+              height: 200.r,
             ),
             Positioned(
               right: screenSize.height * 0.014,
@@ -64,8 +63,8 @@ class ProfileBodyScreen extends StatelessWidget {
                   color: Colors.white,
                   shape: BoxShape.circle,
                 ),
-                width: 50,
-                height: 50,
+                width: 50.r,
+                height: 50.r,
                 child: InkWell(
                   onTap: onTap,
                   child: const Icon(
@@ -77,7 +76,7 @@ class ProfileBodyScreen extends StatelessWidget {
             ),
           ],
         ),
-        20.ph,
+        20.verticalSpace,
         Visibility(
           visible: screen == 'profile' ? true : false,
           child: CustomTextFormField(
@@ -87,7 +86,7 @@ class ProfileBodyScreen extends StatelessWidget {
             initialValue: screen == 'profile' ? initialData[1] : '',
           ),
         ),
-        16.ph,
+        16.verticalSpace,
         Visibility(
           visible: screen == 'profile' ? true : false,
           child: CustomTextFormField(
@@ -97,7 +96,7 @@ class ProfileBodyScreen extends StatelessWidget {
             enabled: false,
           ),
         ),
-        16.ph,
+        16.verticalSpace,
         CustomTextFormField(
           validator: (value) {
             if (!value!.isValidName) {
@@ -110,7 +109,7 @@ class ProfileBodyScreen extends StatelessWidget {
           labelText: 'User Name',
           initialValue: screen == 'profile' ? initialData[0] : null,
         ),
-        16.ph,
+        16.verticalSpace,
         CustomTextFormField(
           validator: (value) {
             if (!value!.isValidNumber) {
@@ -123,7 +122,7 @@ class ProfileBodyScreen extends StatelessWidget {
           enabled: isEnabled,
           labelText: 'Phone',
         ),
-        16.ph,
+        16.verticalSpace,
         CustomTextFormField(
           validator: (value) {
             if (!value!.isValidName) {

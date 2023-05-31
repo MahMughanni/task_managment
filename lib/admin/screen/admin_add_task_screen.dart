@@ -114,8 +114,7 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                                               .updateStatusDropdownValue(
                                                   task.toString());
 
-                                          Navigator.pop(
-                                              context); // Close the bottom sheet
+                                          Navigator.pop(context);
                                         },
                                       );
                                     },
@@ -189,8 +188,7 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                                               user.uId!;
                                           addTaskCubit
                                               .updateUserDropdownValue(id);
-                                          Navigator.pop(
-                                              context); // Close the bottom sheet
+                                          Navigator.pop(context);
                                         },
                                       );
                                     },

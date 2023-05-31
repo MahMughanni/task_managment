@@ -2,24 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_management/model/user_model.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
 import 'package:task_management/shared_widgets/custom_circle_image.dart';
 import 'package:task_management/utils/app_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EmployeeDetailsScreen extends StatelessWidget {
-  const EmployeeDetailsScreen({Key? key, required this.userData}) : super(key: key);
+  const EmployeeDetailsScreen({Key? key, required this.userData})
+      : super(key: key);
   final UserModel userData;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'Profile',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+      appBar: const CustomAppbar(
+        title: 'Profile',
+        action: [],
       ),
       body: SingleChildScrollView(
         child: SizedBox(
@@ -129,7 +127,7 @@ class EmployeeDetailsScreen extends StatelessWidget {
                               CustomIconsButton(
                                 imagePath: SvgIconsConstManger.email,
                                 onPressed: () async {
-                                  final recipientEmail = userData ;
+                                  final recipientEmail = userData;
                                   final uri =
                                       Uri.encodeFull('mailto:$recipientEmail');
 
@@ -192,8 +190,8 @@ class CustomIconsButton extends StatelessWidget {
         onPressed: onPressed,
         child: SvgPicture.asset(
           imagePath,
-          width: 30.r,
-          height: 30.r,
+          width: 25.r,
+          height: 25.r,
         ),
       ),
     );

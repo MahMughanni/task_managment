@@ -84,12 +84,8 @@ class SettingScreen extends StatelessWidget {
                         AppRouter.goTo(screenName: NamedRouter.employeeScreen);
                         break;
                       case 2:
-                        UtilsConfig.showSnackBarMessage(
-                            message: index.toString(), status: true);
                         break;
                       case 3:
-                        UtilsConfig.showSnackBarMessage(
-                            message: index.toString(), status: true);
                         break;
                       case 4:
                         final authenticationCubit =

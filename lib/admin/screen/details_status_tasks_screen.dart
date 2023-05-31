@@ -23,41 +23,54 @@ class AdminDetailsStatusTasks extends StatelessWidget {
               tasks.where((task) => task.state == 'upcoming').toList();
           var completedTasks =
               tasks.where((task) => task.state == 'completed').toList();
-          return Scaffold(
+          if ((status == 'upcoming' && upcomingTasks.isEmpty) ||
+              (status == 'completed' && completedTasks.isEmpty)) {
+            return Scaffold(
               appBar: CustomAppbar(
                 title:
                     status == 'upcoming' ? 'Assigned Tasks' : 'Completed Tasks',
                 action: const [],
               ),
-              body: status == 'upcoming'
-                  ? CustomListViewBuilder(
-                      length: upcomingTasks.length,
-                      stateTasks: upcomingTasks,
-                      userId: '',
-                      role: 'admin',
-                      userName: '',
-                    )
-                  : status == 'completed'
-                      ? CustomListViewBuilder(
-                          length: completedTasks.length,
-                          stateTasks: completedTasks,
-                          userId: '',
-                          role: 'admin',
-                          userName: '',
-                        )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 7,
-                          itemBuilder: (context, index) =>
-                              const ShimmerListViewItemBody(),
-                        ));
-        } else {
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: 7,
-            itemBuilder: (context, index) => const ShimmerListViewItemBody(),
-          );
+              body: const Center(
+                child: Text('No Tasks .. !'),
+              ),
+            );
+          } else if (status == 'upcoming' || upcomingTasks.isNotEmpty) {
+            return Scaffold(
+              appBar: const CustomAppbar(
+                title: 'Assigned Tasks',
+                action: [],
+              ),
+              body: CustomListViewBuilder(
+                length: upcomingTasks.length,
+                stateTasks: upcomingTasks,
+                userId: user?.uId ?? '',
+                role: user?.role ?? 'admin',
+                userName: user?.userName ?? '',
+              ),
+            );
+          } else if (status == 'completed' || completedTasks.isNotEmpty) {
+            return Scaffold(
+              appBar: const CustomAppbar(
+                title: 'Completed Tasks',
+                action: [],
+              ),
+              body: CustomListViewBuilder(
+                length: completedTasks.length,
+                stateTasks: completedTasks,
+                userId: user?.uId ?? '',
+                role: user?.role ?? 'admin',
+                userName: user?.userName ?? '',
+              ),
+            );
+          }
         }
+
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: 7,
+          itemBuilder: (context, index) => const ShimmerListViewItemBody(),
+        );
       },
     );
   }

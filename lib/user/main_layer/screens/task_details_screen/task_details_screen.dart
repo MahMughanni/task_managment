@@ -31,7 +31,6 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    print(' this is UserName ${widget.task.userName}');
     initialTaskState = widget.task.state;
     isTaskCompleted = initialTaskState == 'completed';
   }
@@ -47,23 +46,18 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
     taskCollection.get().then((querySnapshot) {
       for (var userDoc in querySnapshot.docs) {
-        userDoc.reference
-            .collection('tasks')
-            .doc(widget.task.id) // Assuming you have a unique ID for each task
-            .update({
+        userDoc.reference.collection('tasks').doc(widget.task.id).update({
           'state': isDone ? 'completed' : initialTaskState,
           'completedBy': currentUser,
         }).then((value) {
-          print('Task state updated for user: ${userDoc.id}');
+          debugPrint('Task state updated for user: ${userDoc.id}');
         }).catchError((error) {
-          // Error occurred while updating task state
-          print(
+          debugPrint(
               'Failed to update task state for user: ${userDoc.id}, Error: $error');
         });
       }
     }).catchError((error) {
-      // Error occurred while fetching user documents
-      print('Failed to fetch user documents: $error');
+      debugPrint('Failed to fetch user documents: $error');
     });
   }
 
@@ -100,6 +94,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                     .bodyLarge!
                     .copyWith(color: Colors.black),
                 subTitle: widget.task.userName,
+                subTitleStyle: Theme.of(context).textTheme.bodyMedium,
               ),
               CustomDetailsRichText(
                 title: 'Uploaded on  ',
@@ -119,13 +114,20 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                   subTitle: widget.task.endTime.toString(),
                   subTitleStyle: Theme.of(context).textTheme.bodySmall),
               Text('Task Description ',
-                  style: Theme.of(context).textTheme.bodyLarge),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(color: Colors.black)),
               CustomTextFormField(
                 enabled: false,
                 initialValue: widget.task.description.toString(),
                 maxLine: 6,
                 keyboardType: TextInputType.multiline,
                 hintText: '',
+                titleStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Colors.grey.shade800),
               ),
               widget.task.imageUrls.isNotEmpty
                   ? SizedBox(

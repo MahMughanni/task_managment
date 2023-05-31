@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:task_management/core/logic/calender_controller.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
 import 'package:task_management/user/main_layer/screens/task_details_screen/task_details_screen.dart';
 import 'package:task_management/shared_widgets/list_item_body.dart';
 import 'controller/calendar_cubit.dart';
@@ -36,11 +37,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-          title: Text(
-        'Calendar Screen',
-        style: Theme.of(context).textTheme.titleLarge,
-      )),
+      appBar: const CustomAppbar(
+        title: 'Calendar Screen',
+        action: [],
+      ),
       body: BlocBuilder<CalenderCubit, CalenderState>(
         bloc: _calenderCubit,
         builder: (context, state) {

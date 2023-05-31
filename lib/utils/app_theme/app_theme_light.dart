@@ -3,7 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_management/utils/app_constants.dart';
 
 ThemeData getAppTheme() => ThemeData(
-      colorSchemeSeed: ColorConstManger.primaryColor,
+      dialogBackgroundColor: Colors.white,
+      colorScheme: const ColorScheme.light(
+        primary: Colors.blue,
+        background: Colors.white,
+        secondary: Colors.white,
+        secondaryContainer: Colors.white,
+        primaryContainer: Colors.white,
+        scrim: Colors.white,
+      ),
       fontFamily: 'Cairo',
       useMaterial3: true,
       iconTheme: const IconThemeData(color: Colors.black),
@@ -61,3 +69,4 @@ TextTheme getTextTheme() => TextTheme(
         color: ColorConstManger.primaryColor,
       ),
     );
+

@@ -6,6 +6,7 @@ import 'package:task_management/user/main_layer/screens/add_task_screen/controll
 import 'package:task_management/user/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
 import 'package:task_management/shared_widgets/custom_button.dart';
 import 'package:task_management/shared_widgets/custom_form_field.dart';
+import 'package:task_management/utils/app_constants.dart';
 import 'package:task_management/utils/utils_config.dart';
 
 class AddTaskScreen extends StatelessWidget {
@@ -94,7 +95,11 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                             children: [
                               Text(
                                 'Status',
-                                style: Theme.of(context).textTheme.titleSmall,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(
+                                        color: ColorConstManger.primaryColor),
                               ),
                               Divider(
                                 thickness: 1,
@@ -113,7 +118,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                                             .toUpperCase(),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyLarge!
+                                            .bodyMedium!
                                             .copyWith(color: Colors.black),
                                       ),
                                       onTap: () {
@@ -229,38 +234,24 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                         ],
                       ),
                     8.verticalSpace,
-                    Stack(
-                      children: [
-                        CustomButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              addTaskCubit.uploadSuccess();
-                              addTaskCubit.uploadTask(
-                                title: addTaskCubit.titleController.text.trim(),
-                                description: addTaskCubit
-                                    .descriptionController.text
-                                    .trim(),
-                                startTime: addTaskCubit.startTimeController.text
-                                    .trim(),
-                                endTime:
-                                    addTaskCubit.endTimeController.text.trim(),
-                              );
-                            }
-                          },
-                          title: 'Upload',
-                          width: double.infinity,
-                          height: 42.h,
-                        ),
-                        if (addTaskCubit.isUploading)
-                          Positioned.fill(
-                            child: Container(
-                              color: Colors.black.withOpacity(0.5),
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                          ),
-                      ],
+                    CustomButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          addTaskCubit.uploadSuccess();
+                          addTaskCubit.uploadTask(
+                            title: addTaskCubit.titleController.text.trim(),
+                            description:
+                                addTaskCubit.descriptionController.text.trim(),
+                            startTime:
+                                addTaskCubit.startTimeController.text.trim(),
+                            endTime: addTaskCubit.endTimeController.text.trim(),
+                          );
+                        }
+                      },
+                      title: 'Upload',
+                      width: double.infinity,
+                      height: 42.h,
+                      isLoading: addTaskCubit.isUploading,
                     ),
                   ],
                 ),

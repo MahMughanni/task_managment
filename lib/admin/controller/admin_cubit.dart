@@ -47,7 +47,6 @@ class AdminCubit extends Cubit<AdminState> {
             tasksMap[userId] = tasks;
             final allTasks = tasksMap.values.expand((tasks) => tasks).toList();
             allTasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
             emit(AdminTasksLoadedState(tasks: allTasks, user: user));
           });
         }

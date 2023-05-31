@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_management/core/logic/firebase_controller.dart';
 import 'package:task_management/core/routes/app_router.dart';
 import 'package:task_management/core/routes/named_router.dart';
@@ -91,44 +92,45 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 newImage: _newImage ?? File(widget.path),
                 imageUrl: urlImage,
               ),
-              24.ph,
+              24.verticalSpace,
               CustomButton(
-                  onPressed: () async {
-                    if (userNameController.text.isEmpty &&
-                        phoneController.text.isEmpty &&
-                        positionController.text.isEmpty) {
-                      try {
-                        await FireBaseRepository.editProfileImage(_newImage);
-                        AppRouter.goToAndRemove(
-                          routeName: NamedRouter.mainScreen,
-                          arguments: widget.userRole,
-                        );
-                        debugPrint(_newImage?.path.toString() ?? '');
-                      } catch (error) {
-                        debugPrint(error.toString());
-                      }
-                    } else if (formKey.currentState!.validate()) {
-                      try {
-                        await FireBaseRepository.editUserInfo(
-                            userName: userNameController.text.trim(),
-                            phone: phoneController.text.trim(),
-                            position: positionController.text.trim(),
-                            newImage: _newImage);
-
-                        debugPrint('Edit Success');
-                        AppRouter.goToAndRemove(
-                          routeName: NamedRouter.mainScreen,
-                          arguments: widget.userRole,
-                        );
-                      } catch (error) {
-                        debugPrint("Edit error $error");
-                        // handle error
-                      }
+                onPressed: () async {
+                  if (userNameController.text.isEmpty &&
+                      phoneController.text.isEmpty &&
+                      positionController.text.isEmpty) {
+                    try {
+                      await FireBaseRepository.editProfileImage(_newImage);
+                      AppRouter.goToAndRemove(
+                        routeName: NamedRouter.mainScreen,
+                        arguments: widget.userRole,
+                      );
+                      debugPrint(_newImage?.path.toString() ?? '');
+                    } catch (error) {
+                      debugPrint(error.toString());
                     }
-                  },
-                  title: 'Save',
-                  width: screenSize.width * .8,
-                  height: screenSize.height * .06),
+                  } else if (formKey.currentState!.validate()) {
+                    try {
+                      await FireBaseRepository.editUserInfo(
+                          userName: userNameController.text.trim(),
+                          phone: phoneController.text.trim(),
+                          position: positionController.text.trim(),
+                          newImage: _newImage);
+
+                      debugPrint('Edit Success');
+                      AppRouter.goToAndRemove(
+                        routeName: NamedRouter.mainScreen,
+                        arguments: widget.userRole,
+                      );
+                    } catch (error) {
+                      debugPrint("Edit error $error");
+                      // handle error
+                    }
+                  }
+                },
+                title: 'Save',
+                width: screenSize.width * .8,
+                height: screenSize.height * .06,
+              ),
             ],
           ),
         ),

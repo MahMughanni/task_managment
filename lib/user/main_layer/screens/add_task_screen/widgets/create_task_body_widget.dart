@@ -33,10 +33,10 @@ class CreateTaskBody extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () async {
                     final picked = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(DateTime.now().year + 10),
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(DateTime.now().year + 10),
                     );
                     if (picked != null) {
                       final time = await showTimePicker(
@@ -57,7 +57,7 @@ class CreateTaskBody extends StatelessWidget {
                       focus: (_) =>
                           FocusScope.of(context).requestFocus(FocusNode()),
                       suffixIcon: const Icon(Icons.calendar_today),
-                      labelText: 'Start',
+                      labelText: 'Start Time',
                       hintText: '5.apr 10:00pm',
                       controller: startTimeController,
                       validator: (value) {
@@ -99,7 +99,7 @@ class CreateTaskBody extends StatelessWidget {
                       focus: (_) =>
                           FocusScope.of(context).requestFocus(FocusNode()),
                       suffixIcon: const Icon(Icons.calendar_today),
-                      labelText: 'End',
+                      labelText: 'End Time',
                       hintText: '5.apr 10:00pm',
                       controller: endTimeController,
                       validator: (value) {

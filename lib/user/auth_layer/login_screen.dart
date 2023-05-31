@@ -43,12 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
         child: BlocConsumer<AuthenticationCubit, AuthenticationState>(
           listener: (context, state) {
             if (state is LoginInProgress) {
-              UtilsConfig.showSnackBarMessage(message: 'loading', status: false);
+              // UtilsConfig.showSnackBarMessage(message: 'loading', status: false);
             }
             if (state is AuthFailure) {
               debugPrint(state.errorMessage.toString());
               UtilsConfig.showSnackBarMessage(
-                  message: 'Email Or Password is Wrong', status: false);
+                  message: 'Email or Password is Wrong', status: false);
             }
           },
           builder: (context, state) {

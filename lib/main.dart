@@ -27,16 +27,6 @@ void main() async {
   final userAUTH = FirebaseAuth.instance;
   final user = userAUTH.currentUser;
 
-  // AwesomeNotifications().initialize(
-  //   // Define the 'basic_channel'
-  //   'basic_channel',
-  //   // Define the default icon for the channel
-  //   defaultIcon: 'app_icon',
-  //   // Define other channel properties
-  //   channelDescription: 'Basic Channel',
-  //   channelName: 'Basic Notifications',
-  // );
-
   final ConnectivityResult connectivityResult =
       await Connectivity().checkConnectivity();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
@@ -84,8 +74,7 @@ class TaskManagementApp extends StatelessWidget {
               },
             ),
             BlocProvider<AuthenticationCubit>(
-              create: (BuildContext context) =>
-                  AuthenticationCubit(firebaseAuth: userAUTH),
+              create: (BuildContext context) => AuthenticationCubit(firebaseAuth: userAUTH),
             ),
             BlocProvider<AddTaskCubit>(
               create: (BuildContext context) => AddTaskCubit(),
@@ -94,8 +83,7 @@ class TaskManagementApp extends StatelessWidget {
               create: (BuildContext context) => AdminCubit(),
             ),
             BlocProvider<TaskCubit>(
-              create: (BuildContext context) =>
-                  TaskCubit(userId: userAUTH.currentUser?.uid ?? ''),
+              create: (BuildContext context) => TaskCubit(userId: userAUTH.currentUser?.uid ?? ''),
             ),
           ],
           child: MaterialApp(

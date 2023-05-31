@@ -18,6 +18,12 @@ class LoginSuccess extends AuthenticationState {
   List<Object?> get props => [user, isAdmin];
 }
 
+class IsLoadingState extends AuthenticationState {
+  final bool isLoading;
+
+  IsLoadingState({required this.isLoading});
+}
+
 class AuthFailure extends AuthenticationState {
   final String errorMessage;
 
@@ -30,5 +36,18 @@ class SignUpProgress extends AuthenticationState {}
 
 class SignUpSuccess extends AuthenticationState {
   final User user;
+
   SignUpSuccess(this.user);
+}
+
+class ChangePhoneNumber extends AuthenticationState {}
+
+class ChangeCountryCode extends AuthenticationState {
+  final countryCode;
+  final String phone;
+
+  ChangeCountryCode({
+    required this.countryCode,
+    required this.phone,
+  });
 }
