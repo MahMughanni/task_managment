@@ -1,9 +1,6 @@
 import 'dart:io';
-import 'dart:math';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,7 +13,7 @@ import 'package:task_management/core/routes/app_router.dart';
 import 'package:task_management/core/routes/named_router.dart';
 import 'package:task_management/model/user_model.dart';
 import 'package:task_management/utils/utils_config.dart';
-
+import '../../notification_screen/controller/NotificationService.dart';
 import 'add_task_state.dart';
 
 class AddTaskCubit extends Cubit<AddTaskState> {
@@ -69,19 +66,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     imageFiles.clear();
   }
 
-  Future<String?> getUserFCMToken(String userId) async {
-    try {
-      final userDocument =
-          FirebaseFirestore.instance.collection('users').doc(userId);
-      final userData = await userDocument.get();
-      final fcmToken = userData.get('fcmToken') as String;
-      return fcmToken;
-    } catch (error) {
-      print('Error retrieving FCM token: $error');
-      return null;
-    }
-  }
-
+// add task for user by admin
   void addTaskToUser({
     required String userId,
     required String userName,
@@ -104,16 +89,26 @@ class AddTaskCubit extends Cubit<AddTaskState> {
         userName: 'Admin',
         assignedTo: userName,
       );
+
       emit(AddTaskUploadSuccess());
 
-      AppRouter.goTo(screenName: NamedRouter.mainScreen, arguments: 'admin');
-      clear();
+      final notificationsService = NotificationsService();
+
+      var token = await notificationsService.getUserDeviceToken(userId);
+      await notificationsService.sendNotification(
+        title: title,
+        deviceToken: token!,
+        notificationBody: 'New Task Added',
+      );
+      print('send 1 ');
+
       adminCubit.fetchAllTasks();
     } catch (error) {
       emit(AddTaskFailure(errorMessage: error.toString()));
     }
   }
 
+//add task by user
   void uploadTask({
     required String title,
     required String description,
@@ -156,6 +151,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     }
   }
 
+// create project for admin
   void createProject({
     required String title,
     required String description,
@@ -199,6 +195,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     }
   }
 
+// get all user and show them in homeScreen
   Future<void> getAllUsers() async {
     try {
       final users = await repository.getAllUsers();
@@ -220,6 +217,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     emit(newState);
   }
 
+// pickImages for both user and admin
   Future<void> pickImages() async {
     await requestPermissions(); // Call the permission request function
     var status = await Permission.storage.request();
@@ -242,6 +240,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     emit(RemoveTaskImageUpdated(imageFiles));
   }
 
+// for select bottomSheet Value
   Future<void> updateStatusDropdownValue(String value) async {
     selectedDropdownTaskValue = value;
     emit(AddTaskDropdownValueUpdated(selectedDropdownTaskValue!));

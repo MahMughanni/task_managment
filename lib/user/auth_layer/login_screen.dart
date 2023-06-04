@@ -83,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           emailController: emailController,
                           passwordController: passwordController,
+                          isLoading: authCubit.isLoading,
                         ),
                       ],
                     ),

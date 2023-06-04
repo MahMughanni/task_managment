@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/widgets.dart';
 import 'package:task_management/model/task_model.dart';
 import 'package:task_management/model/user_model.dart';
 import 'package:task_management/user/main_layer/screens/home_screen/controller/task_state.dart';
@@ -85,15 +86,21 @@ class TaskCubit extends Cubit<TaskState> {
             final allTasks = tasksMap.values.expand((tasks) => tasks).toList();
             allTasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-            print('Cubit UserName : ${user!.userName!}');
-            emit(UserLoadedState(user: user!, tasks: allTasks));
+            if (!isClosed) {
+              // debugPrint('Cubit UserName : ${user!.userName!}');
+              emit(UserLoadedState(user: user!, tasks: allTasks));
+            }
           });
         }
       }, onError: (error) {
-        emit(Failure(errorMessage: error.toString()));
+        if (!isClosed) {
+          emit(Failure(errorMessage: error.toString()));
+        }
       }) as StreamSubscription<List<TaskModel>>?;
     } catch (error) {
-      emit(Failure(errorMessage: error.toString()));
+      if (!isClosed) {
+        emit(Failure(errorMessage: error.toString()));
+      }
     }
   }
 

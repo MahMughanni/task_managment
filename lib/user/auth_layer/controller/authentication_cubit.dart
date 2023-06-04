@@ -158,9 +158,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       const storage = FlutterSecureStorage();
       await storage.write(key: 'email', value: email);
       await storage.write(key: 'password', value: password);
-
       UtilsConfig.showSnackBarMessage(message: ' Login Success!', status: true);
       emit(LoginSuccess(userCredential.user!));
+
+
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         UtilsConfig.showSnackBarMessage(
@@ -184,8 +185,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       emit(SignUpProgress());
 
-      UserCredential userCredential =
-          await firebaseAuth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -203,15 +203,17 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         await updateFCMToken(userId, fcmToken);
       });
 
-      await fireStore.collection('users').doc(userId).set({
-        'username': username,
-        'phone': phone,
-        'role': 'user',
-        'profileImageUrl': '',
-        'position': '',
-        'email': email,
-        'fcmToken': fcmToken,
-      });
+      if (fcmToken != null) {
+        await fireStore.collection('users').doc(userId).set({
+          'username': username,
+          'phone': phone,
+          'role': 'user',
+          'profileImageUrl': '',
+          'position': '',
+          'email': email,
+          'fcmToken': fcmToken,
+        });
+      }
 
       loggedInUser = userCredential.user!;
       await loggedInUser!.updateDisplayName(username);
@@ -228,6 +230,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       emit(AuthFailure('Error during sign-up: $e'));
     }
   }
+
 
   Future<void> updateFCMToken(String userId, String? fcmToken) async {
     try {

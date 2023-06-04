@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_management/admin/controller/admin_cubit.dart';
 import 'package:task_management/admin/screen/add_project/controller/project_cubit.dart';
@@ -21,21 +22,33 @@ import 'package:task_management/user/main_layer/screens/home_screen/controller/t
 import 'package:task_management/utils/app_theme/app_theme_light.dart';
 import 'package:task_management/utils/utils_config.dart';
 
+import 'user/main_layer/screens/notification_screen/controller/NotificationService.dart';
+import 'user/main_layer/screens/notification_screen/controller/notification_cubit.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   final userAUTH = FirebaseAuth.instance;
   final user = userAUTH.currentUser;
+  NotificationsService notificationsService = NotificationsService();
+  notificationsService.init();
+  notificationsService.initAwesome();
 
+
+  // Get the current connectivity status
   final ConnectivityResult connectivityResult =
       await Connectivity().checkConnectivity();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(TaskManagementApp(
-      userAUTH: userAUTH,
-      user: user,
-      connectivityResult: connectivityResult,
-    )),
-  );
+
+  // Set the preferred orientation to portrait
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  // Run the app
+  runApp(TaskManagementApp(
+    userAUTH: userAUTH,
+    user: user,
+    connectivityResult: connectivityResult,
+  ));
 }
 
 class TaskManagementApp extends StatelessWidget {
@@ -58,10 +71,9 @@ class TaskManagementApp extends StatelessWidget {
       builder: (BuildContext context, Widget? child) {
         return MultiBlocProvider(
           providers: [
-            // BlocProvider(
-            //   create: (context) =>
-            //       NotificationCubit()..loadNotifications(),
-            // ),
+            BlocProvider<NotificationCubit>(
+              create: (context) => NotificationCubit(),
+            ),
             BlocProvider<BaseCubit>(
               lazy: false,
               create: (BuildContext context) {
@@ -74,7 +86,8 @@ class TaskManagementApp extends StatelessWidget {
               },
             ),
             BlocProvider<AuthenticationCubit>(
-              create: (BuildContext context) => AuthenticationCubit(firebaseAuth: userAUTH),
+              create: (BuildContext context) =>
+                  AuthenticationCubit(firebaseAuth: userAUTH),
             ),
             BlocProvider<AddTaskCubit>(
               create: (BuildContext context) => AddTaskCubit(),
@@ -83,7 +96,8 @@ class TaskManagementApp extends StatelessWidget {
               create: (BuildContext context) => AdminCubit(),
             ),
             BlocProvider<TaskCubit>(
-              create: (BuildContext context) => TaskCubit(userId: userAUTH.currentUser?.uid ?? ''),
+              create: (BuildContext context) =>
+                  TaskCubit(userId: userAUTH.currentUser?.uid ?? ''),
             ),
           ],
           child: MaterialApp(

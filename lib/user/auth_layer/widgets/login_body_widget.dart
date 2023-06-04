@@ -18,8 +18,10 @@ class LoginScreenBodyWidget extends StatefulWidget {
     required this.onPressed,
     required this.emailController,
     required this.passwordController,
+    required this.isLoading,
   }) : super(key: key);
   final Function()? onPressed;
+  final bool isLoading;
 
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -29,8 +31,6 @@ class LoginScreenBodyWidget extends StatefulWidget {
 }
 
 class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
-
-
   @override
   void initState() {
     super.initState();
@@ -111,6 +111,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
             ),
             8.verticalSpace,
             CustomButton(
+              isLoading: widget.isLoading,
               title: 'LOG IN',
               width: double.infinity,
               height: 42.h,
