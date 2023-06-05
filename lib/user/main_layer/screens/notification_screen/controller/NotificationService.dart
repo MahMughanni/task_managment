@@ -1,131 +1,12 @@
 import 'dart:convert';
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:task_management/model/notificationData.dart';
 import 'package:http/http.dart' as http;
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-// class NotificationService {
-//   // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-//   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//   FlutterLocalNotificationsPlugin();
-//
-//   Future<String?> getUserDeviceToken(String userId) async {
-//     try {
-//       final userDoc = await FirebaseFirestore.instance
-//           .collection('users')
-//           .doc(userId)
-//           .get();
-//
-//       final deviceToken = userDoc.get('fcmToken');
-//       print('User Device Token: $deviceToken');
-//
-//       return deviceToken;
-//     } catch (error) {
-//       print('Failed to get user device token. Error: $error');
-//       return null;
-//     }
-//   }
-//
-//   Future<void> sendNotification(String deviceToken, String title,
-//       String notificationBody) async {
-//     final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
-//     print('send 00');
-//
-//     final headers = {
-//       'Content-Type': 'application/json',
-//       'Authorization':
-//       'key=AAAAjvYbOdU:APA91bGtSsmPqBONIbhHZosII6W00FZy3hi-aRVNQBVK9jhs2ZQ0EsN3Ozz63KQzYmMUcUY5OXnQ1VAimp6I50yisI5uOImHFJ6B7FmUoDgADRvVq3IfvYfywNthh_tgeoa7BFPJ403-',
-//     };
-//
-//     print('send 1 ');
-//     final requestBody = {
-//       'notification': {
-//         'title': title,
-//         'body': notificationBody,
-//         'priority': 'high',
-//       },
-//       'to': deviceToken,
-//     };
-//     print('send 2 ');
-//
-//     final response = await http.post(
-//       url,
-//       headers: headers,
-//       body: json.encode(requestBody),
-//     );
-//     print('send 3 ');
-//
-//     if (response.statusCode == 200) {
-//       print('send 4 ');
-//
-//       print('Notification sent successfully');
-//       await FirebaseFirestore.instance.collection('notifications').add({
-//         'title': title,
-//         'body': notificationBody,
-//         'timestamp': FieldValue.serverTimestamp(),
-//       });
-//     } else {
-//       print('Failed to send notification. Error: ${response.body}');
-//     }
-//   }
-//
-//   static Future<void> sendLocalNotification({
-//     required String title,
-//     required String message,
-//   }) async {
-//     try {
-//       final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//       FlutterLocalNotificationsPlugin();
-//
-//       const AndroidNotificationDetails androidPlatformChannelSpecifics =
-//       AndroidNotificationDetails(
-//         'task_channel',
-//         'Task Channel',
-//         importance: Importance.high,
-//         priority: Priority.high,
-//         playSound: true,
-//         enableVibration: true,
-//       );
-//       const NotificationDetails platformChannelSpecifics =
-//       NotificationDetails(android: androidPlatformChannelSpecifics);
-//
-//       await flutterLocalNotificationsPlugin.show(
-//         0,
-//         title,
-//         message,
-//         platformChannelSpecifics,
-//       );
-//     } catch (error) {
-//       print('Error sending local notification: $error');
-//     }
-//   }
-//
-//   static clearNotifications() async {
-//     try {
-//       final collection = FirebaseFirestore.instance.collection('notifications');
-//       final snapshot = await collection.get();
-//       for (DocumentSnapshot doc in snapshot.docs) {
-//         await doc.reference.delete();
-//       }
-//       // notifications.clear();
-//
-//       print('Notifications collection cleared');
-//     } catch (error) {
-//       print('Error clearing notifications: $error');
-//     }
-//   }
-//
-// }
 
 class NotificationsService {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -133,7 +14,7 @@ class NotificationsService {
 
   Future<void> init() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings( 'mipmap/ic_launcher');
+        AndroidInitializationSettings('mipmap/ic_launcher');
 
     const InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
@@ -193,6 +74,7 @@ class NotificationsService {
     required String userId,
     required String title,
     required String description,
+    required String id,
   }) async {
     try {
       final deviceToken = await _getDeviceToken(userId);
@@ -204,6 +86,7 @@ class NotificationsService {
           isLocalNotification: false,
           createdAt: DateTime.now(),
           isSeen: false,
+          id: id,
         );
 
         await FirebaseFirestore.instance
@@ -245,7 +128,8 @@ class NotificationsService {
 
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'key=AAAAjvYbOdU:APA91bGtSsmPqBONIbhHZosII6W00FZy3hi-aRVNQBVK9jhs2ZQ0EsN3Ozz63KQzYmMUcUY5OXnQ1VAimp6I50yisI5uOImHFJ6B7FmUoDgADRvVq3IfvYfywNthh_tgeoa7BFPJ403-',
+      'Authorization':
+          'key=AAAAjvYbOdU:APA91bGtSsmPqBONIbhHZosII6W00FZy3hi-aRVNQBVK9jhs2ZQ0EsN3Ozz63KQzYmMUcUY5OXnQ1VAimp6I50yisI5uOImHFJ6B7FmUoDgADRvVq3IfvYfywNthh_tgeoa7BFPJ403-',
     };
 
     final requestBody = {

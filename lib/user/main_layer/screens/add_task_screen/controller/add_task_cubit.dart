@@ -13,6 +13,7 @@ import 'package:task_management/core/routes/app_router.dart';
 import 'package:task_management/core/routes/named_router.dart';
 import 'package:task_management/model/user_model.dart';
 import 'package:task_management/utils/utils_config.dart';
+import 'package:uuid/uuid.dart';
 import '../../notification_screen/controller/NotificationService.dart';
 import 'add_task_state.dart';
 
@@ -93,16 +94,18 @@ class AddTaskCubit extends Cubit<AddTaskState> {
       emit(AddTaskUploadSuccess());
 
       final notificationsService = NotificationsService();
-
-      var token = await notificationsService.getUserDeviceToken(userId);
-      await notificationsService.sendNotification(
-        title: title,
-        deviceToken: token!,
-        notificationBody: 'New Task Added',
+      await notificationsService.sendTaskNotificationToUser(
+        title: 'New Task',
+        userId: userId,
+        description: title,
+        id: Uuid.NAMESPACE_OID,
       );
-      print('send 1 ');
 
+      // clear();
+      // AppRouter.goToAndRemove(
+      //     routeName: NamedRouter.mainScreen, arguments: 'admin');
       adminCubit.fetchAllTasks();
+      // close();
     } catch (error) {
       emit(AddTaskFailure(errorMessage: error.toString()));
     }

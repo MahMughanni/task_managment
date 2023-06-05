@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class NotificationData {
   final String title;
+  final String id;
   final String description;
   final bool isLocalNotification;
   final DateTime createdAt;
@@ -9,6 +11,7 @@ class NotificationData {
 
   NotificationData({
     required this.title,
+    required this.id,
     required this.description,
     required this.isLocalNotification,
     required this.createdAt,
@@ -18,7 +21,7 @@ class NotificationData {
   factory NotificationData.fromSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
     final createdAt =
-        data['createdAt'] != null ? data['createdAt'].toDate() : DateTime.now();
+    data['createdAt'] != null ? data['createdAt'].toDate() : DateTime.now();
 
     return NotificationData(
       title: data['title'] ?? '',
@@ -26,6 +29,7 @@ class NotificationData {
       isLocalNotification: data['isLocalNotification'] ?? false,
       createdAt: createdAt,
       isSeen: data['isSeen'] ?? false,
+      id: data['id'] ?? '0',
     );
   }
 
@@ -36,6 +40,7 @@ class NotificationData {
       "isLocalNotification": isLocalNotification,
       "createdAt": createdAt,
       "isSeen": isSeen,
+      "id": id,
     };
   }
 }

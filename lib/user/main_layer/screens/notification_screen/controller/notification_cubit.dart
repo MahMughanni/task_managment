@@ -7,21 +7,39 @@ import 'package:task_management/user/main_layer/screens/notification_screen/cont
 import 'package:bloc/bloc.dart';
 
 class NotificationCubit extends Cubit<List<NotificationData>> {
+  StreamSubscription<QuerySnapshot>? _notificationSubscription;
+
   NotificationCubit() : super([]) {
     listenToNotifications();
   }
 
-  void markNotificationAsSeen(int index) {
+  Future<void> deleteAllNotifications() async {
+    final notificationsCollection =
+        FirebaseFirestore.instance.collection('notifications');
+    final snapshot = await notificationsCollection.get();
+    final batch = FirebaseFirestore.instance.batch();
+
+    for (final doc in snapshot.docs) {
+      batch.delete(doc.reference);
+    }
+
+    try {
+      await batch.commit();
+      print('All notifications deleted from Firebase');
+      emit([]);
+    } catch (e) {
+      print('Failed to delete all notifications: $e');
+    }
+  }
+
+  void markNotificationAsSeen(String notificationId) {
+    final updatedNotifications = List<NotificationData>.from(state);
+    final index =
+        updatedNotifications.indexWhere((n) => n.id == notificationId);
     if (index >= 0 && index < state.length) {
-      final updatedNotifications = List<NotificationData>.from(state);
-      updatedNotifications[index] = NotificationData(
-        title: state[index].title,
-        description: state[index].description,
-        isSeen: true,
-        isLocalNotification: true,
-        createdAt: DateTime.now(),
-      );
+      updatedNotifications.removeAt(index);
       emit(updatedNotifications);
+      deleteAllNotifications();
     }
   }
 
@@ -42,22 +60,27 @@ class NotificationCubit extends Cubit<List<NotificationData>> {
 
       emit(notifications);
 
-      for (var notification in notifications) {
-        if (!notification.isSeen) {
-          final title = notification.title ?? 'New Notification';
-          final message = notification.description ?? 'You have a new notification';
+      final latestNotification = notifications.first;
 
-          print('Notification Title: $title');
-          print('Notification Description: $message');
+      if (!latestNotification.isSeen) {
+        final title = latestNotification.title ?? 'New Notification';
+        final message =
+            latestNotification.description ?? 'You have a new notification';
 
-          NotificationsService().showNotification(
-            title: title,
-            message: message,
-          );
-        }
+        print('Notification Title: $title');
+        print('Notification Description: $message');
+
+        NotificationsService().showNotification(
+          title: title,
+          message: message,
+        );
       }
     }, onError: (error) {
       print('Error retrieving notifications: $error');
     });
+  }
+
+  void stopListeningToNotifications() {
+    _notificationSubscription?.cancel();
   }
 }

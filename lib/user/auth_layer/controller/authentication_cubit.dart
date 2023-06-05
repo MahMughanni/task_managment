@@ -160,8 +160,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       await storage.write(key: 'password', value: password);
       UtilsConfig.showSnackBarMessage(message: ' Login Success!', status: true);
       emit(LoginSuccess(userCredential.user!));
-
-
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         UtilsConfig.showSnackBarMessage(
@@ -185,7 +183,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       emit(SignUpProgress());
 
-      UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -219,18 +218,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       await loggedInUser!.updateDisplayName(username);
       clearControllers();
       AppRouter.goToAndRemove(
-        routeName: NamedRouter.mainScreen,
-        arguments: 'user',
+        routeName: NamedRouter.loginScreen,
       );
       emit(SignUpSuccess(loggedInUser!));
     } on FirebaseAuthException catch (e) {
-      // Handle FirebaseAuthException
       print('FirebaseAuthException: ${e.message}');
     } catch (e) {
       emit(AuthFailure('Error during sign-up: $e'));
     }
   }
-
 
   Future<void> updateFCMToken(String userId, String? fcmToken) async {
     try {
