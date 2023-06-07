@@ -25,10 +25,10 @@ class NotificationCubit extends Cubit<List<NotificationData>> {
 
     try {
       await batch.commit();
-      print('All notifications deleted from Firebase');
+      // print('All notifications deleted from Firebase');
       emit([]);
     } catch (e) {
-      print('Failed to delete all notifications: $e');
+      // print('Failed to delete all notifications: $e');
     }
   }
 
@@ -50,7 +50,7 @@ class NotificationCubit extends Cubit<List<NotificationData>> {
         .snapshots()
         .listen((snapshot) {
       if (snapshot.docs.isEmpty) {
-        print('No notifications found');
+        // print('No notifications found');
         return;
       }
 
@@ -63,12 +63,9 @@ class NotificationCubit extends Cubit<List<NotificationData>> {
       final latestNotification = notifications.first;
 
       if (!latestNotification.isSeen) {
-        final title = latestNotification.title ?? 'New Notification';
+        final title = latestNotification.title;
         final message =
-            latestNotification.description ?? 'You have a new notification';
-
-        print('Notification Title: $title');
-        print('Notification Description: $message');
+            latestNotification.description;
 
         NotificationsService().showNotification(
           title: title,
@@ -76,7 +73,7 @@ class NotificationCubit extends Cubit<List<NotificationData>> {
         );
       }
     }, onError: (error) {
-      print('Error retrieving notifications: $error');
+      // print('Error retrieving notifications: $error');
     });
   }
 

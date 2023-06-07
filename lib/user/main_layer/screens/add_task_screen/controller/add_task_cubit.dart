@@ -101,11 +101,11 @@ class AddTaskCubit extends Cubit<AddTaskState> {
         id: Uuid.NAMESPACE_OID,
       );
 
-      // clear();
-      // AppRouter.goToAndRemove(
-      //     routeName: NamedRouter.mainScreen, arguments: 'admin');
+      clear();
+      AppRouter.goToAndRemove(
+          routeName: NamedRouter.mainScreen, arguments: 'admin');
       adminCubit.fetchAllTasks();
-      // close();
+      close();
     } catch (error) {
       emit(AddTaskFailure(errorMessage: error.toString()));
     }

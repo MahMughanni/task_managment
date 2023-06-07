@@ -22,7 +22,7 @@ class NotificationsService {
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Received a message while the app is in the foreground!');
+      // print('Received a message while the app is in the foreground!');
       showNotification(
         title: message.notification?.title ?? 'New Notification',
         message: message.notification?.body ?? 'You have a new notification',
@@ -30,7 +30,7 @@ class NotificationsService {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Notification opened from terminated state!');
+      // print('Notification opened from terminated state!');
       // Handle navigation to a specific screen
     });
 
@@ -39,7 +39,7 @@ class NotificationsService {
 
   Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
-    print('Handling a background message!');
+    // print('Handling a background message!');
     showNotification(
       title: message.notification?.title ?? 'New Notification',
       message: message.notification?.body ?? 'You have a new notification',
@@ -99,12 +99,12 @@ class NotificationsService {
           notificationBody: description,
         );
 
-        print('Notification sent to user: $userId');
+        // print('Notification sent to user: $userId');
       } else {
-        print('User device token not available for user: $userId');
+        // print('User device token not available for user: $userId');
       }
     } catch (error) {
-      print('Error sending notification: $error');
+      // print('Error sending notification: $error');
     }
   }
 
@@ -148,9 +148,9 @@ class NotificationsService {
     );
 
     if (response.statusCode == 200) {
-      print('Notification sent successfully');
+      // print('Notification sent successfully');
     } else {
-      print('Failed to send notification. Error: ${response.body}');
+      // print('Failed to send notification. Error: ${response.body}');
     }
   }
 
@@ -162,10 +162,10 @@ class NotificationsService {
           .get();
 
       final deviceToken = userDoc.get('fcmToken');
-      print('User Device Token: $deviceToken');
+      // print('User Device Token: $deviceToken');
       return deviceToken;
     } catch (error) {
-      print('Failed to get user device token. Error: $error');
+      // print('Failed to get user device token. Error: $error');
       return null;
     }
   }
@@ -228,7 +228,7 @@ class NotificationsService {
         platformChannelSpecifics,
       );
     } catch (error) {
-      print('Error sending local notification: $error');
+      // print('Error sending local notification: $error');
     }
   }
 
@@ -239,9 +239,9 @@ class NotificationsService {
       for (DocumentSnapshot doc in snapshot.docs) {
         await doc.reference.delete();
       }
-      print('Notifications collection cleared');
+      // print('Notifications collection cleared');
     } catch (error) {
-      print('Error clearing notifications: $error');
+      // print('Error clearing notifications: $error');
     }
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:task_management/admin/controller/admin_cubit.dart';
 import 'package:task_management/core/routes/app_router.dart';
 import 'package:task_management/core/routes/named_router.dart';
@@ -40,7 +39,7 @@ class HomeScreenBody extends HookWidget {
           final userTasks = state.tasks;
           final user = state.user;
 
-          print('Home Body Name ${user.userName}');
+          // print('Home Body Name ${user.userName}');
           return NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [

@@ -50,7 +50,7 @@ class CardNotificationWidget extends StatelessWidget {
       title: Text(
         title,
         overflow: TextOverflow.ellipsis,
-        style: textTheme.headline3!.copyWith(fontWeight: FontWeight.normal),
+        style: textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.normal),
       ),
       subtitle: Row(
         children: [
@@ -58,7 +58,7 @@ class CardNotificationWidget extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.4,
               child: Text(
                 subTitle,
-                style: textTheme.bodyText2!
+                style: textTheme.bodyMedium!
                     .copyWith(color: ColorConstManger.titleTextFormFieldColor),
                 overflow: TextOverflow.ellipsis,
               )),
@@ -67,7 +67,7 @@ class CardNotificationWidget extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.2,
               child: Text(
                 time,
-                style: textTheme.bodyText1!
+                style: textTheme.bodyMedium!
                     .copyWith(color: ColorConstManger.greyIconBorder),
                 overflow: TextOverflow.ellipsis,
               ))

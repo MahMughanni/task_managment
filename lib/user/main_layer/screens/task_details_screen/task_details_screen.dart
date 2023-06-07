@@ -43,7 +43,6 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
     });
 
     String? currentUser = FirebaseAuth.instance.currentUser?.displayName;
-
     taskCollection.get().then((querySnapshot) {
       for (var userDoc in querySnapshot.docs) {
         userDoc.reference.collection('tasks').doc(widget.task.id).update({

@@ -20,7 +20,8 @@ class NotificationScreen extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text('Notifications',
+            style: Theme.of(context).textTheme.titleLarge),
       ),
       body: Column(
         children: [
@@ -51,8 +52,8 @@ class NotificationScreen extends HookWidget {
                         ),
                         height: 70.h,
                         child: ListTile(
-                          title: Text(notification.title ?? ''),
-                          subtitle: Text(notification.description ?? ''),
+                          title: Text(notification.title),
+                          subtitle: Text(notification.description),
                         ),
                       );
                     },

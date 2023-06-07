@@ -8,7 +8,6 @@ import 'package:task_management/core/routes/named_router.dart';
 import 'package:task_management/user/main_layer/screens/setting_screen/pages/widgets/profile_body.dart';
 import 'package:task_management/shared_widgets/custom_appbar.dart';
 import 'package:task_management/shared_widgets/custom_button.dart';
-import 'package:task_management/utils/extentions/padding_extention.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen(

@@ -6,7 +6,6 @@ import 'package:task_management/core/logic/base_cubit.dart';
 import 'package:task_management/core/routes/app_router.dart';
 import 'package:task_management/core/routes/named_router.dart';
 import 'package:task_management/model/countries.dart';
-import 'package:task_management/shared_widgets/CustomTextField.dart';
 import 'package:task_management/user/auth_layer/controller/authentication_cubit.dart';
 import 'package:task_management/user/auth_layer/widgets/custom_rich_text.dart';
 import 'package:task_management/shared_widgets/custom_button.dart';
@@ -232,7 +231,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: 42.h,
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            authCubit.authSuccess();
                             await authCubit.signUp(
                               email: authCubit.emailController.text
                                   .trim()

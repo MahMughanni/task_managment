@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:task_management/core/routes/app_router.dart';
 
 class CustomAppbar extends StatelessWidget with PreferredSizeWidget {
-  const CustomAppbar(
-      {Key? key,
-      required this.title,
-      required this.action,
-      this.bottom,
-      this.height})
-      : super(key: key);
+  const CustomAppbar({
+    Key? key,
+    required this.title,
+    required this.action,
+    this.bottom,
+    this.height,
+  }) : super(key: key);
   final String title;
   final List<Widget> action;
 
@@ -25,7 +25,7 @@ class CustomAppbar extends StatelessWidget with PreferredSizeWidget {
           onPressed: () {
             AppRouter.mayBack();
           },
-          icon: Icon(Icons.arrow_back_ios)),
+          icon: const Icon(Icons.arrow_back_ios)),
       centerTitle: false,
       iconTheme: IconTheme.of(context).copyWith(color: Colors.black),
       automaticallyImplyLeading: true,

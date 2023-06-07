@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/widgets.dart';
 import 'package:task_management/model/task_model.dart';
 import 'package:task_management/model/user_model.dart';
 import 'package:task_management/user/main_layer/screens/home_screen/controller/task_state.dart';

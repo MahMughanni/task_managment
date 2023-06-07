@@ -51,9 +51,7 @@ class Validator {
     Pattern pattern = r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+';
     RegExp regex = RegExp(pattern as String);
     if (!regex.hasMatch(value)) {
-      print("$value");
       return '';
-      // return '\u26A0 Please enter your email';
     } else {
       return null;
     }

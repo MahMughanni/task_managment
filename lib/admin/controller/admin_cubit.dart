@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
-import 'package:task_management/core/logic/firebase_controller.dart';
 import 'package:task_management/model/task_model.dart';
 import 'package:task_management/model/user_model.dart';
 

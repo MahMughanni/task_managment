@@ -22,12 +22,6 @@ class CalenderCubit extends Cubit<CalenderState> {
       final groupedTasks = CalendarController.groupTasks(tasks);
       final selectedTasks = groupedTasks[selectedDay] ?? [];
 
-      if (selectedTasks == null) {
-      } else {
-        for (var task in selectedTasks) {
-        }
-      }
-
       emit(state.copyWith(
         isLoading: false,
         tasks: tasks,

@@ -32,13 +32,15 @@ class FireBaseRepository {
     await taskDoc.update({'state': newState});
   }
 
+
   static Future<void> editUserInfo({
     required String userName,
     required String phone,
     required String position,
     File? newImage,
   }) async {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user!.uid;
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
     // Update the user's profile data
@@ -54,7 +56,11 @@ class FireBaseRepository {
         'profileImageUrl': imageUrl,
       });
     }
+    // Update the display name
+    await user.updateDisplayName(userName);
   }
+
+
 
   static Future<void> editProfileImage(
     File? newImage,

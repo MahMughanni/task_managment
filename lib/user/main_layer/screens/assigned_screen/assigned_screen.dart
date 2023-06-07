@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_management/admin/controller/admin_cubit.dart';
 import 'package:task_management/shared_widgets/custom_shimmer.dart';
 import 'package:task_management/user/auth_layer/controller/authentication_cubit.dart';
 import 'package:task_management/user/main_layer/screens/home_screen/controller/task_cubit.dart';
@@ -19,9 +18,11 @@ class AssignedScreen extends StatelessWidget {
       create: (context) => TaskCubit(userId: user.uid),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: const CustomAppbar(
-          title: 'Assigned Tasks',
-          action: [],
+        appBar: AppBar(
+          title: Text(
+            'Assigned Tasks',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
         ),
         body: BlocBuilder<TaskCubit, TaskState>(
           builder: (context, state) {

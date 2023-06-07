@@ -27,14 +27,14 @@ class AddTaskScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
-        body: AddTaskBody(),
+        body: const AddTaskBody(),
       ),
     );
   }
 }
 
 class AddTaskBody extends StatefulWidget {
-  AddTaskBody({Key? key}) : super(key: key);
+  const AddTaskBody({Key? key}) : super(key: key);
 
   @override
   State<AddTaskBody> createState() => _AddTaskBodyState();

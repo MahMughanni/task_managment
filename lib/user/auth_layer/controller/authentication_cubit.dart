@@ -8,7 +8,6 @@ import 'package:meta/meta.dart';
 import 'package:task_management/core/routes/app_router.dart';
 import 'package:task_management/core/routes/named_router.dart';
 import 'package:task_management/model/countries.dart';
-import 'package:task_management/model/user_model.dart';
 import 'package:task_management/utils/utils_config.dart';
 
 part 'authentication_state.dart';
@@ -47,10 +46,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     countryController.clear();
   }
 
-  void authSuccess() {
-    isLoading = !isLoading;
-    emit(IsLoadingState(isLoading: isLoading));
-  }
 
   void selectCountryCode(countryCode) {
     selectedCountryCode = countryCode;

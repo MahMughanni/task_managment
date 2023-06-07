@@ -23,7 +23,7 @@ class ProfileScreen extends StatelessWidget {
                 body: Text("An error occurred: ${snapshot.error}"),
               );
             }
-            print('userData ${snapshot.data}');
+            // print('userData ${snapshot.data}');
             var userData = snapshot.data;
 
             return Scaffold(

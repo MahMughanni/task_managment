@@ -36,7 +36,7 @@ class ColorConstManger {
   static const int borderContainer = 0xffF3F3F3;
   static const Color titleTextFormFieldColor = Color(0xFF6C6969);
   static const Color lightGrey = Color(0xFF707070);
-  static const Color primaryBorder = const Color(0xFF4375FF);
+  static const Color primaryBorder = Color(0xFF4375FF);
   static const Color borderBlue = Color(0xFF90AEFF);
   static Color greyIconBorder = const Color(0xFF8C8C8C);
   static const Color borderWhite = Color(0xFFE2E2E2);
