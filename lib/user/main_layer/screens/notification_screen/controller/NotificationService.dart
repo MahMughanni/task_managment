@@ -7,7 +7,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:task_management/model/notificationData.dart';
 import 'package:http/http.dart' as http;
 
-
 class NotificationsService {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -128,8 +127,7 @@ class NotificationsService {
 
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization':
-          'key=AAAAjvYbOdU:APA91bGtSsmPqBONIbhHZosII6W00FZy3hi-aRVNQBVK9jhs2ZQ0EsN3Ozz63KQzYmMUcUY5OXnQ1VAimp6I50yisI5uOImHFJ6B7FmUoDgADRvVq3IfvYfywNthh_tgeoa7BFPJ403-',
+      'Authorization': 'key=AAAAjvYbOdU:APA91bGtSsmPqBONIbhHZosII6W00FZy3hi-aRVNQBVK9jhs2ZQ0EsN3Ozz63KQzYmMUcUY5OXnQ1VAimp6I50yisI5uOImHFJ6B7FmUoDgADRvVq3IfvYfywNthh_tgeoa7BFPJ403-',
     };
 
     final requestBody = {
@@ -138,7 +136,15 @@ class NotificationsService {
         'body': notificationBody,
         'priority': 'high',
       },
+      'priority': 'high',
+      'data': {
+        'body': notificationBody,
+        'title': title,
+        'data': {'object': notificationBody},
+        'status': 'done'
+      },
       'to': deviceToken,
+      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
     };
 
     final response = await http.post(
@@ -147,10 +153,11 @@ class NotificationsService {
       body: json.encode(requestBody),
     );
 
+
     if (response.statusCode == 200) {
-      // print('Notification sent successfully');
+      print('Notification sent successfully');
     } else {
-      // print('Failed to send notification. Error: ${response.body}');
+      print('Failed to send notification. Error: ${response.body}');
     }
   }
 

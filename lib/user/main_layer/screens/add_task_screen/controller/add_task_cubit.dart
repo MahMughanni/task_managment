@@ -94,6 +94,9 @@ class AddTaskCubit extends Cubit<AddTaskState> {
       emit(AddTaskUploadSuccess());
 
       final notificationsService = NotificationsService();
+      // var token = await notificationsService.getUserDeviceToken(userId);
+
+      // await  notificationsService.sendNotification(deviceToken: token!, title: 'New Task ', notificationBody: title);
       await notificationsService.sendTaskNotificationToUser(
         title: 'New Task',
         userId: userId,

@@ -76,8 +76,7 @@ class OnGenerateRouter {
         break;
       case NamedRouter.calenderScreen:
         return MaterialPageRoute(builder: (BuildContext context) {
-          final Map<String, dynamic>? args =
-              settings.arguments as Map<String, dynamic>?;
+          final Map<String, dynamic>? args = settings.arguments as Map<String, dynamic>?;
           return CalendarScreen(
             userId: args?['userId'] ?? '',
             userName: args?['userName'] ?? '',

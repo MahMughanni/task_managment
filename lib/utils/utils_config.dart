@@ -77,6 +77,9 @@ class UtilsConfig {
     return formattedDate;
   }
 
+
+
+
   static showSnackBar(String content, {bool success = false}) {
     return AppRouter.scaffoldKey.currentState?.showSnackBar(SnackBar(
       content: Text(

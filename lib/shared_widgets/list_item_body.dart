@@ -51,8 +51,7 @@ class ListViewItemBody extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 4.verticalSpace,
-                Text(
-                  UtilsConfig.capitalizeFirstLetter(taskModel.state),
+                Text(UtilsConfig.capitalizeFirstLetter(taskModel.state),
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: AppConstFontWeight.medium,
@@ -73,8 +72,7 @@ class ListViewItemBody extends StatelessWidget {
                 ),
                 RichText(
                   text: TextSpan(
-                    text:
-                        UtilsConfig.formatDate(taskModel.startTime.toString()),
+                    text: UtilsConfig.formatDate(taskModel.startTime.toString()),
                     style: TextStyle(
                       fontWeight: AppConstFontWeight.regular,
                       color: Colors.deepOrange,

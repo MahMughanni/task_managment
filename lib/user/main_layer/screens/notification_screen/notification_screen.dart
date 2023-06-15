@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_management/model/notificationData.dart';
+import 'package:task_management/shared_widgets/custom_circle_image.dart';
 import 'package:task_management/user/main_layer/screens/notification_screen/controller/notification_cubit.dart';
+import 'package:task_management/utils/app_constants.dart';
 
 class NotificationScreen extends HookWidget {
   const NotificationScreen({super.key});
@@ -53,6 +55,11 @@ class NotificationScreen extends HookWidget {
                         height: 70.h,
                         child: ListTile(
                           title: Text(notification.title),
+                          leading: CustomCircleImage(
+                            image: ImageConstManger.logoImage,
+                            width: 40.r,
+                            height: 40.r,
+                          ),
                           subtitle: Text(notification.description),
                         ),
                       );
