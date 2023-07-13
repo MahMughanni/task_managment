@@ -13,9 +13,11 @@ part 'admin_state.dart';
 class AdminCubit extends Cubit<AdminState> {
   AdminCubit() : super(AdminInitial());
 
+
   StreamSubscription<QuerySnapshot>? tasksSubscription;
   StreamSubscription<DocumentSnapshot>? userSubscription;
   UserModel? user;
+
 
   Future<void> fetchAllTasks() async {
     try {
@@ -75,6 +77,7 @@ class AdminCubit extends Cubit<AdminState> {
       emit(AdminFailure(errorMessage: e.toString()));
     }
   }
+
 
   @override
   Future<void> close() {

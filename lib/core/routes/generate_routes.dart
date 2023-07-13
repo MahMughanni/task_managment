@@ -57,8 +57,8 @@ class OnGenerateRouter {
           role: (settings.arguments as Map)['role'] as String,
           userName: (settings.arguments as Map)['userName'] as String,
         );
-
         break;
+
       case NamedRouter.taskDetailsScreen:
         page = TaskDetailsScreen(
           task: (settings.arguments as Map)['task'],

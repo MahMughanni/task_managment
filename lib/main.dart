@@ -26,6 +26,7 @@ void main() async {
 
   final userAUTH = FirebaseAuth.instance;
   final user = userAUTH.currentUser;
+
   NotificationsService notificationsService = NotificationsService();
   notificationsService.init();
   notificationsService.initAwesome();
@@ -98,8 +99,8 @@ class TaskManagementApp extends StatelessWidget {
             onGenerateRoute: OnGenerateRouter.onGenerateRoute,
             navigatorKey: AppRouter.navigatorKey,
             initialRoute: NamedRouter.splashScreen,
-            theme: getAppTheme(),
             scaffoldMessengerKey: UtilsConfig.scaffoldKey,
+            theme: getAppTheme(),
             debugShowCheckedModeBanner: false,
           ),
         );

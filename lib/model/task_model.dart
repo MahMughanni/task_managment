@@ -30,7 +30,6 @@ class TaskModel {
   factory TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
     final imageUrls = List<String>.from(data['imageUrls'] ?? []);
-
     return TaskModel(
       id: data['id'] ?? '',
       title: data['title'] ?? '',
@@ -41,11 +40,11 @@ class TaskModel {
       imageUrls: imageUrls,
       createdAt: data['createdAt'] ?? Timestamp.now(),
       userName: data['username'] ?? '',
-      assignedTo: data['assignedTo'] ?? ' ',
-      completedBy: data['completedBy'] ??
-          '', // Initialize the username as an empty string
+      assignedTo: data['assignedTo'] ?? '',
+      completedBy: data['completedBy'] ?? '', // Initialize the username as an empty string
     );
   }
+
 
   TaskModel copyWith({
     String? id,

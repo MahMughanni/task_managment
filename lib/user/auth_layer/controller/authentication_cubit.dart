@@ -123,6 +123,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     return userRole;
   }
 
+
   Future<void> logIn(String email, String password) async {
     try {
       emit(LoginInProgress());

@@ -24,14 +24,13 @@ class AdminHomeScreenBody extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final adminCubit = BlocProvider.of<AdminCubit>(context);
+
     useEffect(() {
       adminCubit.fetchAllTasks();
       return () {
         //clean if needed
       };
     }, []);
-
-
 
     return BlocBuilder<AdminCubit, AdminState>(
       builder: (context, state) {

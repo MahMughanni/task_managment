@@ -128,9 +128,7 @@ class EmployeeDetailsScreen extends StatelessWidget {
                                 imagePath: SvgIconsConstManger.email,
                                 onPressed: () async {
                                   final recipientEmail = userData;
-                                  final uri =
-                                      Uri.encodeFull('mailto:$recipientEmail');
-
+                                  final uri = Uri.encodeFull('mailto:$recipientEmail');
                                   final url = Uri.tryParse(uri);
                                   await launchUrl(url!);
                                 },

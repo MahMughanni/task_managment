@@ -114,6 +114,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
     }
   }
 
+
 //add task by user
   void uploadTask({
     required String title,
@@ -156,6 +157,7 @@ class AddTaskCubit extends Cubit<AddTaskState> {
       emit(AddTaskFailure(errorMessage: e.toString()));
     }
   }
+
 
 // create project for admin
   void createProject({

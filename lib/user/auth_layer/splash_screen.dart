@@ -14,9 +14,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<AuthenticationCubit>(context).checkLoginStatus();
-  }
+    Future.delayed(const Duration(seconds: 3), () {
+      BlocProvider.of<AuthenticationCubit>(context).checkLoginStatus();
+    });
 
+  }
 
   @override
   Widget build(BuildContext context) {
