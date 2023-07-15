@@ -34,3 +34,4 @@ class BaseCubit extends Cubit<BaseCubitState> {
       emit(BaseCubitErrorState(error: e.toString()));
     }
   }
+
