@@ -1,12 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/utils/utils_config.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/model/countries.dart';
+import 'package:task_management/utils/utils_config.dart';
 
 part 'authentication_state.dart';
 
@@ -15,8 +17,51 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   User? loggedInUser;
   String? userRole;
+  TextEditingController countryFlagController = TextEditingController();
+  Country? selectedCountryCode = countries[0];
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
+  FocusNode phoneNumberFocusNode = FocusNode();
 
-  AuthenticationCubit({required this.firebaseAuth}) : super(LoginInitial());
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
+  bool isLoading = false;
+
+  AuthenticationCubit({required this.firebaseAuth}) : super(LoginInitial()) {
+    phoneNumberFocusNode.addListener(() {
+      if (!phoneNumberFocusNode.hasFocus) {
+        emit(ChangePhoneNumber());
+      }
+    });
+  }
+
+  Country? selectedCountry = countries[0];
+
+  void clearControllers() {
+    emailController.clear();
+    passwordController.clear();
+    userNameController.clear();
+    phoneController.clear();
+    countryController.clear();
+  }
+
+
+  void selectCountryCode(countryCode) {
+    selectedCountryCode = countryCode;
+    countryFlagController.text = countryCode.flag;
+    phoneController.text = '';
+
+    emit(ChangeCountryCode(countryCode: countryCode, phone: ''));
+  }
+
+  void phoneNumberFocusChangeListener() {
+    phoneNumberFocusNode.addListener(() {
+      if (!phoneNumberFocusNode.hasFocus) {
+        emit(ChangePhoneNumber());
+      }
+    });
+  }
 
   Future<void> autoLogin() async {
     const storage = FlutterSecureStorage();
@@ -49,14 +94,25 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     if (loggedInUser != null) {
       final userData =
           await fireStore.collection('users').doc(loggedInUser!.uid).get();
-      userRole = userData['role'];
-      if (userRole == 'user' || userRole == 'admin') {
-        AppRouter.goToAndRemove(
-          routeName: NamedRouter.mainScreen,
-          arguments: userRole,
-        );
+
+      if (userData.exists) {
+        final userRole = userData['role'];
+
+        if (userRole == 'user' || userRole == 'admin') {
+          AppRouter.goToAndRemove(
+            routeName: NamedRouter.mainScreen,
+            arguments: userRole,
+          );
+        } else {
+          AppRouter.goToAndRemove(routeName: NamedRouter.loginScreen);
+        }
       } else {
         AppRouter.goToAndRemove(routeName: NamedRouter.loginScreen);
+        UtilsConfig.showSnackBarMessage(
+          message: 'User data not found.',
+          status: false,
+        );
+        emit(AuthFailure('User data not found.'));
       }
     } else {
       AppRouter.goToAndRemove(routeName: NamedRouter.loginScreen);
@@ -66,6 +122,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   String? getUserRole() {
     return userRole;
   }
+
 
   Future<void> logIn(String email, String password) async {
     try {
@@ -97,7 +154,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       const storage = FlutterSecureStorage();
       await storage.write(key: 'email', value: email);
       await storage.write(key: 'password', value: password);
-
       UtilsConfig.showSnackBarMessage(message: ' Login Success!', status: true);
       emit(LoginSuccess(userCredential.user!));
     } on FirebaseAuthException catch (e) {
@@ -131,43 +187,57 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
       String userId = userCredential.user!.uid;
 
-      await fireStore.collection('users').doc(userId).set({
-        'username': username,
-        'phone': phone,
-        'role': 'user',
-        'profileImageUrl': '',
-        'position': '',
-        'email': email, // add email field to the document
+      // Get the FCM token for the user
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      await messaging.requestPermission();
+      String? fcmToken = await messaging.getToken();
+
+      // Listen for token refresh events and update the token accordingly
+      messaging.onTokenRefresh.listen((newToken) async {
+        fcmToken = newToken;
+        await updateFCMToken(userId, fcmToken);
       });
+
+      if (fcmToken != null) {
+        await fireStore.collection('users').doc(userId).set({
+          'username': username,
+          'phone': phone,
+          'role': 'user',
+          'profileImageUrl': '',
+          'position': '',
+          'email': email,
+          'fcmToken': fcmToken,
+        });
+      }
 
       loggedInUser = userCredential.user!;
       await loggedInUser!.updateDisplayName(username);
-
+      clearControllers();
       AppRouter.goToAndRemove(
-          routeName: NamedRouter.mainScreen, arguments: 'user');
+        routeName: NamedRouter.loginScreen,
+      );
       emit(SignUpSuccess(loggedInUser!));
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        UtilsConfig.showSnackBarMessage(
-            message: 'email already used', status: false);
-        emit(AuthFailure('The email address is already in use.'));
-      } else if (e.code == 'phone-number-already-exists') {
-        UtilsConfig.showSnackBarMessage(
-            message: 'phone already used', status: false);
-
-        emit(AuthFailure('The phone number is already in use.'));
-      } else {
-        emit(AuthFailure(e.message ?? 'An unknown error occurred.'));
-      }
+      print('FirebaseAuthException: ${e.message}');
     } catch (e) {
-      emit(AuthFailure('An unknown error occurred.'));
+      emit(AuthFailure('Error during sign-up: $e'));
+    }
+  }
+
+  Future<void> updateFCMToken(String userId, String? fcmToken) async {
+    try {
+      await fireStore.collection('users').doc(userId).update({
+        'fcmToken': fcmToken,
+      });
+    } catch (e) {
+      emit(AuthFailure('Error updating FCM token.'));
     }
   }
 
   Future<void> logOut() async {
     await firebaseAuth.signOut();
 
-// Remove user info from secure storage
+    // Remove user info from secure storage
     const storage = FlutterSecureStorage();
     await storage.delete(key: 'email');
     await storage.delete(key: 'password');

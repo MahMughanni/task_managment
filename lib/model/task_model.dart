@@ -9,7 +9,9 @@ class TaskModel {
   String state;
   final List<String> imageUrls;
   final Timestamp createdAt;
-  String userName; // New property to store the username
+  String userName;
+  String? assignedTo;
+  String? completedBy;
 
   TaskModel({
     this.id,
@@ -20,13 +22,14 @@ class TaskModel {
     required this.state,
     required this.imageUrls,
     required this.createdAt,
-    required this.userName, // Include the username in the constructor
+    required this.userName,
+    required this.assignedTo,
+    required this.completedBy,
   });
 
   factory TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
     final imageUrls = List<String>.from(data['imageUrls'] ?? []);
-
     return TaskModel(
       id: data['id'] ?? '',
       title: data['title'] ?? '',
@@ -36,9 +39,12 @@ class TaskModel {
       state: data['state'] ?? '',
       imageUrls: imageUrls,
       createdAt: data['createdAt'] ?? Timestamp.now(),
-      userName: data['username'] ?? '', // Initialize the username as an empty string
+      userName: data['username'] ?? '',
+      assignedTo: data['assignedTo'] ?? '',
+      completedBy: data['completedBy'] ?? '', // Initialize the username as an empty string
     );
   }
+
 
   TaskModel copyWith({
     String? id,
@@ -50,6 +56,8 @@ class TaskModel {
     List<String>? imageUrls,
     Timestamp? createdAt,
     String? userName,
+    String? assignedTo,
+    String? completedBy,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -61,6 +69,8 @@ class TaskModel {
       imageUrls: imageUrls ?? this.imageUrls,
       createdAt: createdAt ?? this.createdAt,
       userName: userName ?? this.userName,
+      assignedTo: assignedTo ?? this.assignedTo,
+      completedBy: completedBy ?? this.completedBy,
     );
   }
 
@@ -75,6 +85,8 @@ class TaskModel {
       'imageUrls': imageUrls,
       'createdAt': createdAt,
       'username': userName,
+      'assignedTo': assignedTo,
+      'completedBy': completedBy,
     };
   }
 

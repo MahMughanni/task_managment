@@ -8,7 +8,8 @@ class UserModel {
       profileImageUrl,
       position,
       email,
-      password;
+      password,
+      fcmToken; // Add the fcmToken field
 
   UserModel({
     this.userName = '',
@@ -19,6 +20,7 @@ class UserModel {
     this.password = '',
     this.profileImageUrl = '',
     this.position = '',
+    this.fcmToken = '',
   });
 
   factory UserModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -32,11 +34,12 @@ class UserModel {
       password: data['password'],
       profileImageUrl: data['profileImageUrl'],
       position: data['position'],
+      fcmToken: data['fcmToken'], // Map the fcmToken field from the document data
     );
   }
 
   @override
   String toString() {
-    return 'UserModel{userName: $userName, uId: $uId, role: $role, phone: $phone, profileImageUrl: $profileImageUrl, position: $position, email: $email, password: $password}';
+    return 'UserModel{userName: $userName, uId: $uId, role: $role, phone: $phone, profileImageUrl: $profileImageUrl, position: $position, email: $email, password: $password, fcmToken: $fcmToken}';
   }
 }

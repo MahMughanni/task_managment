@@ -16,7 +16,8 @@ class AdminLoadingState extends AdminState {}
 class AdminTaskAddedState extends AdminState {}
 
 class AdminTasksLoadedState extends AdminState {
+  final UserModel? user;
   final List<TaskModel> tasks;
 
-  AdminTasksLoadedState(this.tasks);
+  AdminTasksLoadedState({required this.tasks, this.user});
 }

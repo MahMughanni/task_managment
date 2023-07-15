@@ -1,4 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:task_management/model/project_model.dart';
+import 'package:task_management/model/task_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:task_management/model/user_model.dart';
 import 'package:task_mangment/model/project_model.dart';
 import 'package:task_mangment/model/task_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,12 +36,15 @@ class FireBaseRepository {
     await taskDoc.update({'state': newState});
   }
 
+
   static Future<void> editUserInfo({
     required String userName,
     required String phone,
     required String position,
     File? newImage,
   }) async {
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user!.uid;
     final userId = FirebaseAuth.instance.currentUser!.uid;
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
@@ -54,6 +61,12 @@ class FireBaseRepository {
         'profileImageUrl': imageUrl,
       });
     }
+    // Update the display name
+    await user.updateDisplayName(userName);
+  }
+
+
+
   }
 
   static Future<void> editProfileImage(
@@ -196,6 +209,8 @@ class FireBaseRepository {
     required String endTime,
     required String state,
     List<File>? imageFiles,
+    required String userName,
+    String? assignedTo,
     required String userName, // Add userName parameter
   }) async {
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
@@ -229,6 +244,9 @@ class FireBaseRepository {
       imageUrls: imageUrls,
       createdAt: Timestamp.now(),
       userName: userName,
+      assignedTo: assignedTo ?? '',
+      completedBy: '',
+
     );
 
     final DocumentReference docRef = await fireStore
@@ -250,6 +268,8 @@ class FireBaseRepository {
     required String endTime,
     required String state,
     List<File>? imageFiles,
+    required String userName,
+    required String assignedTo,
     required String userName, // Add userName parameter
   }) async {
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
@@ -283,10 +303,14 @@ class FireBaseRepository {
       imageUrls: imageUrls,
       createdAt: Timestamp.now(),
       userName: userName,
+      assignedTo: assignedTo,
+      completedBy: '',
+
     );
 
     final DocumentReference docRef = await fireStore
         .collection('users')
+        .doc(userId)
         .doc(userId) // Use userId parameter
         .collection('tasks')
         .add(task.toMap());

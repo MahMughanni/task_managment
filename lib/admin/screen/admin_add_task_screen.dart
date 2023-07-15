@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/model/user_model.dart';
-import 'package:task_mangment/shared_widgets/custom_button.dart';
-import 'package:task_mangment/shared_widgets/custom_form_field.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_state.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
-import 'package:task_mangment/utils/utils_config.dart';
+import 'package:task_management/model/user_model.dart';
+import 'package:task_management/shared_widgets/custom_button.dart';
+import 'package:task_management/shared_widgets/custom_form_field.dart';
+import 'package:task_management/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
+import 'package:task_management/user/main_layer/screens/add_task_screen/controller/add_task_state.dart';
+import 'package:task_management/user/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
+import 'package:task_management/utils/utils_config.dart';
 
 class AdminAddTaskScreen extends StatefulWidget {
   const AdminAddTaskScreen({Key? key}) : super(key: key);
@@ -114,8 +114,7 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                                               .updateStatusDropdownValue(
                                                   task.toString());
 
-                                          Navigator.pop(
-                                              context); // Close the bottom sheet
+                                          Navigator.pop(context);
                                         },
                                       );
                                     },
@@ -140,7 +139,8 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                           textInputAction: TextInputAction.next,
                           onChanged: (val) {},
                           validator: (value) {
-                            return addTaskCubit.selectedDropdownTaskValue == null
+                            return addTaskCubit.selectedDropdownTaskValue ==
+                                    null
                                 ? ""
                                 : null;
                           },
@@ -179,7 +179,6 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                                               .copyWith(color: Colors.black),
                                         ),
                                         onTap: () {
-                                          print(user.userName);
                                           addTaskCubit.selectUserValueController
                                                   .text =
                                               addTaskCubit.users[index].userName
@@ -189,8 +188,7 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                                               user.uId!;
                                           addTaskCubit
                                               .updateUserDropdownValue(id);
-                                          Navigator.pop(
-                                              context); // Close the bottom sheet
+                                          Navigator.pop(context);
                                         },
                                       );
                                     },
@@ -214,7 +212,8 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                           textInputAction: TextInputAction.next,
                           onChanged: (val) {},
                           validator: (value) {
-                            return addTaskCubit.selectedDropdownTaskValue == null
+                            return addTaskCubit.selectedDropdownTaskValue ==
+                                    null
                                 ? ""
                                 : null;
                           },
@@ -301,6 +300,7 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                               String? userId =
                                   addTaskCubit.selectUserDropdownValue;
                               if (_formKey.currentState!.validate()) {
+                                // addTaskCubit.uploadSuccess();
                                 addTaskCubit.addTaskToUser(
                                   title:
                                       addTaskCubit.titleController.text.trim(),
@@ -313,11 +313,12 @@ class _AdminAddTaskScreenState extends State<AdminAddTaskScreen> {
                                   endTime: addTaskCubit.endTimeController.text
                                       .trim(),
                                   userId: userId!,
-                                  userName: addTaskCubit.selectUserValueController.text,
+                                  userName: addTaskCubit
+                                      .selectUserValueController.text,
                                 );
                               }
 
-                              addTaskCubit.uploadSuccess();
+                              // addTaskCubit.uploadSuccess();
                             },
                             title: 'Upload',
                             width: double.infinity,

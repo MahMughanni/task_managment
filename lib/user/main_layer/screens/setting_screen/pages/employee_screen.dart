@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/shared_widgets/custom_circle_image.dart';
-import 'package:task_mangment/utils/extentions/padding_extention.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/shared_widgets/custom_circle_image.dart';
 
 import '../../../../../shared_widgets/custom_appbar.dart';
 import '../controller /setting_cubit.dart';

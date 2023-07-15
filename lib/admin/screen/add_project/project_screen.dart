@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:task_mangment/admin/screen/add_project/add_project_screen.dart';
-import 'package:task_mangment/admin/screen/add_project/controller/project_cubit.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
-import 'package:task_mangment/utils/app_constants.dart';
+import 'package:task_management/admin/screen/add_project/add_project_screen.dart';
+import 'package:task_management/admin/screen/add_project/controller/project_cubit.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
+import 'package:task_management/utils/app_constants.dart';
 
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({Key? key}) : super(key: key);
@@ -46,12 +46,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
             ),
             BlocBuilder<ProjectCubit, ProjectState>(
               builder: (context, state) {
-                print('state $state');
                 if (state is ProjectsLoadingState) {
                   return const CircularProgressIndicator();
                 } else if (state is ProjectLoadedState) {
                   final projects = state.projects;
-                  print("project length ${projects.length}");
                   return Expanded(
                     child: ListView.builder(
                       itemCount: projects.length,
@@ -59,6 +57,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                         final project = projects[index];
                         return ProjectListBodyItem(
                           projectTitle: project.title,
+                          states: project.state,
                         );
                       },
                     ),
@@ -106,29 +105,41 @@ class _ProjectScreenState extends State<ProjectScreen> {
 }
 
 class ProjectListBodyItem extends StatelessWidget {
-  const ProjectListBodyItem({Key? key, required this.projectTitle})
+  const ProjectListBodyItem(
+      {Key? key, required this.projectTitle, required this.states})
       : super(key: key);
 
-  final String projectTitle;
+  final String projectTitle, states;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(16),
-      height: 50,
+      height: 56.h,
       decoration: BoxDecoration(
-        color: const Color(0xffF2F2F2),
+        color: states == 'completed'
+            ? const Color(0xff3AAF3C)
+            : const Color(0xffF2F2F2),
         borderRadius: BorderRadius.circular(9),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            projectTitle,
-            style: Theme.of(context).textTheme.bodyText2,
+          Expanded(
+            child: Text(projectTitle,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color:
+                        states == 'completed' ? Colors.white : Colors.black)),
           ),
-          const Icon(Icons.done),
+          states == 'completed'
+              ? SvgPicture.asset(
+                  SvgIconsConstManger.done,
+                  width: 18.r,
+                  color: Colors.white,
+                  height: 18.r,
+                )
+              : const SizedBox(),
         ],
       ),
     );

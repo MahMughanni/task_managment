@@ -1,6 +1,6 @@
 {
-    "name": "task_mangment",
-    "short_name": "task_mangment",
+    "name": "task_management",
+    "short_name": "task_management",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

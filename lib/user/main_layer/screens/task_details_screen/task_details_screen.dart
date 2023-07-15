@@ -1,21 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/model/task_model.dart';
-import 'package:task_mangment/user/main_layer/screens/task_details_screen/widgets/custom_rich_text.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
-import 'package:task_mangment/shared_widgets/custom_form_field.dart';
-import 'package:task_mangment/utils/app_constants.dart';
+import 'package:task_management/model/task_model.dart';
+import 'package:task_management/user/main_layer/screens/task_details_screen/widgets/custom_rich_text.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
+import 'package:task_management/shared_widgets/custom_form_field.dart';
+import 'package:task_management/utils/app_constants.dart';
 
 class TaskDetailsScreen extends StatefulWidget {
   const TaskDetailsScreen({
     Key? key,
     required this.task,
-    required this.userName,
     required this.userId,
+    required this.completedBy,
   }) : super(key: key);
 
-  final String userName, userId;
+  final String userId, completedBy;
+
   final TaskModel task;
 
   @override
@@ -34,15 +36,28 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   }
 
   void _updateTaskState(bool isDone) {
-    final userDoc =
-        FirebaseFirestore.instance.collection('users').doc(widget.userId);
-    final taskDoc = userDoc.collection('tasks').doc(widget.task.id);
+    final taskCollection = FirebaseFirestore.instance.collection('users');
 
     setState(() {
       isTaskCompleted = isDone;
     });
 
-    taskDoc.update({'state': isDone ? 'completed' : initialTaskState});
+    String? currentUser = FirebaseAuth.instance.currentUser?.displayName;
+    taskCollection.get().then((querySnapshot) {
+      for (var userDoc in querySnapshot.docs) {
+        userDoc.reference.collection('tasks').doc(widget.task.id).update({
+          'state': isDone ? 'completed' : initialTaskState,
+          'completedBy': currentUser,
+        }).then((value) {
+          debugPrint('Task state updated for user: ${userDoc.id}');
+        }).catchError((error) {
+          debugPrint(
+              'Failed to update task state for user: ${userDoc.id}, Error: $error');
+        });
+      }
+    }).catchError((error) {
+      debugPrint('Failed to fetch user documents: $error');
+    });
   }
 
   @override
@@ -77,7 +92,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                     .textTheme
                     .bodyLarge!
                     .copyWith(color: Colors.black),
-                subTitle: widget.userName,
+                subTitle: widget.task.userName,
+                subTitleStyle: Theme.of(context).textTheme.bodyMedium,
               ),
               CustomDetailsRichText(
                 title: 'Uploaded on  ',
@@ -97,13 +113,20 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                   subTitle: widget.task.endTime.toString(),
                   subTitleStyle: Theme.of(context).textTheme.bodySmall),
               Text('Task Description ',
-                  style: Theme.of(context).textTheme.bodyLarge),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(color: Colors.black)),
               CustomTextFormField(
                 enabled: false,
                 initialValue: widget.task.description.toString(),
                 maxLine: 6,
                 keyboardType: TextInputType.multiline,
                 hintText: '',
+                titleStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Colors.grey.shade800),
               ),
               widget.task.imageUrls.isNotEmpty
                   ? SizedBox(

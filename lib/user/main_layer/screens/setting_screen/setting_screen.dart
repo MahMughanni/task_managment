@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/utils/app_constants.dart';
-import 'package:task_mangment/utils/utils_config.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/user/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_management/utils/app_constants.dart';
+import 'package:task_management/utils/utils_config.dart';
 
 class SettingScreen extends StatelessWidget {
   SettingScreen({Key? key}) : super(key: key);
@@ -84,12 +84,8 @@ class SettingScreen extends StatelessWidget {
                         AppRouter.goTo(screenName: NamedRouter.employeeScreen);
                         break;
                       case 2:
-                        UtilsConfig.showSnackBarMessage(
-                            message: index.toString(), status: true);
                         break;
                       case 3:
-                        UtilsConfig.showSnackBarMessage(
-                            message: index.toString(), status: true);
                         break;
                       case 4:
                         final authenticationCubit =

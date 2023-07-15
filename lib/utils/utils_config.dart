@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/utils/extentions/padding_extention.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/utils/extentions/padding_extention.dart';
 import 'app_constants.dart';
 
 class UtilsConfig {
@@ -79,13 +77,13 @@ class UtilsConfig {
     return formattedDate;
   }
 
-  static showSnackBar(String content, {bool Success = false}) {
-    return AppRouter.snackBarKey.currentState?.showSnackBar(SnackBar(
+  static showSnackBar(String content, {bool success = false}) {
+    return AppRouter.scaffoldKey.currentState?.showSnackBar(SnackBar(
       content: Text(
         content,
       ),
       backgroundColor:
-          Success ? ColorConstManger.primaryColor : ColorConstManger.red,
+          success ? ColorConstManger.primaryColor : ColorConstManger.red,
       behavior: SnackBarBehavior.floating,
     ));
   }
@@ -106,7 +104,7 @@ class UtilsConfig {
       default:
         errorMessage = e.message!;
     }
-    showSnackBar(errorMessage, Success: false);
+    showSnackBar(errorMessage, success: false);
   }
 
   static void showBottomSheet(Widget widget) {
@@ -119,6 +117,13 @@ class UtilsConfig {
         );
       },
     );
+  }
+
+  static String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
   }
 }
 

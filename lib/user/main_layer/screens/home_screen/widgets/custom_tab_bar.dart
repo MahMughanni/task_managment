@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/shared_widgets/custom_circle_image.dart';
-import 'package:task_mangment/shared_widgets/custom_tabBar.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/shared_widgets/custom_circle_image.dart';
+import 'package:task_management/shared_widgets/custom_tabBar.dart';
 
 class CustomTabBarViewTabs extends StatelessWidget {
   const CustomTabBarViewTabs({
