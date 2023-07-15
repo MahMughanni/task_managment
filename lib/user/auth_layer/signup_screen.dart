@@ -2,16 +2,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/core/logic/base_cubit.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/user/auth_layer/widgets/custom_rich_text.dart';
-import 'package:task_mangment/shared_widgets/custom_button.dart';
-import 'package:task_mangment/shared_widgets/custom_form_field.dart';
-import 'package:task_mangment/utils/app_constants.dart';
-import 'package:task_mangment/utils/extentions/string_validate_extention.dart';
-import 'package:task_mangment/utils/utils_config.dart';
+import 'package:task_management/core/logic/base_cubit.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/model/countries.dart';
+import 'package:task_management/user/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_management/user/auth_layer/widgets/custom_rich_text.dart';
+import 'package:task_management/shared_widgets/custom_button.dart';
+import 'package:task_management/shared_widgets/custom_form_field.dart';
+import 'package:task_management/utils/app_constants.dart';
+import 'package:task_management/utils/extentions/string_validate_extention.dart';
+import 'package:task_management/utils/utils_config.dart';
 
 import 'widgets/header_widget.dart';
 
@@ -24,30 +25,18 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  late TextEditingController emailController;
-  late TextEditingController passwordController;
-  late TextEditingController userNameController;
-  late TextEditingController phoneController;
   late AuthenticationCubit authCubit;
 
   @override
   void initState() {
     super.initState();
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
-    phoneController = TextEditingController();
-    userNameController = TextEditingController();
     authCubit = BlocProvider.of<AuthenticationCubit>(context);
   }
 
   @override
   void dispose() {
+    authCubit.clearControllers();
     super.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    userNameController.dispose();
-    phoneController.dispose();
   }
 
   @override
@@ -88,7 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       24.verticalSpace,
                       CustomTextFormField(
                         focus: (_) => FocusScope.of(context).nearestScope,
-                        controller: userNameController,
+                        controller: authCubit.userNameController,
                         validator: (value) {
                           if (!value!.isValidName) {
                             return 'enter valid name';
@@ -99,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       8.verticalSpace,
                       CustomTextFormField(
-                        controller: emailController,
+                        controller: authCubit.emailController,
                         validator: (value) {
                           if (!value!.isValidEmail) {
                             return 'enter valid email';
@@ -115,7 +104,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           maxWidth: 100.r,
                         ),
                         focus: (_) => FocusScope.of(context).nearestScope,
-                        controller: passwordController,
+                        controller: authCubit.passwordController,
                         suffixIcon: IconButton(
                           highlightColor: Colors.transparent,
                           splashColor: Colors.transparent,
@@ -160,17 +149,80 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       8.verticalSpace,
                       CustomTextFormField(
-                        focus: (_) => FocusScope.of(context).nearestScope,
-                        controller: phoneController,
+                        prefixIcon: GestureDetector(
+                          onTap: () {
+                            authCubit.phoneNumberFocusNode.unfocus();
+
+                            UtilsConfig.showBottomSheet(
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.35,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: countries.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0,
+                                        vertical: 4,
+                                      ),
+                                      child: ListTile(
+                                        title: Text(
+                                          countries[index].flag,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 22.sp,
+                                            overflow: TextOverflow.visible,
+                                          ),
+                                        ),
+                                        trailing: SizedBox(
+                                          width: 150.h,
+                                          child: Text(
+                                            countries[index].name,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16.sp,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                         setState(() {
+                                           authCubit.selectCountryCode(
+                                               countries[index]);
+                                           authCubit.countryFlagController.text =
+                                               countries[index].flag;
+                                           authCubit.phoneController.text = '';
+                                         });
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "+${authCubit.selectedCountryCode == null ? authCubit.selectedCountryCode = countries[0] : authCubit.selectedCountryCode!.dialCode}",
+                              textAlign: TextAlign.start,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ),
+                        ),
+                        hintText: 'Phone Number',
+                        keyboardType: TextInputType.phone,
+                        textInputAction: TextInputAction.next,
+                        controller: authCubit.phoneController,
                         validator: (value) {
                           if (!value!.isValidNumber) {
-                            return 'enter valid phone must start with +970 ';
+                            return 'Invalid phone number';
                           }
                           return null;
                         },
-                        keyboardType: TextInputType.phone,
-                        hintText: '+970',
-                        labelText: 'phone',
                       ),
                       16.verticalSpace,
                       CustomButton(
@@ -178,16 +230,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         height: 42.h,
                         onPressed: () async {
-                          print('clicked');
-                          print('userName ${userNameController.text.trim().toString()}');
                           if (_formKey.currentState!.validate()) {
-                           await authCubit.signUp(
-                              email: emailController.text.trim().toString(),
-                              password:
-                                  passwordController.text.trim().toString(),
-                              username:
-                                  userNameController.text.trim().toString(),
-                              phone: phoneController.text.trim().toString(),
+                            await authCubit.signUp(
+                              email: authCubit.emailController.text
+                                  .trim()
+                                  .toString(),
+                              password: authCubit.passwordController.text
+                                  .trim()
+                                  .toString(),
+                              username: authCubit.userNameController.text
+                                  .trim()
+                                  .toString(),
+                              phone:
+                                  "+${authCubit.selectedCountryCode?.dialCode}${authCubit.phoneController.text.trim()}",
                             );
                           } else {
                             UtilsConfig.showSnackBarMessage(
@@ -195,6 +250,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 status: false);
                           }
                         },
+                        isLoading: authCubit.isLoading,
                       ),
                       CustomRichText(
                         title: 'Already have an account?',

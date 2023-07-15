@@ -4,13 +4,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:task_mangment/admin/controller/admin_cubit.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/shared_widgets/cutom_container.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
-import 'package:task_mangment/utils/app_constants.dart';
+import 'package:task_management/admin/controller/admin_cubit.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/shared_widgets/cutom_container.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/widgets/custom_sliver_appbar.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
+import 'package:task_management/utils/app_constants.dart';
 
 class AdminHomeScreenBody extends HookWidget {
   const AdminHomeScreenBody({
@@ -24,6 +24,7 @@ class AdminHomeScreenBody extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final adminCubit = BlocProvider.of<AdminCubit>(context);
+
     useEffect(() {
       adminCubit.fetchAllTasks();
       return () {
@@ -39,6 +40,7 @@ class AdminHomeScreenBody extends HookWidget {
           );
         } else if (state is AdminTasksLoadedState) {
           final userTasks = state.tasks;
+          // final user = state.user;
           final upcomingTasksCount =
               userTasks.where((task) => task.state == 'upcoming').length;
           final completedTasksCount =
@@ -65,7 +67,7 @@ class AdminHomeScreenBody extends HookWidget {
                             onTap: () {
                               AppRouter.goTo(
                                   screenName:
-                                      NamedRouter.adminDetailsStatusTasks,
+                                  NamedRouter.adminDetailsStatusTasks,
                                   arguments: 'upcoming');
                             },
                           ),
@@ -88,7 +90,7 @@ class AdminHomeScreenBody extends HookWidget {
                           baseColor: Colors.grey.shade300,
                           highlightColor: Colors.grey.shade100,
                           child:
-                              const CustomContainer(title: '', taskNumber: ''),
+                          const CustomContainer(title: '', taskNumber: ''),
                         );
                     }
                   },
@@ -107,6 +109,7 @@ class AdminHomeScreenBody extends HookWidget {
                   userId: userId,
                   adminCubit: adminCubit,
                   taskType: 'today',
+                  role: userRole,
                 ),
                 CustomTaskList(
                   userName: 'Admin',
@@ -115,6 +118,7 @@ class AdminHomeScreenBody extends HookWidget {
                   userId: userId,
                   adminCubit: adminCubit,
                   taskType: 'upcoming',
+                  role: userRole,
                 ),
                 CustomTaskList(
                   userName: 'Admin',
@@ -123,6 +127,7 @@ class AdminHomeScreenBody extends HookWidget {
                   userId: userId,
                   adminCubit: adminCubit,
                   taskType: 'completed',
+                  role: userRole,
                 ),
               ],
             ),

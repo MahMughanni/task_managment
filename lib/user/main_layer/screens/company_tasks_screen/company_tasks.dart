@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/admin/controller/admin_cubit.dart';
-import 'package:task_mangment/shared_widgets/custom_tabBar.dart';
-import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
+import 'package:task_management/admin/controller/admin_cubit.dart';
+import 'package:task_management/shared_widgets/custom_tabBar.dart';
+import 'package:task_management/user/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
 
 class CompanyTasksScreen extends StatelessWidget {
   const CompanyTasksScreen({Key? key, required this.userRole})
@@ -15,9 +14,8 @@ class CompanyTasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = BlocProvider.of<AuthenticationCubit>(context)
-        .firebaseAuth!
-        .currentUser!;
+    final user =
+        BlocProvider.of<AuthenticationCubit>(context).firebaseAuth.currentUser!;
 
     final adminCubit = BlocProvider.of<AdminCubit>(context);
 
@@ -44,24 +42,27 @@ class CompanyTasksScreen extends StatelessWidget {
                         label: 'today',
                         userName: user.displayName,
                         userId: user.uid,
-                        userCubit: BlocProvider.of<TaskCubit>(context),
+                        adminCubit: BlocProvider.of<AdminCubit>(context),
                         taskType: 'today',
+                        role: userRole,
                       ),
                       CustomTaskList(
                         state: 'upcoming',
                         label: 'upcoming',
                         userName: user.displayName,
-                        userCubit: BlocProvider.of<TaskCubit>(context),
+                        adminCubit: BlocProvider.of<AdminCubit>(context),
                         userId: user.uid,
                         taskType: 'upcoming',
+                        role: userRole,
                       ),
                       CustomTaskList(
                         state: 'completed',
                         userId: user.uid,
                         label: 'completed',
-                        userCubit: BlocProvider.of<TaskCubit>(context),
+                        adminCubit: BlocProvider.of<AdminCubit>(context),
                         userName: user.displayName,
                         taskType: 'completed',
+                        role: userRole,
                       ),
                     ],
                   ),
@@ -86,22 +87,25 @@ class CompanyTasksScreen extends StatelessWidget {
                         userId: user.uid,
                         adminCubit: BlocProvider.of<AdminCubit>(context),
                         taskType: 'today',
+                        role: userRole,
                       ),
                       CustomTaskList(
                         state: 'upcoming',
                         label: '',
-                        userName: ' ajsdsajdj',
+                        userName: user.displayName,
                         adminCubit: BlocProvider.of<AdminCubit>(context),
                         userId: user.uid,
                         taskType: 'upcoming',
+                        role: userRole,
                       ),
                       CustomTaskList(
                         state: 'completed',
                         userId: user.uid,
                         label: '',
                         adminCubit: BlocProvider.of<AdminCubit>(context),
-                        userName: 'asdjhash',
+                        userName: user.displayName,
                         taskType: 'completed',
+                        role: userRole,
                       ),
                     ],
                   ),

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_state.dart';
-import 'package:task_mangment/user/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
-import 'package:task_mangment/shared_widgets/custom_button.dart';
-import 'package:task_mangment/shared_widgets/custom_form_field.dart';
-import 'package:task_mangment/utils/utils_config.dart';
+import 'package:task_management/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
+import 'package:task_management/user/main_layer/screens/add_task_screen/controller/add_task_state.dart';
+import 'package:task_management/user/main_layer/screens/add_task_screen/widgets/create_task_body_widget.dart';
+import 'package:task_management/shared_widgets/custom_button.dart';
+import 'package:task_management/shared_widgets/custom_form_field.dart';
+import 'package:task_management/utils/app_constants.dart';
+import 'package:task_management/utils/utils_config.dart';
 
 class AddTaskScreen extends StatelessWidget {
   const AddTaskScreen({Key? key}) : super(key: key);
@@ -26,14 +27,14 @@ class AddTaskScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
-        body: AddTaskBody(),
+        body: const AddTaskBody(),
       ),
     );
   }
 }
 
 class AddTaskBody extends StatefulWidget {
-  AddTaskBody({Key? key}) : super(key: key);
+  const AddTaskBody({Key? key}) : super(key: key);
 
   @override
   State<AddTaskBody> createState() => _AddTaskBodyState();
@@ -94,7 +95,11 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                             children: [
                               Text(
                                 'Status',
-                                style: Theme.of(context).textTheme.titleSmall,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(
+                                        color: ColorConstManger.primaryColor),
                               ),
                               Divider(
                                 thickness: 1,
@@ -113,7 +118,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                                             .toUpperCase(),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyLarge!
+                                            .bodyMedium!
                                             .copyWith(color: Colors.black),
                                       ),
                                       onTap: () {
@@ -229,37 +234,24 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                         ],
                       ),
                     8.verticalSpace,
-                    Stack(
-                      children: [
-                        CustomButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              addTaskCubit.uploadTask(
-                                title: addTaskCubit.titleController.text.trim(),
-                                description: addTaskCubit
-                                    .descriptionController.text
-                                    .trim(),
-                                startTime: addTaskCubit.startTimeController.text
-                                    .trim(),
-                                endTime:
-                                    addTaskCubit.endTimeController.text.trim(),
-                              );
-                            }
-                          },
-                          title: 'Upload',
-                          width: double.infinity,
-                          height: 42.h,
-                        ),
-                        if (addTaskCubit.isUploading)
-                          Positioned.fill(
-                            child: Container(
-                              color: Colors.black.withOpacity(0.5),
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                          ),
-                      ],
+                    CustomButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          addTaskCubit.uploadSuccess();
+                          addTaskCubit.uploadTask(
+                            title: addTaskCubit.titleController.text.trim(),
+                            description:
+                                addTaskCubit.descriptionController.text.trim(),
+                            startTime:
+                                addTaskCubit.startTimeController.text.trim(),
+                            endTime: addTaskCubit.endTimeController.text.trim(),
+                          );
+                        }
+                      },
+                      title: 'Upload',
+                      width: double.infinity,
+                      height: 42.h,
+                      isLoading: addTaskCubit.isUploading,
                     ),
                   ],
                 ),

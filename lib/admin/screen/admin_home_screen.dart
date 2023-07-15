@@ -1,9 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_mangment/admin/controller/admin_cubit.dart';
-import 'package:task_mangment/admin/screen/widget/admin_homeBody.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/widgets/custom_task_list.dart';
+import 'package:task_management/admin/screen/widget/admin_homeBody.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   AdminHomeScreen({Key? key, required this.userRole}) : super(key: key);

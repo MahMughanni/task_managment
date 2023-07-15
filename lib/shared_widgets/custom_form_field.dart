@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/utils/app_constants.dart';
+import 'package:task_management/utils/app_constants.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
@@ -15,9 +15,11 @@ class CustomTextFormField extends StatelessWidget {
     this.maxLine,
     this.keyboardType,
     this.enabled,
+    this.fontSize,
     this.padding,
     this.contentPadding,
     this.focus,
+    this.prefixIcon,
     this.suffixIconConstraints,
     this.hintStyle,
     this.titleStyle,
@@ -28,6 +30,9 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool? isPassword;
   final Widget? suffixIcon;
+  final double? fontSize;
+
+  final Widget? prefixIcon;
   final TextEditingController? controller;
   final int? maxLine;
   final TextInputType? keyboardType;
@@ -59,6 +64,7 @@ class CustomTextFormField extends StatelessWidget {
         validator: validator,
         style: titleStyle ?? Theme.of(context).textTheme.bodySmall,
         decoration: InputDecoration(
+          prefixIcon: prefixIcon,
           suffixIconConstraints: suffixIconConstraints,
           hintStyle: hintStyle ?? Theme.of(context).textTheme.bodySmall,
           contentPadding: contentPadding ?? REdgeInsets.all(15),
@@ -66,7 +72,7 @@ class CustomTextFormField extends StatelessWidget {
           labelStyle: Theme.of(context)
               .textTheme
               .bodySmall!
-              .copyWith(color: Colors.grey),
+              .copyWith(color: Colors.grey, fontSize: fontSize ?? 13.sp),
           suffixIcon: suffixIcon,
           fillColor: ColorConstManger.formFieldFiledColor,
           filled: true,

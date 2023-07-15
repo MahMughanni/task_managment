@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:task_mangment/core/logic/calender_controller.dart';
-import 'package:task_mangment/model/task_model.dart';
+import 'package:task_management/core/logic/calender_controller.dart';
+import 'package:task_management/model/task_model.dart';
 
 part 'calendar_state.dart';
 
@@ -20,20 +20,8 @@ class CalenderCubit extends Cubit<CalenderState> {
       final tasks =
           await CalendarController.getTasksForDay(selectedDay, userId);
       final groupedTasks = CalendarController.groupTasks(tasks);
-      print(groupedTasks[selectedDay]);
       final selectedTasks = groupedTasks[selectedDay] ?? [];
-      print(selectedTasks);
 
-      if (selectedTasks == null) {
-        print("Error: selectedTasks is null!");
-      } else {
-        print("Selected tasks:");
-        for (var task in selectedTasks) {
-          print(task.title);
-        }
-      }
-
-      print('groupedTasks $groupedTasks');
       emit(state.copyWith(
         isLoading: false,
         tasks: tasks,

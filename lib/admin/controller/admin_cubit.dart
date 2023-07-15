@@ -2,19 +2,22 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
-import 'package:task_mangment/core/logic/firebase_controller.dart';
-import 'package:task_mangment/model/task_model.dart';
-import 'package:task_mangment/model/user_model.dart';
+import 'package:task_management/model/task_model.dart';
+import 'package:task_management/model/user_model.dart';
 
 part 'admin_state.dart';
 
 class AdminCubit extends Cubit<AdminState> {
   AdminCubit() : super(AdminInitial());
 
+
   StreamSubscription<QuerySnapshot>? tasksSubscription;
   StreamSubscription<DocumentSnapshot>? userSubscription;
+  UserModel? user;
+
 
   Future<void> fetchAllTasks() async {
     try {
@@ -44,8 +47,7 @@ class AdminCubit extends Cubit<AdminState> {
             tasksMap[userId] = tasks;
             final allTasks = tasksMap.values.expand((tasks) => tasks).toList();
             allTasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
-            emit(AdminTasksLoadedState(allTasks));
+            emit(AdminTasksLoadedState(tasks: allTasks, user: user));
           });
         }
       }, onError: (error) {
@@ -56,18 +58,23 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
-  void getTasksForUser(String userId) async {
-    emit(AdminLoadingState());
-
+  Future<void> deleteTask({required String taskId}) async {
     try {
-      // Call your task repository or API to fetch tasks for the user
-      final tasks = await FireBaseRepository().getTasksForUser(userId, 'user');
+      final QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('users').get();
 
-      // Emit the tasks loaded state with the fetched tasks
-      emit(AdminTasksLoadedState(tasks));
-    } catch (error) {
-      // Handle any error that occurred during the fetching process
-      emit(AdminFailure(errorMessage: error.toString()));
+      for (final QueryDocumentSnapshot userSnapshot in querySnapshot.docs) {
+        final tasksCollection = userSnapshot.reference.collection('tasks');
+        final taskQuerySnapshot =
+            await tasksCollection.where('id', isEqualTo: taskId).get();
+
+        for (final QueryDocumentSnapshot taskSnapshot
+            in taskQuerySnapshot.docs) {
+          await taskSnapshot.reference.delete();
+        }
+      }
+    } catch (e) {
+      emit(AdminFailure(errorMessage: e.toString()));
     }
   }
 

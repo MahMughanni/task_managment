@@ -2,13 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_mangment/core/logic/base_cubit.dart';
-import 'package:task_mangment/core/routes/app_router.dart';
-import 'package:task_mangment/core/routes/named_router.dart';
-import 'package:task_mangment/shared_widgets/custom_button.dart';
-import 'package:task_mangment/shared_widgets/custom_form_field.dart';
-import 'package:task_mangment/utils/app_constants.dart';
-import 'package:task_mangment/utils/extentions/string_validate_extention.dart';
+import 'package:task_management/core/logic/base_cubit.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/shared_widgets/custom_button.dart';
+import 'package:task_management/shared_widgets/custom_form_field.dart';
+import 'package:task_management/utils/app_constants.dart';
+import 'package:task_management/utils/extentions/string_validate_extention.dart';
 
 import 'custom_rich_text.dart';
 
@@ -18,8 +18,10 @@ class LoginScreenBodyWidget extends StatefulWidget {
     required this.onPressed,
     required this.emailController,
     required this.passwordController,
+    required this.isLoading,
   }) : super(key: key);
   final Function()? onPressed;
+  final bool isLoading;
 
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -29,8 +31,6 @@ class LoginScreenBodyWidget extends StatefulWidget {
 }
 
 class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
-
-
   @override
   void initState() {
     super.initState();
@@ -111,6 +111,7 @@ class _LoginScreenBodyWidgetState extends State<LoginScreenBodyWidget> {
             ),
             8.verticalSpace,
             CustomButton(
+              isLoading: widget.isLoading,
               title: 'LOG IN',
               width: double.infinity,
               height: 42.h,

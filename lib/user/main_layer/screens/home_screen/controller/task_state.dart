@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:task_mangment/model/task_model.dart';
-import 'package:task_mangment/model/user_model.dart';
+import 'package:task_management/model/task_model.dart';
+import 'package:task_management/model/user_model.dart';
 
 @immutable
 abstract class TaskState {}
@@ -13,16 +13,11 @@ class UserLoadingState extends TaskState {}
 class UserLoadedState extends TaskState {
   final UserModel user;
   final List<TaskModel> tasks;
+
   UserLoadedState({required this.user, required this.tasks});
 }
 
 class UserUpdatingState extends TaskState {}
-
-class UserErrorState extends TaskState {
-  final String error;
-
-  UserErrorState({required this.error});
-}
 
 class UserConnectedState extends TaskState {}
 
@@ -45,8 +40,8 @@ class TaskLoadedState extends TaskState {
   TaskLoadedState({required this.user, required this.tasks});
 }
 
-class TaskErrorState extends TaskState {
+class Failure extends TaskState {
   final String errorMessage;
 
-  TaskErrorState(this.errorMessage);
+  Failure({required this.errorMessage});
 }

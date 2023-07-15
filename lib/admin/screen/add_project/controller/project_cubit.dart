@@ -4,8 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
-import 'package:task_mangment/model/project_model.dart';
-import 'package:task_mangment/model/user_model.dart';
+import 'package:task_management/model/project_model.dart';
+import 'package:task_management/model/user_model.dart';
 
 part 'project_state.dart';
 

@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:task_mangment/model/task_model.dart';
-import 'package:task_mangment/model/user_model.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_state.dart';
+import 'package:task_management/model/task_model.dart';
+import 'package:task_management/model/user_model.dart';
+import 'package:task_management/user/main_layer/screens/home_screen/controller/task_state.dart';
 
 class TaskCubit extends Cubit<TaskState> {
   final String userId;
   StreamSubscription<List<TaskModel>>? tasksSubscription;
   StreamSubscription<DocumentSnapshot>? userSubscription;
   DocumentReference? userDoc;
-
   bool isTaskCompleted = false;
   UserModel? user;
 
@@ -20,14 +19,14 @@ class TaskCubit extends Cubit<TaskState> {
     userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
     userSubscription = userDoc?.snapshots().listen((userData) async {
       try {
-        final user = UserModel.fromSnapshot(userData);
+        user = UserModel.fromSnapshot(userData);
         if (!isClosed) {
           emit(UserLoadingState());
         }
-        await _loadUserTasks(user);
+        await fetchAllTasks();
       } catch (e) {
         if (!isClosed) {
-          emit(UserErrorState(error: e.toString()));
+          emit(Failure(errorMessage: e.toString()));
         }
       }
     });
@@ -37,14 +36,13 @@ class TaskCubit extends Cubit<TaskState> {
         switch (result) {
           case ConnectivityResult.wifi:
           case ConnectivityResult.mobile:
-            _loadUserTasks(null);
             emit(UserConnectedState());
             break;
           case ConnectivityResult.none:
             emit(UserDisconnectedState());
             break;
           default:
-            emit(UserErrorState(error: "Unknown connectivity state"));
+            emit(Failure(errorMessage: "Unknown connectivity state"));
             break;
         }
       }
@@ -58,104 +56,49 @@ class TaskCubit extends Cubit<TaskState> {
     }
   }
 
-  Future<void> loadUserTasks(String userId) async {
-    // Cancel any active task subscription
-    tasksSubscription?.cancel();
-
+  Future<void> fetchAllTasks() async {
     try {
-      // Get the user document reference
-      final userDoc =
-          FirebaseFirestore.instance.collection('users').doc(userId);
+      emit(UserLoadingState());
 
-      if (!isClosed) {
-        emit(UserLoadingState());
-      }
+      final usersCollection = FirebaseFirestore.instance.collection('users');
+      final snapshots = usersCollection.snapshots();
 
-      // Get the tasks collection for the user
-      final tasksCollection = userDoc.collection('tasks');
+      final tasksMap = <String, List<TaskModel>>{};
 
-      final querySnapshot =
-          await tasksCollection.orderBy('createdAt', descending: true).get();
+      tasksSubscription = snapshots.listen((querySnapshot) {
+        for (var userDoc in querySnapshot.docs) {
+          final userId = userDoc.id;
+          final tasksCollection = userDoc.reference.collection('tasks');
 
-      final tasks =
-          querySnapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList();
+          tasksCollection
+              .orderBy('createdAt', descending: true)
+              .snapshots()
+              .listen((taskSnapshot) {
+            final tasks = <TaskModel>[];
 
-      // Subscribe to changes in the user's tasks
-      tasksSubscription = tasksCollection
-          .snapshots()
-          .map((snapshot) =>
-              snapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList())
-          .listen((tasks) {
-        if (!isClosed) {
-          emit(UserLoadedState(user: user!, tasks: tasks));
+            for (var taskDoc in taskSnapshot.docs) {
+              final task = TaskModel.fromSnapshot(taskDoc);
+              tasks.add(task);
+            }
+
+            tasksMap[userId] = tasks;
+            final allTasks = tasksMap.values.expand((tasks) => tasks).toList();
+            allTasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+            if (!isClosed) {
+              // debugPrint('Cubit UserName : ${user!.userName!}');
+              emit(UserLoadedState(user: user!, tasks: allTasks));
+            }
+          });
         }
       }, onError: (error) {
         if (!isClosed) {
-          emit(UserErrorState(error: error.toString()));
+          emit(Failure(errorMessage: error.toString()));
         }
-      });
-
-      // Sort the tasks in descending order (newest to oldest)
-      tasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
+      }) as StreamSubscription<List<TaskModel>>?;
+    } catch (error) {
       if (!isClosed) {
-        emit(UserLoadedState(user: user!, tasks: tasks));
-      }
-    } catch (e) {
-      if (!isClosed) {
-        emit(UserErrorState(error: e.toString()));
-      }
-    }
-  }
-
-  Future<void> _loadUserTasks(user) async {
-    // Cancel any active task subscription
-    tasksSubscription?.cancel();
-
-    try {
-      if (user == null) {
-        final userSnapshot = await userDoc!.get();
-        user = UserModel.fromSnapshot(userSnapshot);
-      }
-
-      if (!isClosed) {
-        emit(UserLoadingState());
-      }
-
-      // Get the tasks collection
-      final tasksCollection = userDoc!.collection('tasks');
-
-      // Get the user's tasks from Firestore and order them by createdAt field
-      final querySnapshot =
-          await tasksCollection.orderBy('createdAt', descending: true).get();
-
-      final tasks =
-          querySnapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList();
-
-      // Subscribe to changes in the user's tasks
-      tasksSubscription = tasksCollection
-          .snapshots()
-          .map((snapshot) =>
-              snapshot.docs.map((doc) => TaskModel.fromSnapshot(doc)).toList())
-          .listen((tasks) {
-        if (!isClosed) {
-          emit(UserLoadedState(user: user!, tasks: tasks));
-        }
-      }, onError: (error) {
-        if (!isClosed) {
-          emit(UserErrorState(error: error.toString()));
-        }
-      });
-
-      // Sort the tasks in descending order (newest to oldest)
-      tasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
-      if (!isClosed) {
-        emit(UserLoadedState(user: user, tasks: tasks));
-      }
-    } catch (e) {
-      if (!isClosed) {
-        emit(UserErrorState(error: e.toString()));
+        emit(Failure(errorMessage: error.toString()));
       }
     }
   }
@@ -169,7 +112,7 @@ class TaskCubit extends Cubit<TaskState> {
           .doc(id);
       await taskDoc.delete();
     } catch (e) {
-      emit(UserErrorState(error: e.toString()));
+      emit(Failure(errorMessage: e.toString()));
     }
   }
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:task_mangment/core/logic/base_cubit.dart';
-import 'package:task_mangment/model/task_model.dart';
-import 'package:task_mangment/shared_widgets/list_item_body.dart';
-import 'package:task_mangment/user/main_layer/screens/task_details_screen/task_details_screen.dart';
+import 'package:task_management/admin/controller/admin_cubit.dart';
+import 'package:task_management/core/logic/base_cubit.dart';
+import 'package:task_management/core/routes/app_router.dart';
+import 'package:task_management/core/routes/named_router.dart';
+import 'package:task_management/model/task_model.dart';
+import 'package:task_management/shared_widgets/list_item_body.dart';
 
 class CustomListViewBuilder extends StatelessWidget {
   CustomListViewBuilder({
@@ -10,13 +12,15 @@ class CustomListViewBuilder extends StatelessWidget {
     required this.length,
     required this.stateTasks,
     required this.userId,
+    required this.role,
+    required this.userName,
   }) : super(key: key);
+  final AdminCubit adminCubit = AdminCubit();
+  final BaseCubit baseCubit = BaseCubit();
 
   final int length;
   final List<TaskModel> stateTasks;
-  final String userId;
-
-  final BaseCubit baseCubit = BaseCubit();
+  final String userId, role, userName;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +32,6 @@ class CustomListViewBuilder extends StatelessWidget {
           return Container();
         }
         final task = stateTasks[index];
-
-        print('Task UserName${task.userName}');
-
-
         return GestureDetector(
           onLongPress: () {
             showDialog(
@@ -54,7 +54,11 @@ class CustomListViewBuilder extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        baseCubit.deleteTask(userId: userId, id: task.id!);
+                        String? taskId = task.id;
+                        role == 'admin'
+                            ? adminCubit.deleteTask(taskId: taskId ?? '')
+                            : baseCubit.deleteTask(
+                                userId: userId, id: taskId ?? '');
                         Navigator.of(context).pop();
                       },
                       child: Text(
@@ -71,25 +75,17 @@ class CustomListViewBuilder extends StatelessWidget {
             );
           },
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TaskDetailsScreen(
-                  task: task,
-                  userName: task.userName,
-                  userId: userId,
-                ),
-              ),
-            );
+            AppRouter.goTo(
+                screenName: NamedRouter.taskDetailsScreen,
+                arguments: {
+                  'task': task,
+                  "username": task.userName,
+                  'userId': userId,
+                  'completedBy': userName,
+                });
           },
           child: ListViewItemBody(
-            title: task.description,
-            startTime: task.startTime,
-            taskTitle: task.title,
-            taskCategory: task.state,
-            url: task.imageUrls.isNotEmpty ? task.imageUrls.first : '',
-            status: task.state,
-            userName: task.userName,
+            taskModel: task,
           ),
         );
       },

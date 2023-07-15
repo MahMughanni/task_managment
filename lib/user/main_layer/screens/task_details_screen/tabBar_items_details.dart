@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_mangment/shared_widgets/custom_appbar.dart';
-import 'package:task_mangment/shared_widgets/custom_list.dart';
-import 'package:task_mangment/shared_widgets/custom_shimmer.dart';
-import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
-import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_state.dart';
+import 'package:task_management/admin/controller/admin_cubit.dart';
+import 'package:task_management/shared_widgets/custom_appbar.dart';
+import 'package:task_management/shared_widgets/custom_list.dart';
+import 'package:task_management/shared_widgets/custom_shimmer.dart';
 
 class UserDetailsStatusTasks extends StatelessWidget {
-  const UserDetailsStatusTasks(
-      {Key? key, required this.status, required this.userId})
-      : super(key: key);
-  final String status, userId;
+  const UserDetailsStatusTasks({
+    Key? key,
+    required this.status,
+    required this.userId,
+    required this.role,
+    required this.userName,
+  }) : super(key: key);
+  final String status, userId, role, userName;
 
   @override
   Widget build(BuildContext context) {
-    final userRole = BlocProvider.of<AuthenticationCubit>(context).userRole;
-
-    return BlocBuilder<TaskCubit, TaskState>(
+    return BlocBuilder<AdminCubit, AdminState>(
       builder: (context, state) {
-        if (state is UserLoadedState) {
+        if (state is AdminTasksLoadedState) {
           final user = state.user;
           final tasks = state.tasks;
           var upcomingTasks =
@@ -39,18 +39,24 @@ class UserDetailsStatusTasks extends StatelessWidget {
                 ? CustomListViewBuilder(
                     length: upcomingTasks.length,
                     stateTasks: upcomingTasks,
-                    userId: user.uId ?? '',
+                    userId: user?.uId ?? '',
+                    role: role,
+                    userName: userName,
                   )
                 : status == 'completed'
                     ? CustomListViewBuilder(
                         length: completedTasks.length,
                         stateTasks: completedTasks,
-                        userId: user.uId ?? '',
+                        userId: user?.uId ?? '',
+                        role: role,
+                        userName: userName,
                       )
                     : CustomListViewBuilder(
                         length: tasks.length,
                         stateTasks: tasks,
-                        userId: user.uId ?? '',
+                        userId: user?.uId ?? '',
+                        role: role,
+                        userName: userName,
                       ),
           );
         } else {
