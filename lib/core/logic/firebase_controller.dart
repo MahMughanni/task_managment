@@ -3,6 +3,10 @@ import 'package:task_management/model/project_model.dart';
 import 'package:task_management/model/task_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_management/model/user_model.dart';
+import 'package:task_mangment/model/project_model.dart';
+import 'package:task_mangment/model/task_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:task_mangment/model/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:path/path.dart' as path;
@@ -41,6 +45,7 @@ class FireBaseRepository {
   }) async {
     final user = FirebaseAuth.instance.currentUser;
     final userId = user!.uid;
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
     // Update the user's profile data
@@ -61,6 +66,8 @@ class FireBaseRepository {
   }
 
 
+
+  }
 
   static Future<void> editProfileImage(
     File? newImage,
@@ -204,6 +211,7 @@ class FireBaseRepository {
     List<File>? imageFiles,
     required String userName,
     String? assignedTo,
+    required String userName, // Add userName parameter
   }) async {
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser!;
@@ -238,6 +246,7 @@ class FireBaseRepository {
       userName: userName,
       assignedTo: assignedTo ?? '',
       completedBy: '',
+
     );
 
     final DocumentReference docRef = await fireStore
@@ -261,6 +270,7 @@ class FireBaseRepository {
     List<File>? imageFiles,
     required String userName,
     required String assignedTo,
+    required String userName, // Add userName parameter
   }) async {
     final FirebaseFirestore fireStore = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser!;
@@ -295,11 +305,13 @@ class FireBaseRepository {
       userName: userName,
       assignedTo: assignedTo,
       completedBy: '',
+
     );
 
     final DocumentReference docRef = await fireStore
         .collection('users')
         .doc(userId)
+        .doc(userId) // Use userId parameter
         .collection('tasks')
         .add(task.toMap());
 

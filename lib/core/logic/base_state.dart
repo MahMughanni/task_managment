@@ -15,4 +15,3 @@ class BaseCubitErrorState extends BaseCubitState {
   final String error;
 
   BaseCubitErrorState({required this.error});
-}

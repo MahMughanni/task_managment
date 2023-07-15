@@ -19,6 +19,17 @@ import 'package:task_management/utils/utils_config.dart';
 
 import 'user/main_layer/screens/notification_screen/controller/NotificationService.dart';
 import 'user/main_layer/screens/notification_screen/controller/notification_cubit.dart';
+import 'package:task_mangment/admin/controller/admin_cubit.dart';
+import 'package:task_mangment/admin/screen/add_project/controller/project_cubit.dart';
+import 'package:task_mangment/core/logic/base_cubit.dart';
+import 'package:task_mangment/core/routes/app_router.dart';
+import 'package:task_mangment/core/routes/generate_routes.dart';
+import 'package:task_mangment/core/routes/named_router.dart';
+import 'package:task_mangment/user/auth_layer/controller/authentication_cubit.dart';
+import 'package:task_mangment/user/main_layer/screens/add_task_screen/controller/add_task_cubit.dart';
+import 'package:task_mangment/user/main_layer/screens/home_screen/controller/task_cubit.dart';
+import 'package:task_mangment/utils/app_theme/app_theme_light.dart';
+import 'package:task_mangment/utils/utils_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
