@@ -11,3 +11,6 @@ Using FireBase and Bloc (Cubit) ,
 ![Simulator Screenshot - iPhone 14 Pro - 2023-07-29 at 19 48 39](https://github.com/MahMughanni/task_managment/assets/43685429/c7b0d41d-a3eb-48db-87f5-1640e5d51141)
 ![Simulator Screenshot - iPhone 14 Pro - 2023-07-29 at 19 53 48](https://github.com/MahMughanni/task_managment/assets/43685429/065bdcb8-4dc1-435c-9775-f18d618e1455)
 ![Simulator Screenshot - iPhone 14 Pro - 2023-07-29 at 19 54 07](https://github.com/MahMughanni/task_managment/assets/43685429/417d8fda-148f-44e7-87f3-5db90441300c)
+![Simulator Screenshot - iPhone 14 Pro - 2023-07-29 at 19 58 20](https://github.com/MahMughanni/task_managment/assets/43685429/64f8f5fd-8fb4-4a53-a6da-3f5bcd8c648e)
+![Simulator Screenshot - iPhone 14 Pro - 2023-07-29 at 19 58 33](https://github.com/MahMughanni/task_managment/assets/43685429/f25ce6f5-4837-4923-a2a1-3fc1cff79ea4)
+![Simulator Screenshot - iPhone 14 Pro - 2023-07-29 at 19 57 32](https://github.com/MahMughanni/task_managment/assets/43685429/87d462d2-8b31-4361-b5d8-d8e87929c8d3)
